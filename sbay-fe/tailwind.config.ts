@@ -26,6 +26,11 @@ const config: Config = {
             },
         },
     },
+    variants:{
+        extend: {
+            display:['group-hover']
+        },
+    },
 
     plugins: [
         require("flowbite/plugin"),

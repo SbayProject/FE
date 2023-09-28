@@ -5,14 +5,17 @@ import moment from "moment";
 import {ListGetAllPost} from "@/pages/service/PostService";
 import {ListGetAllTypePost} from "@/pages/service/TypePostService";
 import {Field, Form, Formik} from "formik";
+import {useRouter} from "next/router";
+import Image from "next/image";
 
 export default function NavCard() {
     const [post, setPost] = useState([]);
     const [typePost, setTypePost] = useState([]);
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
+
     const GetAllListPost = async () => {
-        const res = await ListGetAllPost(type,title,0);
+        const res = await ListGetAllPost(type, title, 0);
         setPost(res);
     }
     const GetAllListTypePost = async () => {
@@ -21,7 +24,7 @@ export default function NavCard() {
     }
     useEffect(() => {
         GetAllListPost();
-    }, [type,title])
+    }, [type, title])
 
     useEffect(() => {
         GetAllListTypePost();
@@ -36,13 +39,17 @@ export default function NavCard() {
     return (
         <>
             <nav
-                className="container  flex w-full flex-wrap items-center justify-between z-[1] bg-neutral-100 py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 lg:py-4"
+                className="container  flex w-full flex-wrap items-center justify-between  bg-neutral-100 py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 lg:py-4"
                 style={{maxWidth: "100%"}}>
                 <div className="flex w-full flex-wrap items-center justify-between px-3">
-                    <a className="text-neutral-500 transition duration-200 hover:text-neutral-600 hover:ease-in-out motion-reduce:transition-none dark:text-neutral-200"
-                       href="#">
-                        Trang chủ / Tin tức
-                    </a>
+                    <span
+                        className="text-neutral-500 transition duration-200 hover:text-neutral-600 hover:ease-in-out motion-reduce:transition-none dark:text-neutral-200"
+                    >
+                       <Link href="/components/home-news/nav-card" className="hover:text-danger-600"
+                             style={{cursor: "pointer"}}>Trang chủ /</Link><Link href="/components/home-news/nav-card"
+                                                                                 className="hover:text-danger-600"
+                                                                                 style={{cursor: "pointer"}}>Tin tức  </Link>
+                    </span>
                     <Formik
                         initialValues={{
                             title: '',
@@ -51,13 +58,13 @@ export default function NavCard() {
                         onSubmit={async (values) => {
                             const searchPost = async () => {
                                 // @ts-ignore
-                                 setTitle(values.title);
+                                setTitle(values.title);
                                 // @ts-ignore
-                                 setType(values.type);
-                                const res = await ListGetAllPost(values.type, values.title,0);
-                                 setPost(res.content)
+                                setType(values.type);
+                                const res = await ListGetAllPost(values.type, values.title, 0);
+                                setPost(res.content)
                             }
-                             searchPost()
+                            searchPost()
                         }}>
                         <Form
                             className="flex w-[32%] items-center justify-between text-neutral-500 transition duration-200 hover:text-neutral-600 hover:ease-in-out motion-reduce:transition-none dark:text-neutral-200">
@@ -93,21 +100,21 @@ export default function NavCard() {
                     </Formik>
                 </div>
             </nav>
-            <div className="mt-5 container mb-20" style={{maxWidth: "100%"}}>
+            <div className="mt-5 container mb-12    " style={{maxWidth: "100%"}}>
                 <div className="grid-cols-1 sm:grid md:grid-cols-4 ">
                     {post.map((list, index) => (
-                        <div key={index}
-                             className="mx-3 mt-6 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0">
-                            <Link href="/components/home-news/detail">
-
-                                <img
-                                    className="rounded-t-lg md:h-44"
-                                    //@ts-ignore
-                                    src={list?.image}
-                                    style={{width: "100%"}}
-                                    alt="Hollywood Sign on The Hill"
-                                />
-                            </Link>
+                        //@ts-ignore
+                        <Link key={index} href={`/components/home-news/${list.id}`}>
+                        <div className="mx-3 mt-6 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
+                        ><div >
+                            <img
+                                className="rounded-t-lg md:h-44"
+                                //@ts-ignore
+                                src={list?.image}
+                                style={{width: "100%"}}
+                                alt=""
+                            />
+                        </div>
                             <div className="py-2 px-6 text-base text-neutral-600 dark:text-neutral-200">
                                 <p
                                     // @ts-ignore
@@ -115,8 +122,13 @@ export default function NavCard() {
                             </div>
                             <div className="px-6">
 
-                                <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                                    {list?.title}
+                                <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
+                                    //@ts-ignore
+                                >{list?.title}
+                                </h5>
+                                <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
+                                    //@ts-ignore
+                                >
                                 </h5>
                                 <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200"
                                    style={{
@@ -125,15 +137,20 @@ export default function NavCard() {
                                        textOverflow: 'ellipsis'
                                    }}
                                     // @ts-ignore
-                                >
-                                    {list?.content}
+                                >{list?.content}
                                 </p>
                             </div>
                         </div>
+                        </Link>
                     ))}
+
                 </div>
-
-
+                <div className="text-center">
+                    <button
+                        className="bg-white hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow mt-10 ">
+                        Xem thêm
+                    </button>
+                </div>
             </div>
 
 

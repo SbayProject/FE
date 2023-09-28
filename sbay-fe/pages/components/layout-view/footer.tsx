@@ -2,6 +2,7 @@ import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import Image from "next/image";
 import {AiOutlineMail, AiOutlinePhone} from "react-icons/ai";
 import {BsArrowRight, BsFacebook} from "react-icons/bs";
+import Link from "next/link";
 
 export default function Footer() {
     return (
@@ -18,7 +19,7 @@ export default function Footer() {
                                 <Image src={Logo_Header} alt=""/>
                             </h6>
                             <a href="#" className="flex mb-3 hover:text-red-700">
-                                <AiOutlineMail size={20} style={{marginTop: "0.5px"}}/>&nbsp;
+                                <AiOutlineMail size={20} style={{marginTop: "0.9px"}}/>&nbsp;
                                 <span className="text-danger-600">Email</span>: hanhchinh.sbay@gmail.com
                             </a>
                             <p className="flex mb-3">
@@ -92,11 +93,11 @@ export default function Footer() {
                                 </a>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="/components/home-news/nav-card"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Tin tức
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
                                 <a href="#!"
@@ -108,7 +109,7 @@ export default function Footer() {
                             <p className="md-3">
                                 <a href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
-                                    <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
+                                    <BsArrowRight  style={{marginTop: "3px"}}/>&nbsp;
                                     Liên hệ
                                 </a>
                             </p>
