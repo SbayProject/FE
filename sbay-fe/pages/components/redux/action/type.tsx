@@ -1,0 +1,1 @@
+export const LIST_GET_ALL_POST ="LIST_GET_ALL_POST"

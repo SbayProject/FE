@@ -1,8 +1,6 @@
-"use client"
+import React from "react";
 import Header from "@/pages/components/layout-view/header";
 import Footer from "@/pages/components/layout-view/footer";
-import React from "react";
-
 // @ts-ignore
 export default function Layout({children}) {
     return (

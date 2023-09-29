@@ -1,8 +1,8 @@
-import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import Image from "next/image";
 import {AiOutlineMail, AiOutlinePhone} from "react-icons/ai";
 import {BsArrowRight, BsFacebook} from "react-icons/bs";
 import Link from "next/link";
+import Logo_Header from "../../../public/img/logo-sbay-header.png";
 
 export default function Footer() {
     return (
