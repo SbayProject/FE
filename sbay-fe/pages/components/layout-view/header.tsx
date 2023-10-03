@@ -1,9 +1,10 @@
+"use client"
 import Link from "next/link";
 import Image from "next/image";
 import React, {useContext, useEffect, useState} from "react";
 import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import {AiOutlineCloseCircle, AiOutlineMenu} from "react-icons/ai";
-import {ListGetAllTypePost} from "@/pages/service/TypePostService";
+import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/TypePostService";
 import {ListGetAllPost} from "@/pages/service/PostService";
 import Login from "@/pages/components/login/login";
 import ImageNav from "@/pages/components/layout-view/imageNav";
@@ -13,22 +14,22 @@ export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [typePosts, setTypePosts] = useState([]);
     const [postType, setPostType] = useState([]);
-    const { counter, setCounter } = useContext(CounterContext);
+    const {counter, setCounter} = useContext(CounterContext);
+    const [page, setPage] = useState(0);
+    const [totalPage, setTotalPage] = useState();
     const GetListAllTypePost = async () => {
         const res = await ListGetAllTypePost();
         setTypePosts(res);
     }
     // @ts-ignore
-    const GetListAllTypePostId = async (name) => {
-        const res = await ListGetAllPost(name,null,0);
-        setCounter(res)
+    const GetListAllTypePostId = async (id) => {
+        const res = await ListGetTypePostSearch(id,'', 0);
+        setCounter(res);
         setPostType(res);
     }
-
     useEffect(() => {
         GetListAllTypePost();
     }, [])
-
 
     const handleModalOpen = (b: boolean) => {
         setMobileMenuOpen(false);
@@ -78,7 +79,7 @@ export default function Header() {
                                     Trang chủ</Link>
                             </li>
                             <li>
-                                <Link href="/components/home-news/nav-card"
+                                <Link href="/components/home-news/post_news"
                                       className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
                                       relative justify-center items-center rounded  group
                                       ">Tin tức
@@ -88,15 +89,16 @@ export default function Header() {
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                                   strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
                                     <div
-                                        className=" absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                        className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
                                         <ul className="text-left border bg-white rounded ml-32 ">
                                             {typePosts.map((list, index) => (
                                                 <li key={index} onClick={async () => {
                                                     // @ts-ignore
-                                                    await GetListAllTypePostId(list.name)
-                                                }} className="hover:text-danger-600 px-4 py-1  border-b"
+                                                    await GetListAllTypePostId(list.id)
+                                                }} className="hover:text-danger-600 px-4 py-1 border-b"
                                                     // @ts-ignore
-                                                ><Link href={`/components/home-news/nav_card_type`}>{list.name}</Link></li>
+                                                ><Link href={`/components/home-news/post_news_type`}>{list.name}</Link>
+                                                </li>
                                             ))}
                                         </ul>
                                     </div>
@@ -106,7 +108,6 @@ export default function Header() {
                     </div>
                 </div>
             </nav>
-            {!<Login/> ? '' : <ImageNav/>}
         </header>
         <div
             className={`md:hidden flex mt-2 flex-col w-[70%] z-50 h-screen fixed bg-neutral-300 text-white top-[60px] ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
@@ -121,12 +122,33 @@ export default function Header() {
                 </li>
 
                 <li>
-                    <Link href="/components/home-news/nav-card"
+                    <Link href="/components/home-news/post_news"
                           onClick={() => {
                               handleModalOpen(true)
                           }}
-                          className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Tin
-                        tức</Link>
+                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                                      relative  items-center rounded group
+                          ">Tin tức
+                        <span className="">
+                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
+                        <div
+                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                            <ul className="text-left border bg-white rounded ml-[-10px] w-[99%]">
+                                {typePosts.map((list, index) => (
+                                    <li key={index} onClick={async () => {
+                                        // @ts-ignore
+                                        await GetListAllTypePostId(list.id)
+                                    }} className="hover:text-danger-600 px-4 py-1 border-b"
+                                        // @ts-ignore
+                                    ><Link href={`/components/home-news/post_news_type`}>{list.name}</Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </Link>
                 </li>
             </ul>
         </div>

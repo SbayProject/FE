@@ -13,24 +13,23 @@ export default function Footer() {
                 style={{maxWidth: "100%"}}>
                 <div className="mx-6 py-10 text-center md:text-left">
                     <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-
                         <div className="">
                             <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
                                 <Image src={Logo_Header} alt=""/>
                             </h6>
-                            <a href="#" className="flex mb-3 hover:text-red-700">
+                            <Link href="#" className="flex mb-3 hover:text-red-700">
                                 <AiOutlineMail size={20} style={{marginTop: "0.9px"}}/>&nbsp;
                                 <span className="text-danger-600">Email</span>: hanhchinh.sbay@gmail.com
-                            </a>
+                            </Link>
                             <p className="flex mb-3">
                                 <AiOutlinePhone size={20} style={{marginTop: "0.5px"}}/>&nbsp;
                                 <span className="text-danger-600">Tel</span>: 0973 20 1200
                             </p>
-                            <a href="https://www.facebook.com/SbayVietNam247"
+                            <Link href="https://www.facebook.com/SbayVietNam247"
                                className="flex mb-3 hover:text-red-700">
                                 <BsFacebook size={20} style={{marginTop: "0.5px"}}/>&nbsp;
                                 <span className="text-danger-600">Face Book</span>: Sbay Việt Nam
-                            </a>
+                            </Link>
                         </div>
 
                         <div className="">
@@ -38,39 +37,39 @@ export default function Footer() {
                                 Thông tin cần biết
                             </h6>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Hướng dẫn đặt phòng
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Hướng dẫn thanh toán
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Hướng dẫn giao vé
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Chính sách bảo mật
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Điều khoảng điều kiện
-                                </a>
+                                </Link>
                             </p>
                         </div>
 
@@ -79,39 +78,39 @@ export default function Footer() {
                                 Về chúng tôi
                             </h6>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Trang chủ
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Giới thiệu
-                                </a>
+                                </Link>
                             </p>
                             <p className="mb-3">
-                                <Link href="/components/home-news/nav-card"
+                                <Link href="/components/home-news/post_news"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Tin tức
                                 </Link>
                             </p>
                             <p className="mb-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight style={{marginTop: "3px"}}/>&nbsp;
                                     Tin khuyến mãi
-                                </a>
+                                </Link>
                             </p>
                             <p className="md-3">
-                                <a href="#!"
+                                <Link href="#!"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">
                                     <BsArrowRight  style={{marginTop: "3px"}}/>&nbsp;
                                     Liên hệ
-                                </a>
+                                </Link>
                             </p>
                         </div>
                         <div>
@@ -122,26 +121,26 @@ export default function Footer() {
                                 <p className="text-danger-600 mb-1 flex items-center justify-center md:justify-start">
                                     📍 Hà Nội:
                                 </p>
-                                <a href="#" className="hover:text-danger-600">
+                                <Link href="#" className="hover:text-danger-600">
                                     <span className=""><span className="text-blue-500">Văn phòng giao dịch</span>: Số A3012, Tòa nhà Tứ Hiệp Plaza - KĐT Pháp Vân - Tp Hà Nội</span>
-                                </a>
+                                </Link>
                             </div>
                             <div className="mb-3">
 
                                 <p className="text-danger-600 mb-1 flex items-center justify-center md:justify-start">
                                     📍 Đà Nẵng:
                                 </p>
-                                <a href="#" className="hover:text-danger-600">
+                                <Link href="#" className="hover:text-danger-600">
                                     <span className="">Khách sạn 3* Sbay hotel Đà Nẵng: Số 3 - Đinh Thị Hoà - Q. Sơn Trà - Tp Đà Nẵng</span>
-                                </a>
+                                </Link>
                             </div>
                             <div>
                                 <p className="text-danger-600 mb-1 flex items-center justify-center md:justify-start">
                                     📍Hồ Chí Minh:
                                 </p>
-                                <a href="#" className="hover:text-danger-600">
+                                <Link href="#" className="hover:text-danger-600">
                                     <span className=""><span className="text-blue-500">Văn phòng giao dịch</span>: Số 42/112 đường Tây Hoà - TP Thủ Đức - Tp Hồ Chí Minh</span>
-                                </a>
+                                </Link>
                             </div>
 
                         </div>
@@ -151,8 +150,8 @@ export default function Footer() {
 
             </footer>
             <div className="bg-neutral-300 p-6 text-center dark:bg-neutral-700">
-                <a className="hover:text-danger-600 font-semibold text-neutral-600 dark:text-neutral-400"
-                   href="https://sbay.com.vn/tin-tuc">© 2023 Sbay Việt Nam. </a>
+                <Link className="hover:text-danger-600 font-semibold text-neutral-600 dark:text-neutral-400"
+                   href="https://sbay.com.vn/tin-tuc">© 2023 Sbay Việt Nam. </Link>
                 <span style={{cursor:"default"}}>All Rights Reserved</span>
             </div>
         </>

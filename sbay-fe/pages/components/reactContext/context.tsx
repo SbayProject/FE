@@ -23,7 +23,6 @@ export const CounterContextProvider: React.FC<{ children: any }> = ({ children }
         }),
         [counter, setCounter],
     );
-
     return <CounterContext.Provider value={values}>{children}</CounterContext.Provider>;
 };
 

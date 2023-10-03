@@ -28,7 +28,7 @@ const config: Config = {
     },
     variants:{
         extend: {
-            display:['group-hover']
+            display:['group-hover'],
         },
     },
 

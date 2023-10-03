@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import moment from "moment/moment";
 import {useRouter} from "next/router";
 // @ts-ignore
@@ -7,6 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import {FcCalendar} from "react-icons/fc";
 import {DetailPost, ListGetAllTop4NewPost} from "@/pages/service/PostService";
 import {ListGetTheSameKind} from "@/pages/service/TypePostService";
+import ImageNav from "@/pages/components/layout-view/imageNav";
 
 export default function IdPost() {
     const [newPost, setNewPost] = useState([]);
@@ -27,8 +28,8 @@ export default function IdPost() {
         const res = await DetailPost(idPost)
         await GetListTheSameKind(res?.typePost.id)
         setDetail(res)
-    }
 
+    }
     useEffect(() => {
         GetListAllTop4NewPost()
         PostDetail()
@@ -40,20 +41,17 @@ export default function IdPost() {
     if (!detail) {
         return null;
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect(() => {
-    //     window.scrollTo(0, 0)
-    // }, [])
     return (
         <>
+            <ImageNav/>
             <nav
                 className="container flex w-full flex-wrap items-center justify-between bg-neutral-100 py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 lg:py-4"
                 style={{maxWidth: "100%"}}>
                 <div className="flex w-full flex-wrap items-center justify-between px-3">
                     <span
                         className=" text-neutral-500 transition duration-200  motion-reduce:transition-none dark:text-neutral-200"
-                    ><Link href="/components/home-news/nav-card" className="hover:text-danger-600"
-                           style={{cursor: "pointer"}}>Trang chủ/ </Link><Link href="/components/home-news/nav-card"
+                    ><Link href="/components/home-news/post_news" className="hover:text-danger-600"
+                           style={{cursor: "pointer"}}>Trang chủ/ </Link><Link href="/components/home-news/post_news"
                                                                                className="hover:text-danger-600"
                         // @ts-ignore
                                                                                style={{cursor: "pointer"}}>Tin tức/ </Link>
@@ -111,7 +109,6 @@ export default function IdPost() {
                     <div className="mt-6">
                         <p className="mb-4">
                             <article className="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
-
                                 // @ts-ignore
                             >{detail.content}
                             </article>
@@ -157,7 +154,6 @@ export default function IdPost() {
                     ))}
                 </div>
             </div>
-
         </>
     )
 }
