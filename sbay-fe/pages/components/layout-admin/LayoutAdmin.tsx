@@ -39,7 +39,7 @@ const Layout = ({children}) => {
 
             {/* Main content và phần menu */}
 
-            <main className="ư flex-grow container mx-auto py-8 flex">
+            <main className="flex-grow container mx-auto py-8 flex">
                 {/* Menu */}
                 {/* Menu cho tablet và desktop */}
                 {!isMobile && (

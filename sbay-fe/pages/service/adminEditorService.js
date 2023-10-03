@@ -9,7 +9,7 @@ export const findAllEditors = async (name, page) =>{
         }).catch((err)=>{
             console.log(err)
         })
-    return result.data.content
+    return result.data
 }
 
 export const remove = async (editor) =>{
