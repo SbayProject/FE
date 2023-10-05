@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout-admin/LayoutAdmin";
 import moment from "moment";
 import Swal from "sweetalert2";
-import { Field, Form, Formik } from "formik";
+import {Field, Form, Formik} from "formik";
 import ReactPaginate from "react-paginate";
 
 import * as AdminEditorService from "../../service/adminEditorService";
 import AddEditorModal from "./modal-box/AddEditorModal";
 import {MdPersonAddAlt} from "react-icons/md";
+import {BiSolidEdit} from "react-icons/bi";
+import {RiDeleteBin6Line} from "react-icons/ri";
+import * as Alert from "../../components/hooks/Alert";
+import EditEditorModal from "./modal-box/EditEditorModal";
+import DetailEditorModal from "./modal-box/InfomationEditor";
+import {SlInfo} from "react-icons/sl";
+type ModalType = 'edit' | 'detail';
 
 const ManageEditor = () => {
     const [editors, setEditors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [searchValue, setSearchValue] = useState("");
@@ -20,31 +29,42 @@ const ManageEditor = () => {
     let count = currentPage * size + 1;
     const [prevDisabled, setPrevDisabled] = useState(true);
     const [nextDisabled, setNextDisabled] = useState(true);
+    const [idDelete, setIdDelete] = useState(null);
+    const [editorToEdit, setEditorToEdit] = useState([]); // Đối tượng cần chỉnh sửa
+
 
     useEffect(() => {
         document.title = "Quản lý biên tập viên";
         window.scrollTo(0, 0);
     }, []);
 
-    const openModal = () => {
+    const openAddModal = () => {
         setShowModal(true);
     };
 
-    const closeModal = () => {
+    const closeAddModal = () => {
         setShowModal(false);
+        fetchData({name: "", page: 0});
+    };
+    const openEditModal = () => {
+        setShowEditModal(true);
     };
 
-    const handleSaveModal = async (newEditor) => {
-        try {
-            await AdminEditorService.createEditor(newEditor);
-            closeModal();
-            await fetchData({ name: searchValue, page: currentPage });
-        } catch (error) {
-            console.error(error);
-        }
+    const closeEditModal = () => {
+        setShowEditModal(false);
+        fetchData({name: "", page: currentPage});
+    };
+    const openDetailModal = () => {
+        setShowDetailModal(true);
     };
 
-    const fetchData = async ({ name, page }) => {
+    const closeDetailModal = () => {
+        setShowEditModal(false);
+        fetchData({name: "", page: currentPage});
+    };
+
+
+    const fetchData = async ({name, page}) => {
         try {
             const response = await AdminEditorService.findAllEditors(name, page);
             setSearchValue(name);
@@ -60,39 +80,65 @@ const ManageEditor = () => {
     };
 
     useEffect(() => {
-        fetchData({ name: "", page: currentPage });
+        fetchData({name: "", page: currentPage});
     }, []);
 
-    const handlePageClick = async ({ selected }) => {
+    const handlePageClick = async ({selected}) => {
         setCurrentPage(selected);
-        await fetchData({ name: searchValue, page: selected });
+        await fetchData({name: searchValue, page: selected});
         setPrevDisabled(currentPage === 0);
         setNextDisabled(currentPage === pageCount - 1);
     };
 
-    const handleDeleteUser = async (id) => {
+    const handleDeleteUser = async (editor) => {
         try {
-            await AdminEditorService.remove(id);
+            await AdminEditorService.remove(editor);
             Swal.fire({
                 icon: "success",
                 title: "Xóa thành công !",
                 timer: 3000,
             });
-            await fetchData({ name: searchValue, page: currentPage });
+            await fetchData({name: searchValue, page: 0});
         } catch (error) {
             console.error(error);
         }
     };
 
+    const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
+        try {
+            const result = await AdminEditorService.detailEditor(idEditor);
+            setEditorToEdit(result);
+
+            if (modalType === 'edit') {
+                openEditModal();
+            } else if (modalType === 'detail') {
+                openDetailModal();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    let idEditor;
+    useEffect(() => {
+        fetchEditorDetails(idEditor);
+    }, [idEditor]);
+
     return (
         <Layout>
             <div>
-
-
                 <AddEditorModal
                     isOpen={showModal}
-                    onClose={closeModal}
-                    onSave={handleSaveModal}
+                    onClose={closeAddModal}
+                />
+                <EditEditorModal
+                    isOpen={showEditModal}
+                    onClose={closeEditModal}
+                    editorToEdit={editorToEdit}
+                />
+                <DetailEditorModal
+                    isOpen={openDetailModal}
+                    onClose={closeDetailModal}
+                    editorToDetail={editorToEdit}
                 />
             </div>
             <div className="bg-white p-6 shadow-md">
@@ -100,10 +146,10 @@ const ManageEditor = () => {
                 <div className="flex justify-end">
                     <button
                         className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-4 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-2 mb-2 ease-linear transition-all duration-150"
-                        onClick={openModal}
+                        onClick={openAddModal}
                         type="button"
                     >
-                        <MdPersonAddAlt size="20" /> Thêm mới biên tập viên
+                        <MdPersonAddAlt size="20"/> Thêm mới biên tập viên
                     </button>
                 </div>
                 {isLoading ? (
@@ -197,7 +243,7 @@ const ManageEditor = () => {
                                             scope="row"
                                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
                                         >
-                                            { count++}
+                                            {count++}
                                         </td>
                                         <td
                                             scope="row"
@@ -238,24 +284,42 @@ const ManageEditor = () => {
                                         <td className="px-6 py-4">
                                             <button
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => {
-                                                    // Xử lý sự kiện sửa người dùng
-                                                }}
+                                                onClick={() => fetchEditorDetails(editor.id, 'detail')}
                                             >
-                                                Sửa
+                                                <SlInfo size="20"/>
                                             </button>
                                             <button
-                                                className="bg-red-500 text-white px-2 py-1 rounded-md"
-                                                onClick={() => handleDeleteUser(editor.id)}
+                                                className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                                                onClick={() => fetchEditorDetails(editor.id, 'edit')}
                                             >
-                                                Xóa
+                                                <BiSolidEdit size="20"/>
+                                            </button>
+                                            <button
+                                                className="bg-red-500 text-white px-2 py-1 rounded-md mr-2"
+                                                onClick={
+                                                    () => Alert.swalWithBootstrapButtons.fire({
+                                                        icon: "warning",
+                                                        title: "Xác nhận xóa",
+                                                        html: `Bạn có muốn xoá biên tập viên <span style="color: red">${editor.name}</span> không?`,
+                                                        showCancelButton: true,
+                                                        cancelButtonText: 'Không',
+                                                        confirmButtonText: 'Có',
+                                                        reverseButtons: true
+                                                    }).then((res) => {
+                                                        if (res.isConfirmed) {
+                                                            handleDeleteUser(editor)
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                                <RiDeleteBin6Line size="20"/>
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
                                 </tbody>
                             </table>
-                            <div className="flex justify-center mt-4">
+                            <div className="flex justify-center mt-4 mb-4">
                                 <ReactPaginate
                                     breakLabel="..."
                                     nextLabel=">"
@@ -264,7 +328,7 @@ const ManageEditor = () => {
                                     previousLabel="<"
                                     containerClassName="pagination flex space-x-2"
                                     pageLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-rose-500 transition-colors duration-300 hover:bg-rose-500 hover:text-white ${
-                                        currentPage === 0 ?  '': 'disabled:opacity-50'
+                                        currentPage === 0 ? '' : 'disabled:opacity-50'
                                     }`}
                                     nextLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
                                         nextDisabled ? 'disabled:opacity-50' : ''
@@ -272,7 +336,7 @@ const ManageEditor = () => {
                                     previousLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
                                         prevDisabled ? 'disabled:opacity-50' : ''
                                     }`}
-                                    activeClassName="text-rose-500"
+                                    activeClassName="active:bg-white active:text-rose-500"
                                     disabledClassName="d-none"
                                 />
                             </div>

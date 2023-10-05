@@ -1,37 +1,63 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import {differenceInYears, parseISO} from "date-fns";
+import { differenceInYears, parseISO } from "date-fns";
 import {BiHide, BiShowAlt} from "react-icons/bi";
 import * as AdminEditorService from "../../../service/adminEditorService";
 import {storage} from "../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 
-
 interface EditorModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: () => void;
+    onSave: (values: any) => void;
+    editorToEdit: [];
 }
 
-const AddEditorModal: React.FC<EditorModalProps> = ({
-                                                        isOpen,
-                                                        onClose,
-                                                    }) => {
+const EditEditorModal: React.FC<EditorModalProps> = ({
+                                                         isOpen,
+                                                         onClose,
+                                                         onSave,
+                                                         editorToEdit,
+                                                     }) => {
     Modal.setAppElement("#__next");
 
     const [firebaseImg, setImg] = useState(null);
     const [avatar, setAvatarFile] = useState();
     const [avatarUrl, setAvatarUrl] = useState();
     const [showPassword, setShowPassword] = useState(true);
-
     const handleFileSelect = (event, setFile, setFileUrl) => {
         const file = event.target.files[0];
         if (file) {
             setFile(file);
         }
     };
+    useEffect(() => {
+        if (editorToEdit) {
+            console.log(editorToEdit)
+
+        formik.setValues({
+            id: editorToEdit?.id ||"",
+            name: editorToEdit?.name ||"",
+            username: editorToEdit?.users?.username || "",
+            email: editorToEdit?.email || "",
+            password: "",
+            repeatPassword: "",
+            gender: editorToEdit?.gender || "",
+            birthday: editorToEdit?.birthday || "",
+            phoneNumber: editorToEdit?.phoneNumber || "",
+            address: editorToEdit?.address || "",
+            userId: editorToEdit?.users?.id || "",
+            image: editorToEdit?.image || ""
+        });
+
+            // Set hình ảnh xem trước nếu có
+            if (editorToEdit?.image) {
+                setAvatarUrl(editorToEdit?.image);
+            }
+        }
+    }, [editorToEdit]);
 
     const handleFileUpload = async () => {
         return new Promise((resolve, reject) => {
@@ -63,7 +89,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
 
     const handleRemoveImage = () => {
         setImg(null);
-        setAvatarFile(null);
+        setAvatarUrl(null);
     };
 
     const handleAvatarFileSelect = (event) => {
@@ -76,6 +102,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
 
     const formik = useFormik({
         initialValues: {
+            id: "",
             name: "",
             birthday: "",
             gender: "",
@@ -86,6 +113,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             repeatPassword: "",
             username: "",
             password: "",
+            userId: "",
         },
         validationSchema: Yup.object({
             username: Yup.string().required("Username is required"),
@@ -113,18 +141,20 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             const avatarUrl = results;
             let newEditor = {
                 ...values,
-                users: {"username": values.username, "password": values.password},
-                "image": avatarUrl,
-                "gender": parseInt(values.gender)
+                id: parseInt(values.id),
+                users: { username: values.username, password: values.password },
+                image: avatarUrl,
+                gender: parseInt(values.gender),
+                id: parseInt(values.usersId)
             };
-            const handleSaveModal = async () => {
+            const handleEditModal = async () => {
                 try {
-                    await AdminEditorService.createEditor(newEditor);
+                    await AdminEditorService.updateEditor({...newEditor});
                 } catch (error) {
                     console.error(error);
                 }
             };
-            handleSaveModal();
+            handleEditModal();
             resetForm();
             onClose();
         }
@@ -150,7 +180,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                         <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white">
                             <div
                                 className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                <h3 className="text-3xl font-semibold">Thêm mới biên tập viên</h3>
+                                <h3 className="text-3xl font-semibold"> Chỉnh sửa biên tập viên</h3>
                                 <button className="modal-close" onClick={onClose}>
                                     &times;
                                 </button>
@@ -175,9 +205,11 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                                     handleAvatarFileSelect(event);
                                                 }}
                                             />
-                                            {avatar && (
+                                            {avatarUrl && (
                                                 <>
-                                                    <img src={URL.createObjectURL(avatar)} alt="Loading..." className="mt-2 m-auto"
+                                                    <img
+                                                        src={avatarUrl ? avatarUrl : (avatar ? URL.createObjectURL(avatar) : '/assets/defaut-img/human.png')}
+                                                        alt="Loading..." className="mt-2 m-auto"
                                                          style={{maxWidth: 150}}/>
                                                     <button
                                                         className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
@@ -187,7 +219,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                                     </button>
                                                 </>
                                             )}
-                                            {!avatar && (
+                                            {!avatarUrl && (
                                                 <>
                                                     <img src="\assets\defaut-img\human.png" alt="Loading..."
                                                          className="mt-2 m-auto"
@@ -392,6 +424,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                         </div>
                                     </div>
                                     {/*footer*/}
+
                                     <div
                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                                         <button
@@ -405,7 +438,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="submit"
                                         >
-                                            Add new Editor
+                                            Update Editor
                                         </button>
                                     </div>
                                 </div>
@@ -418,4 +451,4 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
     );
 };
 
-export default AddEditorModal;
+export default EditEditorModal;
