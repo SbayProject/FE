@@ -1,7 +1,7 @@
 'use client'
 import '@/styles/globals.css'
 import type {AppProps} from 'next/app'
-import Layout from "@/pages/layout";
+import Layout from "@/pages/components/home-news/layout";
 import {CounterContextProvider} from "@/pages/components/reactContext/context";
 
 export default function App({Component, pageProps}: AppProps) {

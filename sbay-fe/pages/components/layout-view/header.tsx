@@ -15,8 +15,6 @@ export default function Header() {
     const [typePosts, setTypePosts] = useState([]);
     const [postType, setPostType] = useState([]);
     const {counter, setCounter} = useContext(CounterContext);
-    const [page, setPage] = useState(0);
-    const [totalPage, setTotalPage] = useState();
     const GetListAllTypePost = async () => {
         const res = await ListGetAllTypePost();
         setTypePosts(res);
@@ -24,7 +22,8 @@ export default function Header() {
     // @ts-ignore
     const GetListAllTypePostId = async (id) => {
         const res = await ListGetTypePostSearch(id,'', 0);
-        setCounter(res);
+        setCounter(res.content);
+        await new Promise((resolve)=>setTimeout(resolve,150))
         setPostType(res);
     }
     useEffect(() => {
