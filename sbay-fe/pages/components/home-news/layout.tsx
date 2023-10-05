@@ -1,9 +1,8 @@
 import React, {Suspense} from "react";
 import Header from "@/pages/components/layout-view/header";
 import Footer from "@/pages/components/layout-view/footer";
-import {Meta} from "@/pages/components/meta";
-import ImageNav from "@/pages/components/layout-view/imageNav";
-import Loading from "@/pages/loading";
+import {Meta} from "@/pages/meta";
+
 
 // @ts-ignore
 export default function Layout({children}) {
@@ -11,12 +10,9 @@ export default function Layout({children}) {
         <>
             <Meta/>
             <Header/>
-
-            <Suspense fallback={<Loading/>}>
-               <main className="w-full">
+               <main className="w-full ">
               {children}
               </main>
-            </Suspense>
             <Footer/>
         </>
     )
