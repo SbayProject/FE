@@ -127,10 +127,8 @@ export default function Post_news() {
                     <div className="grid-cols-1 sm:grid md:grid-cols-4 ">
 
                         {post.map((list, index) => (
-                            <LazyLoad key={index} offet={[-100,100]}
-                                      placeholder={<p>Loading...</p>}
-                                //@ts-ignore
-                            ><Link  href={`/components/home-news/${list.id}`}>
+                            //@ts-ignore
+                           <Link key={index}  href={`/components/home-news/${list.id}`}>
                                 <div
                                     className="mx-3 mt-6 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
                                 >
@@ -170,7 +168,6 @@ export default function Post_news() {
                                     </div>
                                 </div>
                             </Link>
-                            </LazyLoad>
                         ))}
                     </div>
                     <div className="text-center"
