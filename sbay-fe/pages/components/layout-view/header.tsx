@@ -1,29 +1,35 @@
-"use client"
+'use client'
 import Link from "next/link";
 import Image from "next/image";
 import React, {useContext, useEffect, useState} from "react";
 import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import {AiOutlineCloseCircle, AiOutlineMenu} from "react-icons/ai";
-import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/TypePostService";
-import {ListGetAllPost} from "@/pages/service/PostService";
-import Login from "@/pages/components/login/login";
-import ImageNav from "@/pages/components/layout-view/imageNav";
+import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/typePostService";
 import CounterContext from "@/pages/components/reactContext/context";
+import {BiLogIn, BiUserPlus} from "react-icons/bi";
+import {MdOutlineManageAccounts} from "react-icons/md";
+import 'react-toastify/dist/ReactToastify.min.css';
+
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [typePosts, setTypePosts] = useState([]);
     const [postType, setPostType] = useState([]);
     const {counter, setCounter} = useContext(CounterContext);
+    const [isLogin, setIsLogin] = useState(false);
+    const [token,setToken] = useState('');
+    const [image,setImage] = useState('');
+    const [name,setNames] = useState('');
+
     const GetListAllTypePost = async () => {
         const res = await ListGetAllTypePost();
         setTypePosts(res);
     }
     // @ts-ignore
     const GetListAllTypePostId = async (id) => {
-        const res = await ListGetTypePostSearch(id,'', 0);
+        const res = await ListGetTypePostSearch(id, '', 0);
         setCounter(res.content);
-        await new Promise((resolve)=>setTimeout(resolve,150))
+        await new Promise((resolve) => setTimeout(resolve, 150))
         setPostType(res);
     }
     useEffect(() => {
@@ -33,31 +39,103 @@ export default function Header() {
     const handleModalOpen = (b: boolean) => {
         setMobileMenuOpen(false);
     };
+    const LogOut = async () => {
+        await localStorage.removeItem("sub")
+        await localStorage.removeItem("token")
+        await localStorage.removeItem("name")
+        await localStorage.removeItem("image")
+        await localStorage.removeItem("role")
+        //@ts-ignore
+        await setIsLogin(false)
+        await new Promise((resolve)=>setTimeout(resolve,250))
+
+    }
+    const setTokenLogin =  () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+             setToken(token)
+            //@ts-ignore
+             setImage(localStorage.getItem("image"))
+            //@ts-ignore
+             setNames(localStorage.getItem("name"))
+            setIsLogin(true)
+        }else {
+            setIsLogin(false)
+        }
+    }
+    useEffect(() => {
+        setTokenLogin()
+    })
+
     if (!typePosts) {
         return null;
     }
     if (!postType) {
         return null;
     }
-
     return <>
         <header className="">
-            {/* Navigation bar */}
             <nav className="border-gray-200 px-4 lg:px-6 py-2.5 lg:h-20  z-40 fixed top-0
-                flex w-full items-center justify-between bg-white text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start"
-                 data-te-navbar-ref="">
-                <div className="mx-auto max-w-screen-xl
-                flex w-full flex-wrap items-center justify-between px-3">
+                flex w-full items-center justify-between bg-white text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
+                <div className="mx-auto max-w-screen-xl flex w-full flex-wrap items-center justify-between px-3">
                     <Link href="/" className="flex items-center">
-                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10"
-                               alt=""/>
+                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" alt=""/>
                     </Link>
-                    <div className="flex mt-0 items-center lg:order-2">
-                        <Link type="button" href="/components/login/login"
-                              className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng
-                            nhập
-                        </Link>
-                    </div>
+                    {isLogin ? (
+                        <div className="lg:order-2 ">
+                            <Link href="#!"
+                                  className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
+                                <img
+                                    //@ts-ignore
+                                    src={image}
+                                    className="rounded-full"
+                                    style={{height: 41, width: 42}}
+                                    alt=""
+                                    loading="lazy"/>
+                                <div
+                                    className="absolute hidden top-full min-w-full w-max rounded group-hover:block mt-[-5px]">
+                                    <ul className="text-left border bg-white rounded">
+                                        <li className=" px-5 py-3 border-b ">
+                                            <div
+                                                className="block rounded-lg bg-white p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 mb-2">
+                                                <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
+                                                hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-[0.20rem] px-[0.20rem] hover:rounded">
+                                                    <img
+                                                        //@ts-ignore
+                                                        src={image}
+                                                        className="rounded-full"
+                                                        style={{height: 38, width: 39}}
+                                                        alt=""
+                                                        loading="lazy"/>
+                                                    <span className="text-[20px] mt-1.5 px-3 ">{name}</span>
+                                                </h5>
+                                                <hr className="border-t-2 border-solid border-b-gray-700 mb-1"/>
+
+                                                <Link href="#!" className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
+                                                    <MdOutlineManageAccounts size={25} className="mt-0.5"/><h1
+                                                    className="mt-1 px-2">Xem tất cả trang quản lý</h1>
+                                                </Link>
+                                            </div>
+                                            <Link href="#!" className="flex py-3 px-3 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100  hover:rounded">
+                                                <BiUserPlus size={25} style={{color: "black"}}
+                                                            className="rounded-full"/><h1 className="px-2 ">Thông tin cá nhân</h1>
+                                            </Link>
+                                            <p className="flex px-3 py-3 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100  hover:rounded">
+                                                <BiLogIn size={25} style={{color: "black"}} className="rounded-full"/>
+                                                <Link href="/components/login/login" className="px-2" onClick={() => LogOut()}>Đăng xuất</Link>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="flex mt-0 items-center lg:order-2">
+                            <Link type="button" href="/components/login/login"
+                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng nhập
+                            </Link>
+                        </div>
+                    )}
                     <div className="flex items-center">
                         {mobileMenuOpen ? <AiOutlineCloseCircle onClick={() => {
                                 setMobileMenuOpen(!mobileMenuOpen)

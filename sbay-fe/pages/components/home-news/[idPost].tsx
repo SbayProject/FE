@@ -1,14 +1,14 @@
 import Link from "next/link";
-import React, {Suspense, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import moment from "moment/moment";
 import {useRouter} from "next/router";
+import {FcCalendar} from "react-icons/fc";
+import {DetailPost, ListGetAllTop4NewPost} from "@/pages/service/postService";
+import {ListGetTheSameKind} from "@/pages/service/typePostService";
+import ImageNav from "@/pages/components/layout-view/imageNav";
+import {FaCircleChevronUp} from "react-icons/fa6";
 // @ts-ignore
 import ReactHtmlParser from 'react-html-parser';
-import {FcCalendar} from "react-icons/fc";
-import {DetailPost, ListGetAllTop4NewPost} from "@/pages/service/PostService";
-import {ListGetTheSameKind} from "@/pages/service/TypePostService";
-import ImageNav from "@/pages/components/layout-view/imageNav";
-
 export default function IdPost() {
     const [newPost, setNewPost] = useState([]);
     const [newPostType, setNewPostType] = useState([]);
@@ -34,7 +34,12 @@ export default function IdPost() {
         GetListAllTop4NewPost()
         PostDetail()
     }, [idPost])
-
+    const scrollTop = () => {
+        // @ts-ignore
+        document.getElementById('myBtn').addEventListener('click', function () {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+    }
     if (!newPost) {
         return null;
     }
@@ -56,13 +61,13 @@ export default function IdPost() {
                         // @ts-ignore
                                                                                style={{cursor: "pointer"}}>Tin tức/ </Link>
                         <span
-                              className="hover:text-danger-600"
+                            className="hover:text-danger-600"
                             // @ts-ignore
-                              style={{cursor: "pointer"}}>{detail.typePost.name}/ </span>
+                            style={{cursor: "pointer"}}>{detail.typePost.name}/ </span>
                         <span
-                        className="hover:text-danger-600" style={{cursor: "pointer"}}
-                        // @ts-ignore
-                    >{detail.title}</span>
+                            className="hover:text-danger-600" style={{cursor: "pointer"}}
+                            // @ts-ignore
+                        >{detail.title}</span>
                     </span>
                 </div>
             </nav>
@@ -76,29 +81,29 @@ export default function IdPost() {
                         </div>
                         <hr/>
                     </p>
-                    <div >
+                    <div>
                         <h6 className="mt-2 text-[22px]">Một số bài viết cùng thể loại</h6>
-                            {newPostType.map((list, index) => (
-                                                    // @ts-ignore
+                        {newPostType.map((list, index) => (
+                            // @ts-ignore
                             <Link key={index} href={`/components/home-news/${list.id}`}
-                            className="flex mr-3 mb-5 flex-col items-center mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-                        >
-                            <img
-                                className="object-cover md:h-40 w-[12rem] rounded-t-lg md:rounded-none md:rounded-l-lg"
-                                // @ts-ignore
-                                src={list.image}
-                                alt=""
-                            />
-                            <div className="flex flex-col justify-between p-4 leading-normal">
-                                <h5 className="mb-2 text-[18px] font-bold tracking-tight text-gray-900 dark:text-white"
+                                  className="flex mr-3 mb-5 flex-col items-center mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                            >
+                                <img
+                                    className="object-cover md:h-40 w-[12rem] rounded-t-lg md:rounded-none md:rounded-l-lg"
                                     // @ts-ignore
-                                >{list.title}
-                                </h5>
-                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                                </p>
-                            </div>
-                        </Link>
-                                ))}
+                                    src={list.image}
+                                    alt=""
+                                />
+                                <div className="flex flex-col justify-between p-4 leading-normal">
+                                    <h5 className="mb-2 text-[18px] font-bold tracking-tight text-gray-900 dark:text-white"
+                                        // @ts-ignore
+                                    >{list.title}
+                                    </h5>
+                                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                    </p>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 </div>
                 <div className="col-span-2 mb-4  mt-5 border-2 container">
@@ -108,7 +113,8 @@ export default function IdPost() {
                     </h1>
                     <div className="mt-6">
                         <p className="mb-4">
-                            <article className="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
+                            <article
+                                className="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
                                 // @ts-ignore
                             >{detail.content}
                             </article>
@@ -154,6 +160,16 @@ export default function IdPost() {
                     ))}
                 </div>
             </div>
+            <button onClick={() => scrollTop()} id="myBtn" className="text-red-600 " style={{
+                display: "none",
+                position: "fixed",
+                bottom: 20,
+                right: 20,
+                zIndex: 99,
+                cursor: "pointer",
+            }}>
+                <FaCircleChevronUp size={40} style={{marginTop: "-3%"}}/>
+            </button>
         </>
     )
 }
