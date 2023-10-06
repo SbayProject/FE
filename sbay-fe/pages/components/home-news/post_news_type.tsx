@@ -1,15 +1,15 @@
 import Link from "next/link";
-import React, {Suspense, useEffect, useState} from "react";
-import moment from "moment";
+import React, {useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
-import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/TypePostService";
+import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/typePostService";
 import SearchPostError from "@/pages/components/error/searchPostError";
 import {useContext} from 'react';
 import CounterContext from "@/pages/components/reactContext/context";
 import ImageNav from "@/pages/components/layout-view/imageNav";
-import {Loading} from "@/pages/components/home-news/loading";
+import {Loading} from "@/pages/components/loading/loading";
 import {Button} from "@material-tailwind/react";
 import {RotatingLines} from "react-loader-spinner";
+import {FaCircleChevronUp} from "react-icons/fa6";
 export default function NavCard() {
     const [typePost, setTypePost] = useState([]);
     const [title, setTitle] = useState('');
@@ -56,6 +56,12 @@ export default function NavCard() {
         GetAllListTypePost();
     }, [])
 
+    const scrollTop=() =>{
+        // @ts-ignore
+        document.getElementById('myBtn').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
     if (!typePost) {
         return null;
     }
@@ -137,36 +143,25 @@ export default function NavCard() {
                 </nav>
                 {counter == 0 ? <SearchPostError/> : (
                     <div className="mt-5 container mb-12" style={{maxWidth: "100%"}}>
-                        <div className="grid-cols-1 sm:grid md:grid-cols-4 "
-                            //@ts-ignore
-                        >{counter.map((list, index) => (
-                            //@ts-ignore
-                            <Link key={index} href={`/components/home-news/${list.id}`}>
-                                <div
-                                    className="mx-3 mt-6 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0">
-                                    <div>
-                                        <img
-                                            className="rounded-t-lg md:h-44"
-                                            //@ts-ignore
-                                            src={list?.image}
-                                            style={{width: "100%"}}
-                                            alt=""
-                                        />
-                                    </div>
-                                    <div className="py-2 px-6 text-base text-neutral-600 dark:text-neutral-200">
-                                        <p
+                        <div className="grid-cols-1 sm:grid md:grid-cols-4 ">
+                            {//@ts-ignore
+                                counter.map((list, index) => (
+                                <div key={index}
+                                     className="mx-3 mt-5 md:mb-10 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
+                                    // @ts-ignore
+                                ><Link href={`/components/home-news/${list.id}`}>
+                                    <img
+                                        className="rounded-t-lg md:h-44"
+                                        style={{width: "100%"}}
+                                        // @ts-ignore
+                                        src={list.image}
+                                        alt=""
+                                    />
+                                </Link>
+                                    <div className="p-6">
+                                        <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
                                             // @ts-ignore
-                                        >{list?.createDate === "" ? "" : moment(list?.createDate, 'YYYY/MM/DD').format('DD-MM-YYYY')}</p>
-                                    </div>
-                                    <div className="px-6">
-
-                                        <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
-                                            //@ts-ignore
-                                        >{list?.title}
-                                        </h5>
-                                        <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
-                                            //@ts-ignore
-                                        >
+                                        >{list.title}
                                         </h5>
                                         <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200"
                                            style={{
@@ -175,12 +170,11 @@ export default function NavCard() {
                                                textOverflow: 'ellipsis'
                                            }}
                                             // @ts-ignore
-                                        >{list?.content}
+                                        >{list.content}
                                         </p>
                                     </div>
                                 </div>
-                            </Link>
-                        ))}
+                            ))}
                         </div>
                         {button == true ? <div className="flex justify-center mt-5"><RotatingLines
                             strokeColor="grey"
@@ -194,7 +188,7 @@ export default function NavCard() {
                                     //@ts-ignore
                                     page === totalPage - 1 ? ('') : (
                                         <Button onClick={() => loadMore(page + 1)}
-                                                className="bg-white hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded  mt-10 ">
+                                                className="bg-white hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded mt-5">
                                             Xem thêm các tin tức
                                         </Button>
                                     )}
@@ -203,6 +197,16 @@ export default function NavCard() {
                     </div>)}
             </>
             )}
+            <button onClick={() => scrollTop()} id="myBtn" className="text-red-600 " style={{
+                display: "none",
+                position: "fixed",
+                bottom: 20,
+                right: 20,
+                zIndex: 99,
+                cursor: "pointer",
+            }}>
+                <FaCircleChevronUp size={40} style={{marginTop: "-3%"}}/>
+            </button>
         </>
     )
 }

@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import {AiOutlineMail, AiOutlinePhone} from "react-icons/ai";
 import {BsArrowRight, BsFacebook} from "react-icons/bs";
@@ -91,6 +92,7 @@ export default function Footer() {
                                     Giới thiệu
                                 </Link>
                             </p>
+
                             <p className="mb-3">
                                 <Link href="/components/home-news/post_news"
                                    className="flex text-neutral-600 dark:text-neutral-200 hover:text-red-700">

@@ -1,22 +1,21 @@
 'use client'
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import moment from "moment";
 import {Field, Form, Formik} from "formik";
-import {ListGetAllPost} from "@/pages/service/PostService";
-import {ListGetAllTypePost} from "@/pages/service/TypePostService";
+import {ListGetAllPost} from "@/pages/service/postService";
+import {ListGetAllTypePost} from "@/pages/service/typePostService";
 import SearchPostError from "@/pages/components/error/searchPostError";
 import ImageNav from "@/pages/components/layout-view/imageNav";
+import {Button} from "@material-tailwind/react";
+import {RotatingLines} from "react-loader-spinner";
+import {Loading} from "@/pages/components/loading/loading";
+import {FaCircleChevronUp} from "react-icons/fa6";
+import {AiOutlineSearch} from "react-icons/ai";
 // @ts-ignore
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 // @ts-ignore
 import LazyLoad from 'react-lazyload'
-import {Button} from "@material-tailwind/react";
-import {RotatingLines} from "react-loader-spinner";
-import {Loading} from "@/pages/components/home-news/loading";
-import { BsArrowUpCircle } from "react-icons/bs";
-import { FaCircleChevronUp } from "react-icons/fa6";
-import {AiOutlineSearch} from "react-icons/ai";
+
 export default function Post_news() {
     const [post, setPost] = useState([]);
     const [typePost, setTypePost] = useState([]);
@@ -42,23 +41,24 @@ export default function Post_news() {
         const res = await ListGetAllPost(type, title, page);
         setPost(res.totalPages);
         setTotalPage(res.totalPages)
-
         //@ts-ignore
         setPage((prevState) => prevState + 1)
         //@ts-ignore
         setPost(() => [...post, ...res.content])
         setButton(false)
-        console.log(page)
-        console.log(totalPage)
 
     }
-    useEffect(()=>{
+    const scrollTop = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+    useEffect(() => {
         window.onscroll = function () {
             scrollFunction()
         };
     })
 
-    const scrollFunction=() => {
+    const scrollFunction = () => {
         const top = document.getElementById("myBtn");
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             // @ts-ignore
@@ -68,13 +68,6 @@ export default function Post_news() {
             top.style.display = "none";
         }
     }
-
-// When the user clicks on the button, scroll to the top of the document
-    const scrollTop=() =>{
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-
     useEffect(() => {
         GetAllListPost();
     }, [type, title])
@@ -146,7 +139,7 @@ export default function Post_news() {
                                     <div>
                                         <button
                                             className="bg-white rounded-lg hover:bg-gray-100 text-gray-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-gray-400 shadow">
-                              <AiOutlineSearch size={25}/>
+                                            <AiOutlineSearch size={25}/>
                                         </button>
                                     </div>
                                 </Form>
@@ -157,46 +150,35 @@ export default function Post_news() {
                         <div className="mt-5 container mb-12" style={{maxWidth: "100%"}}>
                             <div className="grid-cols-1 sm:grid md:grid-cols-4 ">
                                 {post.map((list, index) => (
-                                    //@ts-ignore
-                                    <Link key={index} href={`/components/home-news/${list.id}`}>
-                                        <div
-                                            className="mx-3 mt-6 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0">
-                                            <div>
-                                                <LazyLoadImage
-                                                    className="rounded-t-lg md:h-44"
-                                                    //@ts-ignore
-                                                    src={list?.image}
-                                                    style={{width: "100%"}}
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div className="py-2 px-6 text-base text-neutral-600 dark:text-neutral-200">
-                                                <p
-                                                    // @ts-ignore
-                                                >{list?.createDate === "" ? "" : moment(list?.createDate, 'YYYY/MM/DD').format('DD-MM-YYYY')}</p>
-                                            </div>
-                                            <div className="px-6">
-
-                                                <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
-                                                    //@ts-ignore
-                                                >{list?.title}
-                                                </h5>
-                                                <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
-                                                    //@ts-ignore
-                                                >
-                                                </h5>
-                                                <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200"
-                                                   style={{
-                                                       overflow: 'hidden',
-                                                       whiteSpace: 'nowrap',
-                                                       textOverflow: 'ellipsis'
-                                                   }}
-                                                    // @ts-ignore
-                                                >{list?.content}
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div key={index}
+                                         className="mx-3 mt-5 md:mb-10 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
+                                        // @ts-ignore
+                                    ><Link href={`/components/home-news/${list.id}`}>
+                                        <img
+                                            className="rounded-t-lg md:h-44"
+                                            style={{width: "100%"}}
+                                            // @ts-ignore
+                                            src={list.image}
+                                            alt=""
+                                        />
                                     </Link>
+                                        <div className="p-6">
+                                            <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50"
+                                                // @ts-ignore
+                                            >{list.title}
+                                            </h5>
+                                            <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200"
+                                               style={{
+                                                   overflow: 'hidden',
+                                                   whiteSpace: 'nowrap',
+                                                   textOverflow: 'ellipsis'
+                                               }}
+                                                // @ts-ignore
+                                            >{list.content}
+                                            </p>
+                                        </div>
+                                    </div>
+
                                 ))}
                             </div>
 
@@ -212,7 +194,7 @@ export default function Post_news() {
                                         //@ts-ignore
                                         page == totalPage - 1 ? ('') : (
                                             <Button onClick={() => loadMore(page + 1)}
-                                                    className="bg-white hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded  mt-10 ">
+                                                    className="bg-white hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded mt-5">
                                                 Xem thêm các tin tức
                                             </Button>
                                         )}
@@ -224,7 +206,7 @@ export default function Post_news() {
                     ) : (<SearchPostError/>)}
                 </>
             )}
-            <button onClick={() => scrollTop()} id="myBtn" className="text-red-600" style={{
+            <button onClick={() => scrollTop()} id="myBtn" className={`text-red-600 `} style={{
                 display: "none",
                 position: "fixed",
                 bottom: 20,
@@ -234,6 +216,7 @@ export default function Post_news() {
             }}>
                 <FaCircleChevronUp size={40} style={{marginTop: "-3%"}}/>
             </button>
+
         </>
     )
 

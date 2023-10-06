@@ -1,8 +1,7 @@
 import axios from "axios";
-import {notFound} from "next/navigation";
 // @ts-ignore
 export const ListGetAllPost = async (type, title, page) => {
-    await new Promise((resolve)=>setTimeout(resolve,150))
+    await new Promise((resolve)=>setTimeout(resolve,200))
     try {
         if (title==''){
             title=''

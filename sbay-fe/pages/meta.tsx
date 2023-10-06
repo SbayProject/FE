@@ -17,7 +17,8 @@ export const Meta = ({title, keywords, description}: Props) => {
         </Head>
     )
 }
-Meta.defaultProps = {   title: 'Sbay',
-    keywords: 'tin tức, vé máy bay, đại lí bán vé máy bay, khách sạn',
+Meta.defaultProps = {
+    title: 'Sbay',
+    keywords: 'sbay, tin tức, vé máy bay, đại lí bán vé máy bay, khách sạn',
     description: 'Nhận tin tức mới nhất về sbay',
 }
