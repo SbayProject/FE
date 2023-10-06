@@ -49,8 +49,10 @@ export default function Post_news() {
 
     }
     const scrollTop = () => {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        // @ts-ignore
+        document.getElementById('myBtn').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
     useEffect(() => {
         window.onscroll = function () {
