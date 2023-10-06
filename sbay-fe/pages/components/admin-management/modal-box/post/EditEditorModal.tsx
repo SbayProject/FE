@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { differenceInYears, parseISO } from "date-fns";
 import {BiHide, BiShowAlt} from "react-icons/bi";
-import * as AdminEditorService from "../../../service/adminEditorService";
-import {storage} from "../../../../firebase";
+import * as AdminEditorService from "../../../../service/adminEditorService";
+import {storage} from "../../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 
 interface EditorModalProps {

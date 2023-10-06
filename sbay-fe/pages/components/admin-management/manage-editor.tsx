@@ -6,13 +6,13 @@ import {Field, Form, Formik} from "formik";
 import ReactPaginate from "react-paginate";
 
 import * as AdminEditorService from "../../service/adminEditorService";
-import AddEditorModal from "./modal-box/AddEditorModal";
+import AddEditorModal from "./modal-box/editor/AddEditorModal";
 import {MdPersonAddAlt} from "react-icons/md";
 import {BiSolidEdit} from "react-icons/bi";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import * as Alert from "../../components/hooks/Alert";
-import EditEditorModal from "./modal-box/EditEditorModal";
-import DetailEditorModal from "./modal-box/InfomationEditor";
+import EditEditorModal from "./modal-box/editor/EditEditorModal";
+import DetailEditorModal from "./modal-box/editor/InfomationEditor";
 import {SlInfo} from "react-icons/sl";
 type ModalType = 'edit' | 'detail';
 
@@ -52,6 +52,7 @@ const ManageEditor = () => {
 
     const closeEditModal = () => {
         setShowEditModal(false);
+        console.log("Tắt Edit")
         fetchData({name: "", page: currentPage});
     };
     const openDetailModal = () => {
@@ -59,7 +60,8 @@ const ManageEditor = () => {
     };
 
     const closeDetailModal = () => {
-        setShowEditModal(false);
+        setShowDetailModal(false);
+        console.log("Tắt Detail")
         fetchData({name: "", page: currentPage});
     };
 
@@ -108,7 +110,6 @@ const ManageEditor = () => {
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
             setEditorToEdit(result);
-
             if (modalType === 'edit') {
                 openEditModal();
             } else if (modalType === 'detail') {
@@ -120,7 +121,7 @@ const ManageEditor = () => {
     };
     let idEditor;
     useEffect(() => {
-        fetchEditorDetails(idEditor);
+        fetchEditorDetails(idEditor,'edit');
     }, [idEditor]);
 
     return (
@@ -136,7 +137,7 @@ const ManageEditor = () => {
                     editorToEdit={editorToEdit}
                 />
                 <DetailEditorModal
-                    isOpen={openDetailModal}
+                    isOpen={showDetailModal}
                     onClose={closeDetailModal}
                     editorToDetail={editorToEdit}
                 />

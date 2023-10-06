@@ -88,9 +88,9 @@ const Layout = ({children}) => {
                                 </svg>
                             </button>
                             <div
-                                className={`${menuOpen ? 'block' : 'hidden'} bg-white w-full h-full transition-transform transform`}
-                                style={{maxWidth: '80%'}}>
-                                <ul className="w-full flex flex-col items-end">
+                                className={`${menuOpen ? 'block' : 'hidden'} w-[250px] bg-white w-full h-full transition-transform transform`}
+                                >
+                                <ul className=" flex flex-col items-end">
                                     <li className="mb-2">
                                         <Link href="/components/admin-management/manage-editor"
                                               className="hover:text-gray-400 py-2 px-4 block"
