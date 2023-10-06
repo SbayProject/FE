@@ -36,9 +36,25 @@ export default function IdPost() {
     }, [idPost])
     const scrollTop = () => {
         // @ts-ignore
-        document.getElementById('myBtn').addEventListener('click', function () {
-            window.scrollTo({top: 0, behavior: 'smooth'});
+        document.getElementById('myBtn').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+    }
+    useEffect(() => {
+        window.onscroll = function () {
+            scrollFunction()
+        };
+    })
+
+    const scrollFunction = () => {
+        const top = document.getElementById("myBtn");
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            // @ts-ignore
+            top.style.display = "block";
+        } else {
+            // @ts-ignore
+            top.style.display = "none";
+        }
     }
     if (!newPost) {
         return null;
