@@ -27,7 +27,7 @@ export default function Header() {
     }
     // @ts-ignore
     const GetListAllTypePostId = async (id) => {
-        const res = await ListGetTypePostSearch(id, '', 0);
+        const res = await ListGetTypePostSearch(id, null, 0);
         setCounter(res.content);
         await new Promise((resolve) => setTimeout(resolve, 150))
         setPostType(res);
@@ -76,7 +76,7 @@ export default function Header() {
     return <>
         <header className="">
             <nav className="border-gray-200 px-4 lg:px-6 py-2.5 lg:h-20  z-40 fixed top-0
-                flex w-full items-center justify-between bg-white text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
+                flex w-full items-center justify-between bg-secondary-50 text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
                 <div className="mx-auto max-w-screen-xl flex w-full flex-wrap items-center justify-between px-3">
                     <Link href="/" className="flex items-center">
                         <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" alt=""/>
@@ -98,6 +98,7 @@ export default function Header() {
                                         <li className=" px-5 py-3 border-b ">
                                             <div
                                                 className="block rounded-lg bg-white p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 mb-2">
+                                                <Link href="/components/home-news/informationEmployees">
                                                 <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
                                                 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-[0.20rem] px-[0.20rem] hover:rounded">
                                                     <img
@@ -109,6 +110,7 @@ export default function Header() {
                                                         loading="lazy"/>
                                                     <span className="text-[20px] mt-1.5 px-3 ">{name}</span>
                                                 </h5>
+                                                </Link>
                                                 <hr className="border-t-2 border-solid border-b-gray-700 mb-1"/>
 
                                                 <Link href="#!" className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
@@ -116,10 +118,6 @@ export default function Header() {
                                                     className="mt-1 px-2">Xem tất cả trang quản lý</h1>
                                                 </Link>
                                             </div>
-                                            <Link href="#!" className="flex py-3 px-3 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100  hover:rounded">
-                                                <BiUserPlus size={25} style={{color: "black"}}
-                                                            className="rounded-full"/><h1 className="px-2 ">Thông tin cá nhân</h1>
-                                            </Link>
                                             <p className="flex px-3 py-3 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100  hover:rounded">
                                                 <BiLogIn size={25} style={{color: "black"}} className="rounded-full"/>
                                                 <Link href="/components/login/login" className="px-2" onClick={() => LogOut()}>Đăng xuất</Link>
@@ -187,7 +185,7 @@ export default function Header() {
             </nav>
         </header>
         <div
-            className={`md:hidden flex mt-2 flex-col w-[70%] z-50 h-screen fixed bg-neutral-300 text-white top-[60px] ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
+            className={`md:hidden flex mt-[3.7%] flex-col w-[70%] z-50 h-screen fixed bg-neutral-300 text-white top-[60px] ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 md:bg">
                 <li>
                     <Link href="/"

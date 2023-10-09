@@ -8,7 +8,7 @@ import SearchPostError from "@/pages/components/error/searchPostError";
 import ImageNav from "@/pages/components/layout-view/imageNav";
 import {Button} from "@material-tailwind/react";
 import {RotatingLines} from "react-loader-spinner";
-import {Loading} from "@/pages/components/loading/loading";
+import {LoadingPost} from "@/pages/components/loading/loadingPost";
 import {FaCircleChevronUp} from "react-icons/fa6";
 import {AiOutlineSearch} from "react-icons/ai";
 // @ts-ignore
@@ -54,22 +54,21 @@ export default function Post_news() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+    const scrollFunction = () => {
+        const top = document.getElementById("myBtn");
+        if (top) {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                top.style.display = "block";
+            } else {
+                top.style.display = "none";
+            }
+        }
+    }
     useEffect(() => {
         window.onscroll = function () {
             scrollFunction()
         };
     })
-
-    const scrollFunction = () => {
-        const top = document.getElementById("myBtn");
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            // @ts-ignore
-            top.style.display = "block";
-        } else {
-            // @ts-ignore
-            top.style.display = "none";
-        }
-    }
     useEffect(() => {
         GetAllListPost();
     }, [type, title])
@@ -86,7 +85,7 @@ export default function Post_news() {
     return (
         <>
             <ImageNav/>
-            {(post.length == 0 && title == '' && type == '') ? (<Loading/>) : (
+            {(post.length == 0 && title == '' && type == '') ? (<LoadingPost/>) : (
                 <>
                     <nav
                         className="container flex w-full flex-wrap items-center justify-between  bg-neutral-100 py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 lg:py-4"
@@ -111,9 +110,8 @@ export default function Post_news() {
                                         // @ts-ignore
                                         setType(values.type);
                                         const res = await ListGetAllPost(values?.type, values?.title, 0);
-                                        setPost(res)
+                                        setPost(res.content)
                                         setPage(() => 0)
-
                                     }
                                     searchPost()
                                 }}>
@@ -131,7 +129,7 @@ export default function Post_news() {
                                            as="select"
                                            name="type"
                                            className=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[12vw]  py-[0.43rem] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option>Chọn Thể Loại</option>
+                                        <option>Chọn thể Loại</option>
                                         {typePost?.map((list, index) => (
                                             <option
                                                 // @ts-ignore
