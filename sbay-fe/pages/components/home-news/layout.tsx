@@ -8,7 +8,7 @@ export default function Layout({children}) {
         <>
             <Meta/>
             <Header/>
-               <main className="w-full ">
+               <main className="w-full h-full ">
               {children}
               </main>
             <Footer/>

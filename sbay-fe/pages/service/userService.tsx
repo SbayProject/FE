@@ -7,7 +7,7 @@ export const loginForm = async (values) => {
         const res=await axios.post('http://localhost:8080/api/user/authenticate',values)
         return res.data
     }catch (e){
-        // @ts-ignore
+        //@ts-ignore
         return toast.error(e.response.data)
     }
 }
