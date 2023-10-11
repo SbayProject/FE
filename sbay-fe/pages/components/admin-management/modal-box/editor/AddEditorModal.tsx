@@ -110,7 +110,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             address: Yup.string().required("Address is required"),
         }),
         onSubmit: async (values,{resetForm}) => {
-
+            await LoadingHidden();
             const results = await handleAvatarFileUpload()
             await LoadingHidden(results,null);
 

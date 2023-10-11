@@ -29,7 +29,7 @@ const ManageEditor = () => {
     let count = currentPage * size + 1;
     const [prevDisabled, setPrevDisabled] = useState(true);
     const [nextDisabled, setNextDisabled] = useState(true);
-    const [idDelete, setIdDelete] = useState(null);
+    const [idEditor, setIdEditor] = useState([]);
     const [editorToEdit, setEditorToEdit] = useState([]); // Đối tượng cần chỉnh sửa
 
 
@@ -50,19 +50,21 @@ const ManageEditor = () => {
         setShowEditModal(true);
     };
 
-    const closeEditModal = () => {
+    const closeEditModal = async () => {
+        await fetchData({name: "", page: currentPage});
         setShowEditModal(false);
-        console.log("Tắt Edit")
-        fetchData({name: "", page: currentPage});
+        await fetchData({name: "", page: currentPage});
+
+        console.log("load lai")
     };
     const openDetailModal = () => {
         setShowDetailModal(true);
     };
 
     const closeDetailModal = () => {
+        fetchData({name: "", page: currentPage});
         setShowDetailModal(false);
         console.log("Tắt Detail")
-        fetchData({name: "", page: currentPage});
     };
 
 
@@ -119,10 +121,10 @@ const ManageEditor = () => {
             console.error(error);
         }
     };
-    let idEditor;
     useEffect(() => {
-        fetchEditorDetails(idEditor,'edit');
+        fetchEditorDetails(idEditor, 'edit');
     }, [idEditor]);
+
 
     return (
         <Layout>

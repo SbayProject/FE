@@ -65,20 +65,16 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
     };
     useEffect(() => {
         if (postDetails) {
-            console.log(postDetails)
+            console.log(postDetails.image)
+            setImageUrl(postDetails?.image);
 
             formik.setValues({
                 id: postDetails?.id || "",
                 title: postDetails?.title || "",
                 content: postDetails?.content || "",
                 typePostId: postDetails?.typePost?.id?.toString() || "",
-                image: postDetails?.image || "",
+                image: imageUrl || "",
             });
-
-            // Set hình ảnh xem trước nếu có
-            if (postDetails?.image) {
-                setImageUrl(postDetails?.image);
-            }
         }
     }, [postDetails]);
 
@@ -120,7 +116,10 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
     };
 
     const handleImageFileUpload = async () => {
-        return handleFileUpload(image, setImageFile, setImageUrl);
+        if (imageUrl != null)
+            return imageUrl
+        else
+            return handleFileUpload(image, setImageFile, setImageUrl);
     };
 
     const formik = useFormik({
@@ -137,6 +136,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
             typePostId: Yup.string().required("TypePost is required"),
         }),
         onSubmit: async (values, {resetForm}) => {
+            await LoadingHidden(3000);
             const results = await handleImageFileUpload();
             const imageUrl = results;
             let newPost = {
@@ -150,7 +150,6 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                 }
             };
             handleEdit();
-            await LoadingHidden();
             resetForm();
             onClose();
         }
@@ -200,11 +199,12 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                                 handleImageFileSelect(event);
                                             }}
                                         />
-                                        {image && (
+                                        {imageUrl && (
                                             <>
-                                                <img src={URL.createObjectURL(image)} alt="Loading..."
-                                                     className="mt-2 m-auto"
-                                                     style={{maxWidth: 150}}/>
+                                                <img
+                                                    src={imageUrl}
+                                                    alt="Loading..." className="mt-2 m-auto"
+                                                    style={{maxWidth: 150}}/>
                                                 <button
                                                     className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
                                                     onClick={handleRemoveImage}
@@ -213,11 +213,13 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                                 </button>
                                             </>
                                         )}
-                                        {!image && (
+                                        {!imageUrl && (
                                             <>
-                                                <img src="\assets\defaut-img\human.png" alt="Loading..."
-                                                     className="mt-2 m-auto"
-                                                     style={{maxWidth: 150}}/>
+                                                <img
+                                                    src={image ? URL.createObjectURL(image) : '/assets/defaut-img/human.png'}
+                                                    alt="Loading..."
+                                                    className="mt-2 m-auto"
+                                                    style={{maxWidth: 150}}/>
                                                 <label
                                                     htmlFor="image"
                                                     className="mt-2 cursor-pointer text-blue-500 underline"

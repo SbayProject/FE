@@ -85,6 +85,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
             typePostId: Yup.string().required("TypePost is required"),
         }),
         onSubmit: async (values, {resetForm}) => {
+            await LoadingHidden(4000);
             const results = await handleImageFileUpload();
             const imageUrl = results;
             console.log(values.typePostId)
@@ -99,7 +100,6 @@ const AddPostModal: React.FC<PostModalProps> = ({
                 }
             };
             handleSaveModal();
-            await LoadingHidden();
             resetForm();
             onClose();
         }
