@@ -34,7 +34,7 @@ export const detailEditor = async (id) =>{
 
 export const updateEditor = async (editor) =>{
     const token = localStorage.getItem('token')
-    await axios.put(`http://localhost:8080/api/editor/detail/${editor.id}`,{...editor},
+    await axios.put(`http://localhost:8080/api/editor/updateEditor/${editor.id}`,{...editor},
         {
             headers: {
                 Authorization: `Bearer ${token}`,
