@@ -10,7 +10,7 @@ export const findAllTypePosts = async (name) =>{
 
 export const remove = async (typePost) =>{
     const token = localStorage.getItem('token')
-    await axios.patch(`http://localhost:8080/api/post/deleteTypePost`,typePost,
+    await axios.patch(`http://localhost:8080/api/typePost/deleteTypePost`,typePost,
     {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -20,7 +20,7 @@ export const remove = async (typePost) =>{
 
 export const updateTypePost = async (typePost) =>{
     const token = localStorage.getItem('token')
-    await axios.patch(`http://localhost:8080/api/post/updateTypePost`,typePost,
+    await axios.patch(`http://localhost:8080/api/typePost/updateTypePost`,typePost,
     {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -29,7 +29,7 @@ export const updateTypePost = async (typePost) =>{
 }
 export const createTypePosts = async (newTypePost) => {
     const token = localStorage.getItem('token')
-    await axios.post(`http://localhost:8080/api/post/createTypePost`,newTypePost,
+    await axios.post(`http://localhost:8080/api/typePost/createTypePost`,newTypePost,
          {
              headers: {
                  Authorization: `Bearer ${token}`,

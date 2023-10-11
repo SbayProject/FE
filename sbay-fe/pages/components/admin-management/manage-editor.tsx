@@ -10,10 +10,10 @@ import AddEditorModal from "./modal-box/editor/AddEditorModal";
 import {MdPersonAddAlt} from "react-icons/md";
 import {BiSolidEdit} from "react-icons/bi";
 import {RiDeleteBin6Line} from "react-icons/ri";
+import {SlInfo} from "react-icons/sl";
 import * as Alert from "../../components/hooks/Alert";
 import EditEditorModal from "./modal-box/editor/EditEditorModal";
 import DetailEditorModal from "./modal-box/editor/InfomationEditor";
-import {SlInfo} from "react-icons/sl";
 type ModalType = 'edit' | 'detail';
 
 const ManageEditor = () => {
@@ -88,8 +88,8 @@ const ManageEditor = () => {
     const handlePageClick = async ({selected}) => {
         setCurrentPage(selected);
         await fetchData({name: searchValue, page: selected});
-        setPrevDisabled(currentPage === 0);
-        setNextDisabled(currentPage === pageCount - 1);
+        setPrevDisabled(selected === 0);
+        setNextDisabled(selected >= pageCount - 1);
     };
 
     const handleDeleteUser = async (editor) => {
@@ -135,6 +135,7 @@ const ManageEditor = () => {
                     isOpen={showEditModal}
                     onClose={closeEditModal}
                     editorToEdit={editorToEdit}
+                    save={closeEditModal}
                 />
                 <DetailEditorModal
                     isOpen={showDetailModal}
@@ -235,7 +236,13 @@ const ManageEditor = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {editors?.map((editor, index) => (
+                                {editors.length <= 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center py-4 text-red-500">
+                                            Không tìm thấy nội dung bạn nhập. Vui lòng nhập lại.
+                                        </td>
+                                    </tr>
+                                ) : ( editors?.map((editor, index) => (
                                     <tr
                                         key={index}
                                         className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400"
@@ -317,7 +324,8 @@ const ManageEditor = () => {
                                             </button>
                                         </td>
                                     </tr>
-                                ))}
+                                    ))
+                                )}
                                 </tbody>
                             </table>
                             <div className="flex justify-center mt-4 mb-4">
@@ -328,7 +336,7 @@ const ManageEditor = () => {
                                     pageCount={pageCount}
                                     previousLabel="<"
                                     containerClassName="pagination flex space-x-2"
-                                    pageLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-rose-500 transition-colors duration-300 hover:bg-rose-500 hover:text-white ${
+                                    pageLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 transition-colors duration-300 hover:bg-rose-500 hover:text-white ${
                                         currentPage === 0 ? '' : 'disabled:opacity-50'
                                     }`}
                                     nextLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
@@ -337,8 +345,9 @@ const ManageEditor = () => {
                                     previousLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
                                         prevDisabled ? 'disabled:opacity-50' : ''
                                     }`}
-                                    activeClassName="active:bg-white active:text-rose-500"
+                                    activeClassName={`relative: text-white bg-rose-500 rounded-full w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight border-rose-500`}
                                     disabledClassName="d-none"
+
                                 />
                             </div>
 

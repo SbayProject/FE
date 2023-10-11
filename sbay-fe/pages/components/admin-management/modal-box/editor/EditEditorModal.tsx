@@ -7,18 +7,17 @@ import {BiHide, BiShowAlt} from "react-icons/bi";
 import * as AdminEditorService from "../../../../service/adminEditorService";
 import {storage} from "../../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
+import LoadingHidden from "../../../hooks/LoadingHidden";
 
 interface EditorModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (values: any) => void;
     editorToEdit: [];
 }
 
 const EditEditorModal: React.FC<EditorModalProps> = ({
                                                          isOpen,
                                                          onClose,
-                                                         onSave,
                                                          editorToEdit,
                                                      }) => {
     Modal.setAppElement("#__next");
@@ -156,6 +155,7 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                 }
             };
             handleEditModal();
+            await LoadingHidden();
             resetForm();
             onClose();
         }
@@ -428,7 +428,7 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                     <div
                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                                         <button
-                                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            className="text-red-500 background-transparent font-bold uppercase p-[0.2rem] py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="button"
                                             onClick={onClose}
                                         >

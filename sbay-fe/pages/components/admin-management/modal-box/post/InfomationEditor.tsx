@@ -130,7 +130,6 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                                     {formik.touched.name && formik.errors.name ? formik.errors.name : "Name "}
                                                 </label>
                                             </div>
-                                           
                                         </div>
                                     </div>
                                     <div className="grid md:grid-cols-2 md:gap-6">

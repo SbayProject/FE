@@ -4,19 +4,33 @@ import {Field, Form, Formik} from "formik";
 import moment from "moment";
 import * as AdminPostService from "../../service/adminPostService";
 import * as Swal from "sweetalert2";
-import * as Alert from "../../components/hooks/Alert";
 import {MdPersonAddAlt} from "react-icons/md";
+import {BiSolidEdit} from "react-icons/bi";
+import {RiDeleteBin6Line} from "react-icons/ri";
+import {SlInfo} from "react-icons/sl";
+import * as Alert from "../../components/hooks/Alert";
 import AddPostModal from "./modal-box/post/AddPostModal";
+import ReactPaginate from "react-paginate";
+import EditPostModal from "./modal-box/post/EditPostModal";
+
 
 const ManagePost = () => {
     const [posts, setPost] = useState([]);
     const [typePosts, setTypePost] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [searchValue, setSearchValue] = useState("");
+    const [size, setSize] = useState(0)
+    let count = currentPage * size + 1;
+    const [prevDisabled, setPrevDisabled] = useState(true);
+    const [nextDisabled, setNextDisabled] = useState(true);
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
+    const [postId, setPostId] = useState(null)
 
     const openAddModal = () => {
         setShowModal(true);
@@ -32,7 +46,7 @@ const ManagePost = () => {
 
     const closeEditModal = () => {
         setShowEditModal(false);
-        findAllListPost({type: "", title: "", page: 0});
+        findAllListPost({type: "", title: "", page: currentPage});
     };
     const openDetailModal = () => {
         setShowDetailModal(true);
@@ -58,22 +72,53 @@ const ManagePost = () => {
     }, []);
 
     const findAllTypePost = async () => {
-        const result = await AdminPostService.typePost();
-        setTypePost(result.data);
+        const result = await AdminPostService.typePost("");
+        setTypePost(result?.data);
         setIsLoading(false);
     };
-    const findAllListPost = async ({}) => {
-        const result = await AdminPostService.findAllPosts("", "", 0);
-        setPost(result);
+    const findAllListPost = async ({type,title,page}) => {
+        const result = await AdminPostService.findAllPosts(type, title, page);
+        setPost(result.content);
         setIsLoading(false);
+        setCurrentPage(result.number);
+        setIsLoading(false);
+        const totalPages = result.totalPages;
+        setPageCount(totalPages);
+        setSize(result.size)
+
     };
     useEffect(() => {
-        findAllListPost({type: "", title: "", page: 0});
-        findAllTypePost();
+        findAllListPost({type: "", title: "", page: currentPage});
+        findAllTypePost({name:""});
     }, []);
 
-    const handleDeleteUser = (id: any) => {
+    const handlePageClick = async ({selected}) => {
+        setCurrentPage(selected);
+        console.log(selected)
+        await findAllListPost({type: "", title: "", page: selected});
+        setPrevDisabled(selected === 0);
+        setNextDisabled(selected >= pageCount - 1);
     };
+
+    const handleDeletePost = async (posts) => {
+        try {
+            await AdminPostService.remove(posts);
+            Swal.fire({
+                icon: "success",
+                title: "Xóa thành công !",
+                timer: 3000,
+            });
+            await findAllListPost({type:"",title: "searchValue", page: 0});
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDetailPost = async (postId) =>{
+        setPostId(postId);
+        openEditModal();
+    }
+
 
     return (
         <Layout>
@@ -81,6 +126,12 @@ const ManagePost = () => {
                 <AddPostModal
                     isOpen={showModal}
                     onClose={closeAddModal}
+                    typePost={typePosts}
+                />
+                <EditPostModal
+                    isOpen={showEditModal}
+                    onClose={closeEditModal}
+                    postId={postId}
                     typePost={typePosts}
                 />
             </div>
@@ -114,7 +165,8 @@ const ManagePost = () => {
                                             values.title,
                                             0
                                         );
-                                        setPost(res);
+                                        setPost(res.content);
+                                        setPageCount(res.totalPages);
                                     };
                                     searchPost();
                                 }}
@@ -187,7 +239,14 @@ const ManagePost = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {posts?.map((post, index) => (
+                                {posts.length <= 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="text-center py-4 text-red-500">
+                                            Không tìm thấy nội dung bạn nhập. Vui lòng nhập lại.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    posts?.map((post, index) => (
                                     <tr
                                         key={index}
                                         className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400"
@@ -196,7 +255,7 @@ const ManagePost = () => {
                                             scope="row"
                                             className="w-[50px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
                                         >
-                                            {index + 1}
+                                            {count++}
                                         </td>
                                         <td
                                             scope="row"
@@ -257,86 +316,66 @@ const ManagePost = () => {
                                         <td className="px-6 py-4">
                                             <button
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => {
-                                                    // Xử lý sự kiện sửa người dùng
-                                                }}
+                                                // onClick={() => handleDetailPost(post.id)}
                                             >
-                                                Sửa
+                                                <SlInfo size="20"/>
                                             </button>
                                             <button
-                                                className="bg-red-500 text-white px-2 py-1 rounded-md"
-                                                onClick={() => handleDeleteUser(post.id)}
+                                                type="button"
+                                                className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                                                onClick={() => handleDetailPost(post.id)}
                                             >
-                                                Xóa
+                                                <BiSolidEdit size="20"/>
+                                            </button>
+                                            <button
+                                                className="bg-red-500 text-white px-2 py-1 rounded-md mr-2"
+                                                onClick={
+                                                    () => Alert.swalWithBootstrapButtons.fire({
+                                                        icon: "warning",
+                                                        title: "Xác nhận xóa",
+                                                        html: `Bạn có muốn xoá bài viết <span style="color: red">${post.title}</span> không?`,
+                                                        showCancelButton: true,
+                                                        cancelButtonText: 'Không',
+                                                        confirmButtonText: 'Có',
+                                                        reverseButtons: true
+                                                    }).then((res) => {
+                                                        if (res.isConfirmed) {
+                                                            handleDeletePost(post)
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                                <RiDeleteBin6Line size="20"/>
                                             </button>
                                         </td>
                                     </tr>
-                                ))}
+                                )))}
                                 </tbody>
 
                             </table>
-                            <div className="py-2">
-                                <nav className="block">
-                                    <ul className="flex pl-0 rounded list-none flex-wrap">
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                <i className="fas fa-chevron-left -ml-px"></i>
-                                                <i className="fas fa-chevron-left -ml-px"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                <i className="fas fa-chevron-left -ml-px"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500">
-                                                1
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                2
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                3
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                4
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                5
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                <i className="fas fa-chevron-right -mr-px"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#pablo"
-                                               className="first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 bg-white text-rose-500">
-                                                <i className="fas fa-chevron-right -mr-px"></i>
-                                                <i className="fas fa-chevron-right -mr-px"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                            <div className="flex justify-center mt-4 mb-4">
+                                <ReactPaginate
+                                    breakLabel="..."
+                                    nextLabel=">"
+                                    onPageChange={handlePageClick}
+                                    pageCount={pageCount}
+                                    previousLabel="<"
+                                    containerClassName="pagination flex space-x-2"
+                                    pageLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 transition-colors duration-300 hover:bg-rose-500 hover:text-white ${
+                                        currentPage === 0 ? '' : 'disabled:opacity-50'
+                                    }`}
+                                    nextLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
+                                        nextDisabled ? 'disabled:opacity-50' : ''
+                                    }`}
+                                    previousLinkClassName={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-rose-500 text-white bg-rose-500 transition-colors duration-300 hover:bg-white hover:text-rose-500 ${
+                                        prevDisabled ? 'disabled:opacity-50' : ''
+                                    }`}
+                                    activeClassName={`relative: text-white bg-rose-500 rounded-full w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight border-rose-500`}
+                                    disabledClassName="d-none"
+
+                                />
                             </div>
+
                         </div>
                     </div>
                 )}

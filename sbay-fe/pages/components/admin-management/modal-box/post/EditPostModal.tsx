@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "react-modal";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -7,23 +7,55 @@ import {storage} from "../../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 
-interface PostModalProps {
+interface EditPostModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSave: () => void;
+    postId: number;
     typePost: any;
 }
 
-const AddPostModal: React.FC<PostModalProps> = ({
-                                                    isOpen,
-                                                    onClose,
-                                                    typePost
-                                                }) => {
+interface PostDetails {
+    id?: string;
+    title?: string;
+    content?: string;
+    typePost?: {
+        id?: string;
+    };
+    image?: string;
+}
+
+const EditPostModal: React.FC<EditPostModalProps> = ({
+                                                         isOpen,
+                                                         onClose,
+                                                         postId,
+                                                         typePost,
+                                                     }) => {
     Modal.setAppElement("#__next");
 
     const [firebaseImg, setImg] = useState(null);
     const [image, setImageFile] = useState();
     const [imageUrl, setImageUrl] = useState();
+    const [postDetails, setPostDetails] = useState([]);
+
+    const fetchPostDetails = async () => {
+        try {
+            const response = await AdminPostService.detail(postId);
+            console.log(postId)
+            console.log(response.data)
+            setPostDetails(response.data);
+
+            console.log(typePost)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen && postId) {
+            fetchPostDetails();
+        }
+    }, [isOpen, postId]);
 
     const handleFileSelect = (event, setFile, setFileUrl) => {
         const file = event.target.files[0];
@@ -31,6 +63,24 @@ const AddPostModal: React.FC<PostModalProps> = ({
             setFile(file);
         }
     };
+    useEffect(() => {
+        if (postDetails) {
+            console.log(postDetails)
+
+            formik.setValues({
+                id: postDetails?.id || "",
+                title: postDetails?.title || "",
+                content: postDetails?.content || "",
+                typePostId: postDetails?.typePost?.id?.toString() || "",
+                image: postDetails?.image || "",
+            });
+
+            // Set hình ảnh xem trước nếu có
+            if (postDetails?.image) {
+                setImageUrl(postDetails?.image);
+            }
+        }
+    }, [postDetails]);
 
     const handleFileUpload = async () => {
         return new Promise((resolve, reject) => {
@@ -59,6 +109,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
         });
     };
 
+
     const handleRemoveImage = () => {
         setImg(null);
         setImageFile(null);
@@ -74,6 +125,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
 
     const formik = useFormik({
         initialValues: {
+            id: "",
             title: "",
             content: "",
             typePostId: "",
@@ -87,18 +139,17 @@ const AddPostModal: React.FC<PostModalProps> = ({
         onSubmit: async (values, {resetForm}) => {
             const results = await handleImageFileUpload();
             const imageUrl = results;
-            console.log(values.typePostId)
             let newPost = {
                 ...values, image: imageUrl, typePost: {"id": parseInt(values.typePostId)}
             };
-            const handleSaveModal = async () => {
+            const handleEdit = async () => {
                 try {
-                    await AdminPostService.createPosts(newPost);
+                    await AdminPostService.updatePosts(newPost);
                 } catch (error) {
                     console.error(error);
                 }
             };
-            handleSaveModal();
+            handleEdit();
             await LoadingHidden();
             resetForm();
             onClose();
@@ -110,7 +161,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
             <Modal
                 isOpen={isOpen}
                 onRequestClose={onClose}
-                contentLabel="Thêm mới bài viết"
+                contentLabel="Chỉnh sửa bài viết"
                 overlayClassName="overlay"
                 ariaHideApp={false}
             >
@@ -125,7 +176,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
                         <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white">
                             <div
                                 className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                                <h3 className="text-3xl font-semibold">Thêm mới bài viết</h3>
+                                <h3 className="text-3xl font-semibold">Cập nhật bài viết</h3>
                                 <button className="modal-close" onClick={onClose}>
                                     &times;
                                 </button>
@@ -215,24 +266,24 @@ const AddPostModal: React.FC<PostModalProps> = ({
                                             </label>
                                         </div>
                                     </div>
-                                        <div className="relative z-0 w-full mb-3 group">
-                                            <input
-                                                type="text"
-                                                name="title"
-                                                id="title"
-                                                className={`${formik.touched.title && formik.errors.title ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
-                                                placeholder="Nhập tiêu đề bài viết"
-                                                required
-                                                {...formik.getFieldProps("title")}
-                                            />
-                                            <label
-                                                htmlFor="title"
-                                                className={` ${formik.touched.title && formik.errors.title ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
-                                            >
-                                                {formik.touched.title && formik.errors.title ? formik.errors.title + "" : "Tiêu đề bài viết"}
-                                            </label>
-                                        </div>
-                                        <div className="relative z-0 w-full mb-3 group">
+                                    <div className="relative z-0 w-full mb-3 group">
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            id="title"
+                                            className={`${formik.touched.title && formik.errors.title ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
+                                            placeholder="Nhập tiêu đề bài viết"
+                                            required
+                                            {...formik.getFieldProps("title")}
+                                        />
+                                        <label
+                                            htmlFor="title"
+                                            className={` ${formik.touched.title && formik.errors.title ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                                        >
+                                            {formik.touched.title && formik.errors.title ? formik.errors.title + "" : "Tiêu đề bài viết"}
+                                        </label>
+                                    </div>
+                                    <div className="relative z-0 w-full mb-3 group">
                                             <textarea
                                                 name="content"
                                                 id="content"
@@ -242,13 +293,13 @@ const AddPostModal: React.FC<PostModalProps> = ({
                                                 required
                                                 {...formik.getFieldProps("content")}
                                             />
-                                            <label
-                                                htmlFor="content"
-                                                className={` ${formik.touched.content && formik.errors.content ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
-                                            >
-                                                {formik.touched.content && formik.errors.content ? formik.errors.content : "Nội dung bài viết"}
-                                            </label>
-                                        </div>
+                                        <label
+                                            htmlFor="content"
+                                            className={` ${formik.touched.content && formik.errors.content ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                                        >
+                                            {formik.touched.content && formik.errors.content ? formik.errors.content : "Nội dung bài viết"}
+                                        </label>
+                                    </div>
                                     {/*footer*/}
                                     <div
                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
@@ -263,7 +314,7 @@ const AddPostModal: React.FC<PostModalProps> = ({
                                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="submit"
                                         >
-                                            Add new Post
+                                            Update Post
                                         </button>
                                     </div>
                                 </div>
@@ -276,4 +327,4 @@ const AddPostModal: React.FC<PostModalProps> = ({
     );
 };
 
-export default AddPostModal;
+export default EditPostModal;
