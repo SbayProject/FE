@@ -22,7 +22,11 @@ const ManageTypePost = () => {
     useEffect(() => {
         document.title = "Quản lý loại bài viết"; // Thay đổi title
         window.scrollTo(0, 0);
-        setTimeout(loadCurrentPageData(0),1000) ;
+        fetchData("").then(() => {
+            loadCurrentPageData(0).then(() => {
+                // You can add any post-loading logic here if needed.
+            });
+        });
     }, []);
 
     const loadCurrentPageData = (page) => {
@@ -43,7 +47,7 @@ const ManageTypePost = () => {
             const totalPages = Math.ceil(response.length / itemsPerPage);
             setTotalPages(totalPages);
             setCurrentPage(0);
-            loadCurrentPageData(0);
+            await loadCurrentPageData(0);
         } catch (error) {
             console.error(error);
         }
