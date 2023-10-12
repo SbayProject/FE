@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout-admin/LayoutAdmin";
+import Layout from "../../components/layout-admin/LayoutTest";
 import moment from "moment";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
@@ -14,10 +14,20 @@ import {SlInfo} from "react-icons/sl";
 import * as Alert from "../../components/hooks/Alert";
 import EditEditorModal from "./modal-box/editor/EditEditorModal";
 import DetailEditorModal from "./modal-box/editor/InfomationEditor";
+
 type ModalType = 'edit' | 'detail';
 
+interface Editor {
+    id: string;
+    name: string;
+    email: string;
+    birthday: string;
+    address: string;
+    phoneNumber: string;
+}
+
 const ManageEditor = () => {
-    const [editors, setEditors] = useState([]);
+    const [editors, setEditors] = useState<Editor[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -29,9 +39,8 @@ const ManageEditor = () => {
     let count = currentPage * size + 1;
     const [prevDisabled, setPrevDisabled] = useState(true);
     const [nextDisabled, setNextDisabled] = useState(true);
-    const [idEditor, setIdEditor] = useState([]);
-    const [editorToEdit, setEditorToEdit] = useState([]); // Đối tượng cần chỉnh sửa
-
+    const [idEditor, setIdEditor] = useState(0);
+    const [editorToEdit, setEditorToEdit] = useState<Editor | null>(null);
 
     useEffect(() => {
         document.title = "Quản lý biên tập viên";
@@ -66,35 +75,35 @@ const ManageEditor = () => {
         setShowDetailModal(false);
         console.log("Tắt Detail")
     };
-
-
     const fetchData = async ({name, page}) => {
+        console.log("page", page); // Fix the log statement
         try {
             const response = await AdminEditorService.findAllEditors(name, page);
             setSearchValue(name);
             setEditors(response.content);
+            console.log(response.content);
             setCurrentPage(response.number);
             setIsLoading(false);
-            const totalPages = response.totalPages;
-            setPageCount(totalPages);
-            setSize(response.size)
+            setPageCount(response.totalPages);
+            setSize(response.size);
         } catch (error) {
-            console.error(error);
+            console.error("fetch data", error);
         }
+    };
+
+    const handlePageClick = async (selected) => {
+        await setCurrentPage(selected.selected); // Use 'selected.selected' to get the selected page number
+        console.log(selected.selected);
+        await fetchData({name: searchValue, page: selected.selected}); // Pass selected page as a number
+        setPrevDisabled(selected.selected === 0);
+        setNextDisabled(selected.selected >= pageCount - 1);
     };
 
     useEffect(() => {
         fetchData({name: "", page: currentPage});
+        console.log(currentPage)
     }, []);
-
-    const handlePageClick = async ({selected}) => {
-        setCurrentPage(selected);
-        await fetchData({name: searchValue, page: selected});
-        setPrevDisabled(selected === 0);
-        setNextDisabled(selected >= pageCount - 1);
-    };
-
-    const handleDeleteUser = async (editor) => {
+    const handleDeleteUser = async (editor: any) => {
         try {
             await AdminEditorService.remove(editor);
             Swal.fire({
@@ -108,7 +117,7 @@ const ManageEditor = () => {
         }
     };
 
-    const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
+    const fetchEditorDetails = async (idEditor: number, modalType: ModalType) => {
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
             setEditorToEdit(result);
@@ -122,9 +131,10 @@ const ManageEditor = () => {
         }
     };
     useEffect(() => {
-        fetchEditorDetails(idEditor, 'edit');
+        if (idEditor > 0) {
+            fetchEditorDetails(idEditor, 'edit');
+        }
     }, [idEditor]);
-
 
     return (
         <Layout>
@@ -132,18 +142,19 @@ const ManageEditor = () => {
                 <AddEditorModal
                     isOpen={showModal}
                     onClose={closeAddModal}
+                    onSave={closeAddModal}
                 />
                 <EditEditorModal
                     isOpen={showEditModal}
                     onClose={closeEditModal}
-                    editorToEdit={editorToEdit}
-                    save={closeEditModal}
+                    editorToEdit={editorToEdit || null}
+                    onSave={closeEditModal}
                 />
                 <DetailEditorModal
                     isOpen={showDetailModal}
                     onClose={closeDetailModal}
-                    editorToDetail={editorToEdit}
-                />
+                    editorToDetail={editorToEdit || null}
+                    onSave={closeDetailModal}/>
             </div>
             <div className="bg-white p-6 shadow-md">
                 <span className="uppercase text-2xl font-semibold mb-4">Quản lý nhân viên</span>
@@ -240,92 +251,92 @@ const ManageEditor = () => {
                                 <tbody>
                                 {editors.length <= 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center py-4 text-red-500">
+                                        <td colSpan={7} className="text-center py-4 text-red-500">
                                             Không tìm thấy nội dung bạn nhập. Vui lòng nhập lại.
                                         </td>
                                     </tr>
-                                ) : ( editors?.map((editor, index) => (
-                                    <tr
-                                        key={index}
-                                        className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400"
-                                    >
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                ) : (editors?.map((editor, index) => (
+                                        <tr
+                                            key={index}
+                                            className="bg-white border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-400"
                                         >
-                                            {count++}
-                                        </td>
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
-                                        >
-                                            {editor.name}
-                                        </td>
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
-                                        >
-                                            {editor.email}
-                                        </td>
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
-                                        >
-                                            {moment(editor.birthday, "YYYY/MM/DD").format(
-                                                "DD/MM/YYYY"
-                                            )}
-                                        </td>
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
-                                        >
-                                            {editor.address}
-                                        </td>
-                                        <td
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
-                                        >
-                                            {editor.phoneNumber.replace(
-                                                /(\d{3})(\d{3})(\d{4})/,
-                                                "($1) $2-$3"
-                                            )}
-                                        </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                            >
+                                                {count++}
+                                            </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            >
+                                                {editor.name}
+                                            </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            >
+                                                {editor.email}
+                                            </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            >
+                                                {moment(editor.birthday, "YYYY/MM/DD").format(
+                                                    "DD/MM/YYYY"
+                                                )}
+                                            </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            >
+                                                {editor.address}
+                                            </td>
+                                            <td
+                                                scope="row"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            >
+                                                {editor.phoneNumber.replace(
+                                                    /(\d{3})(\d{3})(\d{4})/,
+                                                    "($1) $2-$3"
+                                                )}
+                                            </td>
 
-                                        <td className="px-6 py-4">
-                                            <button
-                                                className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => fetchEditorDetails(editor.id, 'detail')}
-                                            >
-                                                <SlInfo size="20"/>
-                                            </button>
-                                            <button
-                                                className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => fetchEditorDetails(editor.id, 'edit')}
-                                            >
-                                                <BiSolidEdit size="20"/>
-                                            </button>
-                                            <button
-                                                className="bg-red-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={
-                                                    () => Alert.swalWithBootstrapButtons.fire({
-                                                        icon: "warning",
-                                                        title: "Xác nhận xóa",
-                                                        html: `Bạn có muốn xoá biên tập viên <span style="color: red">${editor.name}</span> không?`,
-                                                        showCancelButton: true,
-                                                        cancelButtonText: 'Không',
-                                                        confirmButtonText: 'Có',
-                                                        reverseButtons: true
-                                                    }).then((res) => {
-                                                        if (res.isConfirmed) {
-                                                            handleDeleteUser(editor)
-                                                        }
-                                                    })
-                                                }
-                                            >
-                                                <RiDeleteBin6Line size="20"/>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                            <td className="px-2 py-4">
+                                                <button
+                                                    className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                                                    onClick={() => fetchEditorDetails(editor.id, 'detail')}
+                                                >
+                                                    <SlInfo size="20"/>
+                                                </button>
+                                                <button
+                                                    className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                                                    onClick={() => fetchEditorDetails(editor.id, 'edit')}
+                                                >
+                                                    <BiSolidEdit size="20"/>
+                                                </button>
+                                                <button
+                                                    className="bg-red-500 text-white px-2 py-1 rounded-md mr-2"
+                                                    onClick={
+                                                        () => Alert.swalWithBootstrapButtons.fire({
+                                                            icon: "warning",
+                                                            title: "Xác nhận xóa",
+                                                            html: `Bạn có muốn xoá biên tập viên <span style="color: red">${editor.name}</span> không?`,
+                                                            showCancelButton: true,
+                                                            cancelButtonText: 'Không',
+                                                            confirmButtonText: 'Có',
+                                                            reverseButtons: true
+                                                        }).then((res) => {
+                                                            if (res.isConfirmed) {
+                                                                handleDeleteUser(editor)
+                                                            }
+                                                        })
+                                                    }
+                                                >
+                                                    <RiDeleteBin6Line size="20"/>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     ))
                                 )}
                                 </tbody>

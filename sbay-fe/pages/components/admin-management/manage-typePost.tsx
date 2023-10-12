@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../layout-admin/LayoutAdmin";
+import Layout from "../layout-admin/LayoutTest";
 import * as AdminTypePostService from "../../service/adminTypePostService";
 import ReactPaginate from "react-paginate";
 import {BiSolidEdit} from "react-icons/bi";
 import {MdPersonAddAlt} from "react-icons/md";
-import * as Swal from "sweetalert2";
+import Swal from "sweetalert2";
+import fire from "sweetalert2";
 import * as Alert from "../../components/hooks/Alert";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import LoadingHidden from "../hooks/LoadingHidden";
 import {Field, Form, Formik} from "formik";
 
+let page: number;
+let name: string;
 const ManageTypePost = () => {
     const [typePosts, setTypePosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -27,14 +30,14 @@ const ManageTypePost = () => {
         fetchData("");
     }, []);
 
-    const loadCurrentPageData = (page) => {
+    const loadCurrentPageData = (page: number) => {
         const startIndex = page * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const itemsToDisplay = typePosts.slice(startIndex, endIndex);
         setCurrentItems(itemsToDisplay);
     };
 
-    const fetchData = async (name) => {
+    const fetchData = async (name: string) => {
         try {
             const response = await AdminTypePostService.findAllTypePosts(name);
             setTypePosts(response);
@@ -56,7 +59,7 @@ const ManageTypePost = () => {
         }
     }, [typePosts, currentPage]);
 
-    const handleDeleteUser = async (data) => {
+    const handleDeleteUser = async (data: any) => {
         try {
             await AdminTypePostService.remove(data);
             Swal.fire({
@@ -70,17 +73,17 @@ const ManageTypePost = () => {
         }
     };
 
-    const handlePageClick = async (selectedPage) => {
+    const handlePageClick = async (selectedPage:any) => {
         loadCurrentPageData(selectedPage.selected);
         setCurrentPage(selectedPage.selected);
     };
 
-    const handleEdit = (index) => {
-        setEditMode(index);
-        setTypePostEdit(currentItems[index]?.name);
-    };
+const handleEdit = (index: number) => {
+  setEditMode(index);
+  setTypePostEdit(currentItems[index]?.name);
+};
 
-    const handleSaveEdit = async (data, index) => {
+    const handleSaveEdit = async (data:any, index:number) => {
         try {
             await LoadingHidden(null);
             await AdminTypePostService.updateTypePost({name: data, id: currentItems[index]?.id});
@@ -235,6 +238,7 @@ const ManageTypePost = () => {
                                                         type="text"
                                                         className="w-full py-2 px-3 leading-none rounded-lg border border-solid border-neutral-300 bg-clip-padding text-neutral-700 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
                                                         value={typePostEdit}
+                                                        defaultValue={data?.name}
                                                         onChange={(e) => setTypePostEdit(e.target.value)}
                                                     />
                                                     <button

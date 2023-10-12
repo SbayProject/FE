@@ -12,6 +12,7 @@ import LoadingHidden from "../../../hooks/LoadingHidden";
 interface EditorModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSave: () => void;
     editorToEdit: [];
 }
 

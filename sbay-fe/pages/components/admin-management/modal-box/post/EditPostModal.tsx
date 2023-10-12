@@ -41,11 +41,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
     const fetchPostDetails = async () => {
         try {
             const response = await AdminPostService.detail(postId);
-            console.log(postId)
-            console.log(response.data)
             setPostDetails(response.data);
-
-            console.log(typePost)
         } catch (error) {
             console.error(error);
         }
@@ -65,9 +61,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
     };
     useEffect(() => {
         if (postDetails) {
-            console.log(postDetails.image)
             setImageUrl(postDetails?.image);
-
             formik.setValues({
                 id: postDetails?.id || "",
                 title: postDetails?.title || "",

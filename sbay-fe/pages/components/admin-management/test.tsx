@@ -1,5 +1,5 @@
 // import React, { useEffect, useState } from "react";
-// import Layout from "../layout-admin/LayoutAdmin";
+// import Layout from "../layout-admin/LayoutTest";
 // import * as AdminTypePostService from "../../service/adminTypePostService";
 // import { Field, Form, Formik } from "formik";
 // import ReactPaginate from "react-paginate";
