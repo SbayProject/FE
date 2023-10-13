@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout-admin/LayoutTest";
+import LayoutAdmin from "../../components/layout-admin/LayoutAdmin";
 import {Field, Form, Formik} from "formik";
 import moment from "moment";
 import * as AdminPostService from "../../service/adminPostService";
@@ -121,7 +121,7 @@ const ManagePost = () => {
 
 
     return (
-        <Layout>
+        <LayoutAdmin>
             <div>
                 <AddPostModal
                     isOpen={showModal}
@@ -380,7 +380,7 @@ const ManagePost = () => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

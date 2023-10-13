@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout-admin/LayoutTest";
+import LayoutAdmin from "../../components/layout-admin/LayoutAdmin";
 import moment from "moment";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
@@ -136,8 +136,30 @@ const ManageEditor = () => {
         }
     }, [idEditor]);
 
+    //Phan trang
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentPosition = window.pageXOffset;
+            setScrollPosition(currentPosition);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    const calculateTranslateX = () => {
+        const windowWidth = window.innerWidth;
+        const containerWidth = 300; // Đặt chiều rộng của container phân trang tại đây
+        const translateX = (windowWidth - containerWidth) / 2 - scrollPosition;
+        return translateX;
+    };
     return (
-        <Layout>
+        <LayoutAdmin>
             <div>
                 <AddEditorModal
                     isOpen={showModal}
@@ -225,16 +247,16 @@ const ManageEditor = () => {
                             <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-2 py-3">
                                         STT
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Họ và tên
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Email
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Ngày sinh
                                     </th>
                                     <th scope="col" className="px-6 py-3">
@@ -243,7 +265,7 @@ const ManageEditor = () => {
                                     <th scope="col" className="px-6 py-3">
                                         Số điện thoại
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Thao tác
                                     </th>
                                 </tr>
@@ -262,25 +284,25 @@ const ManageEditor = () => {
                                         >
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
                                             >
                                                 {count++}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.name}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.email}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {moment(editor.birthday, "YYYY/MM/DD").format(
                                                     "DD/MM/YYYY"
@@ -288,13 +310,13 @@ const ManageEditor = () => {
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.address}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.phoneNumber.replace(
                                                     /(\d{3})(\d{3})(\d{4})/,
@@ -302,7 +324,7 @@ const ManageEditor = () => {
                                                 )}
                                             </td>
 
-                                            <td className="px-2 py-4">
+                                            <td className="px-2 py-3">
                                                 <button
                                                     className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
                                                     onClick={() => fetchEditorDetails(editor.id, 'detail')}
@@ -341,7 +363,7 @@ const ManageEditor = () => {
                                 )}
                                 </tbody>
                             </table>
-                            <div className="flex justify-center mt-4 mb-4">
+                            <div className="flex justify-center mt-4 mb-4 pagination-container">
                                 <ReactPaginate
                                     breakLabel="..."
                                     nextLabel=">"
@@ -368,7 +390,7 @@ const ManageEditor = () => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

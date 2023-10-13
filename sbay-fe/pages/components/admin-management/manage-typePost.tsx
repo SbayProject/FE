@@ -10,6 +10,7 @@ import * as Alert from "../../components/hooks/Alert";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import LoadingHidden from "../hooks/LoadingHidden";
 import {Field, Form, Formik} from "formik";
+import LayoutAdmin from "../layout-admin/LayoutAdmin";
 
 let page: number;
 let name: string;
@@ -122,7 +123,7 @@ const handleEdit = (index: number) => {
     };
 
     return (
-        <Layout>
+        <LayoutAdmin>
             <div className="bg-white p-6 shadow-md">
                 <h2 className="text-2xl uppercase font-semibold mb-4">
                     Quản lý thể loại bài viết
@@ -322,7 +323,7 @@ const handleEdit = (index: number) => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

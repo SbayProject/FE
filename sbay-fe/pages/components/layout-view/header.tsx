@@ -113,7 +113,7 @@ export default function Header() {
                                                 </Link>
                                                 <hr className="border-t-2 border-solid border-b-gray-700 mb-1"/>
 
-                                                <Link href="#!" className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
+                                                <Link href="/components/layout-admin/LayoutAdmin" className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
                                                     <MdOutlineManageAccounts size={25} className="mt-0.5"/><h1
                                                     className="mt-1 px-2">Xem tất cả trang quản lý</h1>
                                                 </Link>

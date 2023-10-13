@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useMediaQuery } from 'react-responsive';
 
-const Layout = ({ children }) => {
+const LayoutAdmin = ({ children }) => {
     const [menuOpen, setMenuOpen] = useState(true);
     const isMobile = useMediaQuery({ maxWidth: 768 });
 
@@ -93,4 +93,4 @@ const Layout = ({ children }) => {
     );
 };
 
-export default Layout;
+export default LayoutAdmin;

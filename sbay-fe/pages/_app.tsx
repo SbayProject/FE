@@ -1,7 +1,7 @@
 'use client'
 import '@/styles/globals.css'
 import type {AppProps} from 'next/app'
-import Layout from "@/pages/components/home-news/layout";
+import Layout from "@/pages/components/home-news/layoutHome";
 import {CounterContextProvider} from "@/pages/components/reactContext/context";
 import {ToastContainer} from "react-toastify";
 import React from "react";
