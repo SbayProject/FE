@@ -78,7 +78,7 @@ export default function Header() {
             <nav className="border-gray-200 px-4 lg:px-6 py-2.5 lg:h-20  z-40 fixed top-0
                 flex w-full items-center justify-between bg-secondary-50 text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
                 <div className="mx-auto max-w-screen-xl flex w-full flex-wrap items-center justify-between px-3">
-                    <Link href="/" className="flex items-center">
+                    <Link href="/components/home-news/layoutHome" className="flex items-center">
                         <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" alt=""/>
                     </Link>
                     {isLogin ? (
