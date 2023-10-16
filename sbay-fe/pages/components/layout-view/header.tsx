@@ -6,7 +6,7 @@ import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import {AiOutlineCloseCircle, AiOutlineMenu} from "react-icons/ai";
 import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/typePostService";
 import CounterContext from "@/pages/components/reactContext/context";
-import {BiLogIn, BiUserPlus} from "react-icons/bi";
+import {BiLogIn} from "react-icons/bi";
 import {MdOutlineManageAccounts} from "react-icons/md";
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -17,9 +17,10 @@ export default function Header() {
     const [postType, setPostType] = useState([]);
     const {counter, setCounter} = useContext(CounterContext);
     const [isLogin, setIsLogin] = useState(false);
-    const [token,setToken] = useState('');
-    const [image,setImage] = useState('');
-    const [name,setNames] = useState('');
+    const [token, setToken] = useState('');
+    const [image, setImage] = useState('');
+    const [name, setNames] = useState('');
+    const [role, setRole] = useState('');
 
     const GetListAllTypePost = async () => {
         const res = await ListGetAllTypePost();
@@ -47,20 +48,24 @@ export default function Header() {
         await localStorage.removeItem("role")
         //@ts-ignore
         await setIsLogin(false)
-        await new Promise((resolve)=>setTimeout(resolve,250))
+        await new Promise((resolve) => setTimeout(resolve, 250))
 
     }
-    const setTokenLogin =  () => {
+    const setTokenLogin = () => {
         const token = localStorage.getItem("token");
         if (token) {
-             setToken(token)
+            setToken(token)
             //@ts-ignore
-             setImage(localStorage.getItem("image"))
+            setImage(localStorage.getItem("image"))
             //@ts-ignore
-             setNames(localStorage.getItem("name"))
+            setNames(localStorage.getItem("name"))
             setIsLogin(true)
-        }else {
+        } else {
             setIsLogin(false)
+        }
+        const storedRole = localStorage.getItem('role');
+        if (storedRole) {
+            setRole(storedRole);
         }
     }
     useEffect(() => {
@@ -99,28 +104,30 @@ export default function Header() {
                                             <div
                                                 className="block rounded-lg bg-white p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 mb-2">
                                                 <Link href="/components/home-news/informationEmployees">
-                                                <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
+                                                    <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
                                                 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-[0.20rem] px-[0.20rem] hover:rounded">
-                                                    <img
-                                                        //@ts-ignore
-                                                        src={image}
-                                                        className="rounded-full"
-                                                        style={{height: 38, width: 39}}
-                                                        alt=""
-                                                        loading="lazy"/>
-                                                    <span className="text-[20px] mt-1.5 px-3 ">{name}</span>
-                                                </h5>
+                                                        <img
+                                                            //@ts-ignore
+                                                            src={image}
+                                                            className="rounded-full"
+                                                            style={{height: 38, width: 39}}
+                                                            alt=""
+                                                            loading="lazy"/>
+                                                        <span className="text-[20px] mt-1.5 px-3 ">{name}</span>
+                                                    </h5>
                                                 </Link>
                                                 <hr className="border-t-2 border-solid border-b-gray-700 mb-1"/>
 
-                                                <Link href="/components/layout-admin/LayoutAdmin" className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
+                                                <Link href="/components/layout-admin/LayoutAdmin"
+                                                      className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
                                                     <MdOutlineManageAccounts size={25} className="mt-0.5"/><h1
-                                                    className="mt-1 px-2">Xem tất cả trang quản lý</h1>
+                                                    className="mt-1 px-2">Trang quản lý</h1>
                                                 </Link>
                                             </div>
                                             <p className="flex px-3 py-3 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100  hover:rounded">
                                                 <BiLogIn size={25} style={{color: "black"}} className="rounded-full"/>
-                                                <Link href="/components/login/login" className="px-2" onClick={() => LogOut()}>Đăng xuất</Link>
+                                                <Link href="/components/login/login" className="px-2"
+                                                      onClick={() => LogOut()}>Đăng xuất</Link>
                                             </p>
                                         </li>
                                     </ul>
@@ -130,7 +137,8 @@ export default function Header() {
                     ) : (
                         <div className="flex mt-0 items-center lg:order-2">
                             <Link type="button" href="/components/login/login"
-                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng nhập
+                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng
+                                nhập
                             </Link>
                         </div>
                     )}
@@ -175,10 +183,49 @@ export default function Header() {
                                                 ><Link href={`/components/home-news/post_news_type`}>{list.name}</Link>
                                                 </li>
                                             ))}
+
                                         </ul>
+
                                     </div>
                                 </Link>
                             </li>
+                            {role === 'ROLE_ADMIN' && (
+                                <Link href="/components/admin-management/manage-post"
+                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                                      relative justify-center items-center rounded  group
+                                      ">Quản lý
+                                    <span className="">
+                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
+                                    <div
+                                        className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+
+                                        <ul className="text-left border bg-white rounded ml-32 ">
+                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-editor"
+                                                      className="hover:text-gray-400 py-3 px-2 block">
+                                                    Quản lý nhân viên
+                                                </Link>
+                                            </li>
+                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-post"
+                                                      className="hover:text-gray-400 py-3 px-2 block">
+                                                    Quản lý bài viết
+                                                </Link>
+                                            </li>
+                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-typePost"
+                                                      className="hover:text-gray-400 py-3 px-2 block">
+                                                    Quản lý thể loại bài viết
+                                                </Link>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </Link>
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -201,7 +248,7 @@ export default function Header() {
                           onClick={() => {
                               handleModalOpen(true)
                           }}
-                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
                                       relative  items-center rounded group
                           ">Tin tức
                         <span className="">
@@ -225,6 +272,41 @@ export default function Header() {
                         </div>
                     </Link>
                 </li>
+                {role === 'ROLE_ADMIN' && (
+                    <Link href="/components/admin-management/manage-post"
+                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                                      relative  items-center rounded group
+                                      ">Quản lý
+                        <span className="">
+                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
+                        <div
+                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+
+                            <ul className="text-left border bg-white rounded ml-[-10px] w-[99%]">
+
+                            <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                    <Link href="/components/admin-management/manage-editor">
+                                        Quản lý nhân viên
+                                    </Link>
+                                </li>
+                                <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                    <Link href="/components/admin-management/manage-post">
+                                        Quản lý bài viết
+                                    </Link>
+                                </li>
+                                <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                    <Link href="/components/admin-management/manage-typePost">
+                                        Quản lý thể loại bài viết
+                                    </Link>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </Link>
+                )}
             </ul>
         </div>
     </>

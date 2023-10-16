@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7db3273e-1adc-4e84-8031-220ca2ead974" name="Changes" comment="" />
+    <list default="true" id="7db3273e-1adc-4e84-8031-220ca2ead974" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/sbay-fe/pages/components/admin-management/manage-editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sbay-fe/pages/components/admin-management/manage-editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sbay-fe/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/sbay-fe/styles/globals.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,17 +21,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7db3273e-1adc-4e84-8031-220ca2ead974" name="Changes" comment="" />
@@ -37,6 +39,7 @@
       <option name="presentableId" value="Default" />
       <updated>1695354131576</updated>
       <workItem from="1695354133473" duration="87000" />
+      <workItem from="1697128797041" duration="26000" />
     </task>
     <servers />
   </component>

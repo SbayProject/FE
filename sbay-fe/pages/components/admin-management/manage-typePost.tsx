@@ -203,7 +203,7 @@ const handleEdit = (index: number) => {
                 ) : (
                     <div>
                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">

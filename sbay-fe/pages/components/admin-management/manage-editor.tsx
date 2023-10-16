@@ -92,9 +92,9 @@ const ManageEditor = () => {
     };
 
     const handlePageClick = async (selected) => {
-        await setCurrentPage(selected.selected); // Use 'selected.selected' to get the selected page number
+        await setCurrentPage(selected.selected);
         console.log(selected.selected);
-        await fetchData({name: searchValue, page: selected.selected}); // Pass selected page as a number
+        await fetchData({name: searchValue, page: selected.selected});
         setPrevDisabled(selected.selected === 0);
         setNextDisabled(selected.selected >= pageCount - 1);
     };
@@ -136,28 +136,6 @@ const ManageEditor = () => {
         }
     }, [idEditor]);
 
-    //Phan trang
-    const [scrollPosition, setScrollPosition] = useState(0);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentPosition = window.pageXOffset;
-            setScrollPosition(currentPosition);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
-    const calculateTranslateX = () => {
-        const windowWidth = window.innerWidth;
-        const containerWidth = 300; // Đặt chiều rộng của container phân trang tại đây
-        const translateX = (windowWidth - containerWidth) / 2 - scrollPosition;
-        return translateX;
-    };
     return (
         <LayoutAdmin>
             <div>
@@ -224,7 +202,7 @@ const ManageEditor = () => {
                                             className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
                                         >
                         <span
-                            className="input-group-text flex items-center whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
+                            className="input-group-text flex items-center whitespace-nowrap lg:whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
                             id="basic-addon2"
                         >
                         <svg
@@ -244,7 +222,7 @@ const ManageEditor = () => {
                                     </div>
                                 </Form>
                             </Formik>
-                            <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
                                     <th scope="col" className="px-2 py-3">
