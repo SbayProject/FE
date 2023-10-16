@@ -168,7 +168,7 @@ const ManagePost = () => {
                                         setPost(res.content);
                                         setPageCount(res.totalPages);
                                     };
-                                    searchPost();
+                                    await searchPost();
                                 }}
                             >
                                 <Form
@@ -198,7 +198,7 @@ const ManagePost = () => {
                                             className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
                                         >
                       <span
-                          className="input-group-text flex items-center whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
+                          className="input-group-text flex items-center whitespace-nowrap lg:whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
                           id="basic-addon2"
                       >
                         <svg
@@ -218,7 +218,7 @@ const ManagePost = () => {
                                     </div>
                                 </Form>
                             </Formik>
-                            <table className="md-flex mt-3 w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="md-flex mt-3 w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
                                     <th scope="col" className="px-3 py-1">
@@ -253,19 +253,19 @@ const ManagePost = () => {
                                     >
                                         <td
                                             scope="row"
-                                            className="w-[50px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                            className="w-[50px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap `dark:text-black`"
                                         >
                                             {count++}
                                         </td>
                                         <td
                                             scope="row"
-                                            className="w-[150px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="w-[150px] px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {post.title}
                                         </td>
                                         <td
                                             scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="px-1 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {moment(post.createDate, "YYYY/MM/DD HH:mm:ss").format(
                                                 'DD/MM/YYYY- HH[giờ], mm[phút]'
@@ -274,7 +274,7 @@ const ManagePost = () => {
 
                                         <td
                                             scope="row"
-                                            className="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="px-3 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {post.public ? (
                                                 <button
