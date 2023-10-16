@@ -23,6 +23,7 @@ export const ListGetAllTop4NewPost = async () => {
 }
 // @ts-ignore
 export const DetailPost = async (idPost) => {
+    await new Promise((resolve)=>setTimeout(resolve,200))
     try {
         const res = await axios.get(`http://localhost:8080/api/post/detail/${idPost}`)
         return res.data

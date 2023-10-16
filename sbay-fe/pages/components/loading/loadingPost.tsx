@@ -2,7 +2,7 @@ import React from 'react'
 import ContentLoader from 'react-content-loader'
 
 // @ts-ignore
-export const Loading = props => {
+export const LoadingPost = props => {
     return (
         <>
             <ContentLoader
