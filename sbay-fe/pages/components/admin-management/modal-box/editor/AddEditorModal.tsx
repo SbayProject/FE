@@ -9,7 +9,6 @@ import {storage} from "../../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 
-
 interface EditorModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -27,7 +26,8 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
     const [avatarUrl, setAvatarUrl] = useState();
     const [showPassword, setShowPassword] = useState(true);
 
-    const handleFileSelect = (event, setFile, setFileUrl) => {
+    const handleFileSelect = (event:any, setFile:any, setFileUrl:string) => {
+        
         const file = event.target.files[0];
         if (file) {
             setFile(file);
@@ -35,10 +35,15 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
     };
 
     const handleFileUpload = async () => {
-        return new Promise((resolve, reject) => {
+        return new Promise<string | undefined>((resolve, reject) => {
             const file = avatar;
             if (!file) return reject("No file selected");
-            const newName = "sbay_news_topvn" + Date.now() + Math.random()*1000 + "_" + file.name;
+
+            const getUniqueName = () => {
+                return `sbay_news_topvn_${Date.now()}_${Math.random() * 1000}`;
+            };
+
+            const newName = getUniqueName() + "_" + file?.name;
             const storageRef = ref(storage, `files/${newName}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -60,7 +65,6 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             );
         });
     };
-
 
     const handleRemoveImage = () => {
         setImg(null);

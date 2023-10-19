@@ -13,7 +13,7 @@ interface EditorModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSave: () => void;
-    editorToEdit: [];
+    editorToEdit: any;
 }
 
 const EditEditorModal: React.FC<EditorModalProps> = ({

@@ -88,7 +88,7 @@ export default function Header() {
                     </Link>
                     {isLogin ? (
                         <div className="lg:order-2 ">
-                            <Link href="#!"
+                            <Link href="/#"
                                   className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
                                 <img
                                     //@ts-ignore

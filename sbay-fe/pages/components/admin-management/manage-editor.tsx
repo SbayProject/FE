@@ -40,7 +40,7 @@ const ManageEditor = () => {
     const [prevDisabled, setPrevDisabled] = useState(true);
     const [nextDisabled, setNextDisabled] = useState(true);
     const [idEditor, setIdEditor] = useState(0);
-    const [editorToEdit, setEditorToEdit] = useState<Editor | null>(null);
+    const [editorToEdit, setEditorToEdit] = useState<any>(null);
 
     useEffect(() => {
         document.title = "Quản lý biên tập viên";
@@ -55,7 +55,8 @@ const ManageEditor = () => {
         setShowModal(false);
         fetchData({name: "", page: 0});
     };
-    const openEditModal = () => {
+    const openEditModal = (editor: Editor) => {
+        setEditorToEdit(editor);
         setShowEditModal(true);
     };
 
@@ -66,7 +67,8 @@ const ManageEditor = () => {
 
         console.log("load lai")
     };
-    const openDetailModal = () => {
+    const openDetailModal = (editor: Editor) => {
+        setEditorToEdit(editor);
         setShowDetailModal(true);
     };
 
@@ -75,7 +77,7 @@ const ManageEditor = () => {
         setShowDetailModal(false);
         console.log("Tắt Detail")
     };
-    const fetchData = async ({name, page}) => {
+    const fetchData = async ({ name, page }: { name: any, page: number }) => {
         console.log("page", page); // Fix the log statement
         try {
             const response = await AdminEditorService.findAllEditors(name, page);
@@ -91,7 +93,7 @@ const ManageEditor = () => {
         }
     };
 
-    const handlePageClick = async (selected) => {
+    const handlePageClick = async (selected:any) => {
         await setCurrentPage(selected.selected);
         console.log(selected.selected);
         await fetchData({name: searchValue, page: selected.selected});
@@ -117,14 +119,15 @@ const ManageEditor = () => {
         }
     };
 
-    const fetchEditorDetails = async (idEditor: number, modalType: ModalType) => {
+    const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
+        setIdEditor(parseInt(idEditor));
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
             setEditorToEdit(result);
             if (modalType === 'edit') {
-                openEditModal();
+                openEditModal(result);
             } else if (modalType === 'detail') {
-                openDetailModal();
+                openDetailModal(result);
             }
         } catch (error) {
             console.error(error);
@@ -132,7 +135,7 @@ const ManageEditor = () => {
     };
     useEffect(() => {
         if (idEditor > 0) {
-            fetchEditorDetails(idEditor, 'edit');
+            fetchEditorDetails(idEditor.toString(), 'edit');
         }
     }, [idEditor]);
 
@@ -147,13 +150,13 @@ const ManageEditor = () => {
                 <EditEditorModal
                     isOpen={showEditModal}
                     onClose={closeEditModal}
-                    editorToEdit={editorToEdit || null}
+                    editorToEdit={editorToEdit || []}
                     onSave={closeEditModal}
                 />
                 <DetailEditorModal
                     isOpen={showDetailModal}
                     onClose={closeDetailModal}
-                    editorToDetail={editorToEdit || null}
+                    editorToDetail={editorToEdit || []}
                     onSave={closeDetailModal}/>
             </div>
             <div className="bg-white p-6 shadow-md">

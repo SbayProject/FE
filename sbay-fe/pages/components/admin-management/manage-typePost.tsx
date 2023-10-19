@@ -12,17 +12,20 @@ import LoadingHidden from "../hooks/LoadingHidden";
 import {Field, Form, Formik} from "formik";
 import LayoutAdmin from "../layout-admin/LayoutAdmin";
 
-let page: number;
-let name: string;
+export interface TypePost {
+    id:number;
+    name:string;
+}
+
 const ManageTypePost = () => {
-    const [typePosts, setTypePosts] = useState([]);
+    const [typePosts, setTypePosts] = useState<TypePost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [currentItems, setCurrentItems] = useState(typePosts);
-    const [typePostEdit, setTypePostEdit] = useState(null);
+    const [currentItems, setCurrentItems] = useState<TypePost[]>([]);
+    const [typePostEdit, setTypePostEdit] = useState("");
     const [newType, setNewType] = useState("");
-    const [editMode, setEditMode] = useState(null);
+    const [editMode, setEditMode] = useState<number | null>(null);
     const itemsPerPage = 5;
 
     useEffect(() => {
@@ -93,7 +96,7 @@ const handleEdit = (index: number) => {
                 title: "Cập nhật thành công !",
                 timer: 3000,
             });
-            setTypePostEdit(null);
+            setTypePostEdit("");
             setEditMode(null);
             fetchData("");
         } catch (error) {
@@ -103,7 +106,7 @@ const handleEdit = (index: number) => {
 
     const handleCancelEdit = () => {
         setEditMode(null);
-        setTypePostEdit(null);
+        setTypePostEdit("");
     };
 
     const handleAddType = async () => {

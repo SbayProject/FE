@@ -6,7 +6,7 @@ interface InformationEditor {
     isOpen: boolean;
     onClose: () => void;
     onSave: (values: any) => void;
-    editorToDetail: [];
+    editorToDetail: any;
 }
 
 const DetailEditorModal: React.FC<InformationEditor> = ({

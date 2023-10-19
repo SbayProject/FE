@@ -3,7 +3,7 @@ import LayoutAdmin from "../../components/layout-admin/LayoutAdmin";
 import {Field, Form, Formik} from "formik";
 import moment from "moment";
 import * as AdminPostService from "../../service/adminPostService";
-import * as Swal from "sweetalert2";
+import Swal, { SweetAlertOptions } from "sweetalert2";
 import {MdPersonAddAlt} from "react-icons/md";
 import {BiSolidEdit} from "react-icons/bi";
 import {RiDeleteBin6Line} from "react-icons/ri";
@@ -12,10 +12,19 @@ import * as Alert from "../../components/hooks/Alert";
 import AddPostModal from "./modal-box/post/AddPostModal";
 import ReactPaginate from "react-paginate";
 import EditPostModal from "./modal-box/post/EditPostModal";
+import {TypePost} from "./manage-typePost";
 
+export interface Post {
+    id:number;
+    name:string;
+    title:string;
+    page:number;
+    createDate: string;
+    public: boolean;
+}
 
 const ManagePost = () => {
-    const [posts, setPost] = useState([]);
+    const [posts, setPost] = useState<Post[]>([]);
     const [typePosts, setTypePost] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [pageCount, setPageCount] = useState(0);
@@ -30,7 +39,7 @@ const ManagePost = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
-    const [postId, setPostId] = useState(null)
+    const [postId, setPostId] = useState(0)
 
     const openAddModal = () => {
         setShowModal(true);
@@ -57,7 +66,7 @@ const ManagePost = () => {
         findAllListPost({type: "", title: "", page: 0});
     };
 
-    const toggleStatus = async (postStatus) => {
+    const toggleStatus = async (postStatus:any) => {
         try {
             await AdminPostService.browsePost(postStatus);
         } catch (error) {
@@ -71,12 +80,12 @@ const ManagePost = () => {
         window.scrollTo(0, 0)
     }, []);
 
-    const findAllTypePost = async () => {
+    const findAllTypePost = async (name:string) => {
         const result = await AdminPostService.typePost("");
         setTypePost(result?.data);
         setIsLoading(false);
     };
-    const findAllListPost = async ({type,title,page}) => {
+    const findAllListPost = async ({type,title,page}:{ type: string, title:string, page: number }) => {
         const result = await AdminPostService.findAllPosts(type, title, page);
         setPost(result.content);
         setIsLoading(false);
@@ -89,32 +98,32 @@ const ManagePost = () => {
     };
     useEffect(() => {
         findAllListPost({type: "", title: "", page: currentPage});
-        findAllTypePost({name:""});
+        findAllTypePost("");
     }, []);
 
-    const handlePageClick = async ({selected}) => {
+    const handlePageClick = async ({selected}:any) => {
         setCurrentPage(selected);
-        console.log(selected)
         await findAllListPost({type: "", title: "", page: selected});
         setPrevDisabled(selected === 0);
         setNextDisabled(selected >= pageCount - 1);
     };
 
-    const handleDeletePost = async (posts) => {
+    const handleDeletePost = async (posts:any) => {
         try {
             await AdminPostService.remove(posts);
-            Swal.fire({
+            const swalOptions: SweetAlertOptions = {
                 icon: "success",
                 title: "Xóa thành công !",
                 timer: 3000,
-            });
-            await findAllListPost({type:"",title: "searchValue", page: 0});
+            };
+            await Swal.fire(swalOptions);
+            await findAllListPost({type:"",title: "", page: 0});
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleDetailPost = async (postId) =>{
+    const handleDetailPost = async (postId:number) =>{
         setPostId(postId);
         openEditModal();
     }
@@ -127,12 +136,14 @@ const ManagePost = () => {
                     isOpen={showModal}
                     onClose={closeAddModal}
                     typePost={typePosts}
+                    onSave={closeAddModal}
                 />
                 <EditPostModal
                     isOpen={showEditModal}
                     onClose={closeEditModal}
                     postId={postId}
                     typePost={typePosts}
+                    onSave={closeEditModal}
                 />
             </div>
             <div className="bg-white p-6 shadow-md">
@@ -186,7 +197,7 @@ const ManagePost = () => {
                                         className=" border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[12vw]  py-[0.43rem] hover:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     >
                                         <option value="">Chọn Thể Loại</option>
-                                        {typePosts?.map((list, index) => (
+                                        {typePosts?.map((list:TypePost, index) => (
                                             <option key={index} value={list?.name}>
                                                 {list?.name}
                                             </option>
@@ -241,7 +252,7 @@ const ManagePost = () => {
                                 <tbody>
                                 {posts.length <= 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center py-4 text-red-500">
+                                        <td colSpan={7} className="text-center py-4 text-red-500">
                                             Không tìm thấy nội dung bạn nhập. Vui lòng nhập lại.
                                         </td>
                                     </tr>
