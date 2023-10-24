@@ -31,7 +31,7 @@ export default function Post_news() {
     }
 
     const GetAllListTypePost = async () => {
-        const res = await ListGetAllTypePost();
+        const res = await ListGetAllTypePost("");
         setTypePost(res);
     }
     //@ts-ignore

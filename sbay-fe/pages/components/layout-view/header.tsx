@@ -1,4 +1,4 @@
-'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import React, {useContext, useEffect, useState} from "react";
@@ -23,7 +23,7 @@ export default function Header() {
     const [role, setRole] = useState('');
 
     const GetListAllTypePost = async () => {
-        const res = await ListGetAllTypePost();
+        const res = await ListGetAllTypePost("");
         setTypePosts(res);
     }
     // @ts-ignore

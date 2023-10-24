@@ -1,8 +1,8 @@
 import axios from "axios";
-
-export const ListGetAllTypePost = async () => {
+//@ts-ignore
+export const ListGetAllTypePost = async (name) => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/typePost`)
+        const res = await axios.get(`http://localhost:8080/api/typePost?name=${name}`)
         return res.data
     } catch (e) {
 
