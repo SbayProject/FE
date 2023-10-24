@@ -14,4 +14,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+.custom-scroll-margin-left {
+  scroll-margin-left: 20px; /* Set the desired scroll margin */
+}
 

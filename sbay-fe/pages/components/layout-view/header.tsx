@@ -6,10 +6,9 @@ import Logo_Header from "../../../public/img/logo-sbay-header.png";
 import {AiOutlineCloseCircle, AiOutlineMenu} from "react-icons/ai";
 import {ListGetAllTypePost, ListGetTypePostSearch} from "@/pages/service/typePostService";
 import CounterContext from "@/pages/components/reactContext/context";
-import {BiLogIn, BiUserPlus} from "react-icons/bi";
+import {BiLogIn} from "react-icons/bi";
 import {MdOutlineManageAccounts} from "react-icons/md";
 import 'react-toastify/dist/ReactToastify.min.css';
-
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function Header() {
     const [name,setNames] = useState('');
 
     const GetListAllTypePost = async () => {
-        const res = await ListGetAllTypePost();
+        const res = await ListGetAllTypePost("");
         setTypePosts(res);
     }
     // @ts-ignore
@@ -98,7 +97,7 @@ export default function Header() {
                                         <li className=" px-5 py-3 border-b ">
                                             <div
                                                 className="block rounded-lg bg-white p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 mb-2">
-                                                <Link href="/components/home-news/informationEmployees">
+                                                <Link href="/components/editors/informationEditors">
                                                 <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
                                                 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-[0.20rem] px-[0.20rem] hover:rounded">
                                                     <img
