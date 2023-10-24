@@ -1,4 +1,4 @@
-
+'use client'
 import Link from "next/link";
 import Image from "next/image";
 import React, {useContext, useEffect, useState} from "react";
@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [typePosts, setTypePosts] = useState([]);
     const [postType, setPostType] = useState([]);
     const {counter, setCounter} = useContext(CounterContext);
@@ -23,7 +25,7 @@ export default function Header() {
     const [role, setRole] = useState('');
 
     const GetListAllTypePost = async () => {
-        const res = await ListGetAllTypePost("");
+        const res = await ListGetAllTypePost('');
         setTypePosts(res);
     }
     // @ts-ignore
@@ -39,6 +41,8 @@ export default function Header() {
 
     const handleModalOpen = (b: boolean) => {
         setMobileMenuOpen(false);
+        setMenuOpen(false)
+        setOpen(false)
     };
     const LogOut = async () => {
         await localStorage.removeItem("sub")
@@ -87,7 +91,7 @@ export default function Header() {
                         <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" alt=""/>
                     </Link>
                     {isLogin ? (
-                        <div className="lg:order-2 ">
+                        <div className="lg:order-2 z-40 ">
                             <Link href="/#"
                                   className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
                                 <img
@@ -158,22 +162,25 @@ export default function Header() {
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 md:bg">
                             <li>
                                 <Link href="/"
-                                      className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
+                                      className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
+                                       lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
+                                        dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                                     Trang chủ</Link>
                             </li>
                             <li>
                                 <Link href="/components/home-news/post_news"
-                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
-                                      relative justify-center items-center rounded  group
-                                      ">Tin tức
+                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
+                                lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
+                                dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                                relative justify-center items-center rounded group">Tin tức
                                     <span className="">
-                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
+                                <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
+                                      strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
                                     <div
                                         className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
-                                        <ul className="text-left border bg-white rounded ml-32 ">
+                                        <ul className="text-left border bg-white rounded ml-[-10px] w-[110%]">
                                             {typePosts.map((list, index) => (
                                                 <li key={index} onClick={async () => {
                                                     // @ts-ignore
@@ -183,130 +190,165 @@ export default function Header() {
                                                 ><Link href={`/components/home-news/post_news_type`}>{list.name}</Link>
                                                 </li>
                                             ))}
-
                                         </ul>
-
                                     </div>
                                 </Link>
                             </li>
-                            {role === 'ROLE_ADMIN' && (
-                                <Link href="/components/admin-management/manage-post"
-                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
-                                      relative justify-center items-center rounded  group
-                                      ">Quản lý
-                                    <span className="">
+                            <li>
+                                {(role == 'ROLE_EDITOR') ? (
+                                    <Link href="/components/admin-management/manage-post"
+                                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
+                                       lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
+                                       dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
+                                       relative justify-center items-center rounded group">Quản lý
+                                        <span className="">
                                         <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                                   strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
-                                    <div
-                                        className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                        <div
+                                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                            <ul className="text-left border bg-white rounded ml-32 ">
+                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                    <Link href="/components/admin-management/manage-editor"
+                                                          className="hover:text-danger-600  px-2 block">
+                                                        Quản lý nhân viên
+                                                    </Link>
+                                                </li>
+                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                    <Link href="/components/admin-management/manage-post"
+                                                          className="hover:text-danger-600  px-2 block">
+                                                        Quản lý bài viết
+                                                    </Link>
+                                                </li>
+                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                    <Link href="/components/admin-management/manage-typePost"
+                                                          className="hover:text-danger-600  px-2 block">
+                                                        Quản lý thể loại bài viết
+                                                    </Link>
+                                                </li>
 
-                                        <ul className="text-left border bg-white rounded ml-32 ">
-                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                <Link href="/components/admin-management/manage-editor"
-                                                      className="hover:text-gray-400 py-3 px-2 block">
-                                                    Quản lý nhân viên
-                                                </Link>
-                                            </li>
-                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                <Link href="/components/admin-management/manage-post"
-                                                      className="hover:text-gray-400 py-3 px-2 block">
-                                                    Quản lý bài viết
-                                                </Link>
-                                            </li>
-                                            <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                <Link href="/components/admin-management/manage-typePost"
-                                                      className="hover:text-gray-400 py-3 px-2 block">
-                                                    Quản lý thể loại bài viết
-                                                </Link>
-                                            </li>
+                                            </ul>
+                                        </div>
+                                    </Link>
+                                ) : ''}
+                            </li>
 
-                                        </ul>
-                                    </div>
-                                </Link>
-                            )}
                         </ul>
                     </div>
                 </div>
             </nav>
         </header>
         <div
-            className={`md:hidden flex mt-[3.7%] flex-col w-[70%] z-50 h-screen fixed bg-neutral-300 text-white top-[60px] ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
+            className={`md:hidden flex z-30 mt-[3.7%] flex-col w-[70%] h-screen fixed bg-neutral-300 text-white top-[60px]
+             ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 md:bg">
-                <li>
-                    <Link href="/"
-                          onClick={() => {
-                              handleModalOpen(true)
-                          }}
-                          className="block py-2 pr-4 pl-3 text-gray-800 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
-                        Trang chủ</Link>
-                </li>
-
                 <li>
                     <Link href="/components/home-news/post_news"
                           onClick={() => {
                               handleModalOpen(true)
                           }}
-                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
-                                      relative  items-center rounded group
-                          ">Tin tức
-                        <span className="">
-                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
-                        <div
-                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
-                            <ul className="text-left border bg-white rounded ml-[-10px] w-[99%]">
-                                {typePosts.map((list, index) => (
-                                    <li key={index} onClick={async () => {
-                                        // @ts-ignore
-                                        await GetListAllTypePostId(list.id)
-                                    }} className="hover:text-danger-600 px-4 py-1 border-b"
-                                        // @ts-ignore
-                                    ><Link href={`/components/home-news/post_news_type`}>{list.name}</Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </Link>
+                          className="block py-2 pr-4 pl-3 text-gray-800 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                          lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                           lg:dark:hover:bg-transparent dark:border-gray-700">
+                        Trang chủ</Link>
                 </li>
-                {role === 'ROLE_ADMIN' && (
-                    <Link href="/components/admin-management/manage-post"
-                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
-                                      relative  items-center rounded group
-                                      ">Quản lý
-                        <span className="">
-                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
-                        <div
-                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                <li>
+                    <>
+                        {/* Sidenav */}
+                        <ul className="relative m-0 list-none px-[0.2rem]" data-te-sidenav-menu-ref="">
+                            <li className="relative">
+                                <a
+                                    onClick={() => setMenuOpen(!menuOpen)}
+                                    style={{cursor: "pointer"}}
+                                    className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700
+                           lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
+                                      relative  items-center rounded group w-[101%]"
+                                    data-te-sidenav-link-ref="">
+                                    <span>Tin tức</span>
+                                    <span
+                                        className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
+                                        data-te-sidenav-rotate-icon-ref="">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"/></svg></span>
+                                </a>
+                                {menuOpen && (
+                                    <ul className="text-left border bg-white rounded ml-[-10px] w-[104%]">
+                                        {typePosts.map((list, index) => (
+                                            <li
 
-                            <ul className="text-left border bg-white rounded ml-[-10px] w-[99%]">
+                                                key={index} onClick={async () => {
+                                                // @ts-ignore
+                                                await GetListAllTypePostId(list.id)
+                                            }} className=" px-4 py-1 border-b"
+                                                // @ts-ignore
+                                            ><Link href={`/components/home-news/post_news_type`} onClick={() => {
+                                                handleModalOpen(true)
+                                            }}>
+                                                <span className="text-black hover:text-danger-600">{
+                                                    //@ts-ignore
+                                                    list.name}</span></Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
 
-                            <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                    <Link href="/components/admin-management/manage-editor">
-                                        Quản lý nhân viên
-                                    </Link>
+                            </li>
+                            {(role === 'ROLE_EDITOR' || role === 'ROLE_ADMIN') && (
+                                <li className="relative">
+                                    <a
+                                        onClick={() => setOpen(!open)}
+                                        style={{cursor: "pointer"}}
+                                        className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700
+                           lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
+                                      relative  items-center rounded group w-[101%] "
+                                        data-te-sidenav-link-ref="">
+                                        <span>Quản lý</span>
+                                        <span
+                                            className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
+                                            data-te-sidenav-rotate-icon-ref=""><svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    viewBox="0 0 20 20"
+                                                                                    fill="currentColor"
+                                                                                    className="h-5 w-5"><path
+                                            fillRule="evenodd"
+                                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                            clipRule="evenodd"/></svg></span>
+                                    </a>
+                                    {open && (
+                                        <ul className="text-left border bg-white rounded ml-[-10px] w-[104%]">
+                                            <li className="px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-editor" onClick={() => {
+                                                    handleModalOpen(true)
+                                                }}>
+                                                    <span
+                                                        className="text-black hover:text-danger-600">Quản lý nhân viên</span>
+                                                </Link>
+                                            </li>
+                                            <li className="px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-post" onClick={() => {
+                                                    handleModalOpen(true)
+                                                }}>
+                                                    <span
+                                                        className="text-black hover:text-danger-600">Quản lý bài viết</span>
+                                                </Link>
+                                            </li>
+                                            <li className=" px-4 py-1 border-b">
+                                                <Link href="/components/admin-management/manage-typePost"
+                                                      onClick={() => {
+                                                          handleModalOpen(true)
+                                                      }}>
+                                                    <span className="text-black hover:text-danger-600">Quản lý thể loại bài viết</span>
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    )}
                                 </li>
-                                <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                    <Link href="/components/admin-management/manage-post">
-                                        Quản lý bài viết
-                                    </Link>
-                                </li>
-                                <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                    <Link href="/components/admin-management/manage-typePost">
-                                        Quản lý thể loại bài viết
-                                    </Link>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </Link>
-                )}
+                            )}
+                        </ul>
+                    </>
+                </li>
             </ul>
         </div>
     </>
