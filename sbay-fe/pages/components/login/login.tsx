@@ -46,6 +46,7 @@ export default function Login() {
                                     await localStorage.setItem("image", decode.image)
                                     await router.push("/components/home-news/post_news")
                                 }
+
                             }}>
                                 {({isSubmitting}) => (
                                     <Form className="space-y-4 md:space-y-6">
