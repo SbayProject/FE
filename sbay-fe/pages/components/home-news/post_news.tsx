@@ -178,7 +178,6 @@ export default function Post_news() {
                                             </p>
                                         </div>
                                     </div>
-
                                 ))}
                             </div>
 

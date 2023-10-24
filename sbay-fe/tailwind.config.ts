@@ -25,6 +25,7 @@ const config: Config = {
                 '2xl': '6rem',
             },
         },
+
     },
     variants:{
         extend: {

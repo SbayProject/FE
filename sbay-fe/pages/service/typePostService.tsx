@@ -9,7 +9,7 @@ export const ListGetAllTypePost = async (name) => {
     }
 }
 //@ts-ignore
-export const ListGetTypePostSearch = async (id,title,page) => {
+export const ListGetTypePostSearch = async (id, title, page) => {
 
     try {
         const res = await axios.get(`http://localhost:8080/api/post/typePostSearch?id=${id}&title=${title}&page=${page}`)
