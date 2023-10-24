@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import moment from "moment/moment";
@@ -29,9 +30,7 @@ export default function IdPost() {
     const PostDetail = async () => {
         const res = await DetailPost(idPost)
         await GetListTheSameKind(res?.typePost.id)
-        console.log(res)
         setDetail(res)
-
     }
     useEffect(() => {
         GetListAllTop4NewPost()
@@ -59,11 +58,9 @@ export default function IdPost() {
         };
     })
 
-
     if (!newPost) {
         return null;
     }
-
     return (
         <>
             <ImageNav/>

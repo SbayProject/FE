@@ -28,7 +28,6 @@ export default function NavCard() {
             const res = await ListGetTypePostSearch(counter[0]?.typePost?.id, title, 0);
             setCounter(res.content)
             setTotalPage(res.totalPages)
-            console.log(res)
         } else {
         }
     }
@@ -48,7 +47,7 @@ export default function NavCard() {
     }
     // @ts-ignore
     const GetAllListTypePost = async () => {
-        const res = await ListGetAllTypePost();
+        const res = await ListGetAllTypePost("");
         setTypePost(res);
     }
     useEffect(() => {
