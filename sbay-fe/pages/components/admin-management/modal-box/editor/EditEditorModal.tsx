@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {differenceInYears, parseISO} from "date-fns";
 import {BiHide, BiShowAlt} from "react-icons/bi";
 import * as AdminEditorService from "../../../../service/adminEditorService";
-import {storage} from "../../../../../firebase";
+import {storage} from "@/firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 import * as Swal from "sweetalert2";
