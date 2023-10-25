@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout-admin/LayoutTest";
+import LayoutAdmin from "../../components/layout-admin/LayoutAdmin";
 import moment from "moment";
 import Swal from "sweetalert2";
 import {Field, Form, Formik} from "formik";
@@ -40,7 +40,7 @@ const ManageEditor = () => {
     const [prevDisabled, setPrevDisabled] = useState(true);
     const [nextDisabled, setNextDisabled] = useState(true);
     const [idEditor, setIdEditor] = useState(0);
-    const [editorToEdit, setEditorToEdit] = useState<Editor | null>(null);
+    const [editorToEdit, setEditorToEdit] = useState<any>(null);
 
     useEffect(() => {
         document.title = "Quản lý biên tập viên";
@@ -55,7 +55,8 @@ const ManageEditor = () => {
         setShowModal(false);
         fetchData({name: "", page: 0});
     };
-    const openEditModal = () => {
+    const openEditModal = (editor: Editor) => {
+        setEditorToEdit(editor);
         setShowEditModal(true);
     };
 
@@ -66,7 +67,8 @@ const ManageEditor = () => {
 
         console.log("load lai")
     };
-    const openDetailModal = () => {
+    const openDetailModal = (editor: Editor) => {
+        setEditorToEdit(editor);
         setShowDetailModal(true);
     };
 
@@ -75,7 +77,7 @@ const ManageEditor = () => {
         setShowDetailModal(false);
         console.log("Tắt Detail")
     };
-    const fetchData = async ({name, page}) => {
+    const fetchData = async ({ name, page }: { name: any, page: number }) => {
         console.log("page", page); // Fix the log statement
         try {
             const response = await AdminEditorService.findAllEditors(name, page);
@@ -91,10 +93,10 @@ const ManageEditor = () => {
         }
     };
 
-    const handlePageClick = async (selected) => {
-        await setCurrentPage(selected.selected); // Use 'selected.selected' to get the selected page number
+    const handlePageClick = async (selected:any) => {
+        await setCurrentPage(selected.selected);
         console.log(selected.selected);
-        await fetchData({name: searchValue, page: selected.selected}); // Pass selected page as a number
+        await fetchData({name: searchValue, page: selected.selected});
         setPrevDisabled(selected.selected === 0);
         setNextDisabled(selected.selected >= pageCount - 1);
     };
@@ -117,14 +119,15 @@ const ManageEditor = () => {
         }
     };
 
-    const fetchEditorDetails = async (idEditor: number, modalType: ModalType) => {
+    const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
+        setIdEditor(parseInt(idEditor));
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
             setEditorToEdit(result);
             if (modalType === 'edit') {
-                openEditModal();
+                openEditModal(result);
             } else if (modalType === 'detail') {
-                openDetailModal();
+                openDetailModal(result);
             }
         } catch (error) {
             console.error(error);
@@ -132,12 +135,12 @@ const ManageEditor = () => {
     };
     useEffect(() => {
         if (idEditor > 0) {
-            fetchEditorDetails(idEditor, 'edit');
+            fetchEditorDetails(idEditor.toString(), 'edit');
         }
     }, [idEditor]);
 
     return (
-        <Layout>
+        <LayoutAdmin>
             <div>
                 <AddEditorModal
                     isOpen={showModal}
@@ -147,13 +150,13 @@ const ManageEditor = () => {
                 <EditEditorModal
                     isOpen={showEditModal}
                     onClose={closeEditModal}
-                    editorToEdit={editorToEdit || null}
+                    editorToEdit={editorToEdit || []}
                     onSave={closeEditModal}
                 />
                 <DetailEditorModal
                     isOpen={showDetailModal}
                     onClose={closeDetailModal}
-                    editorToDetail={editorToEdit || null}
+                    editorToDetail={editorToEdit || []}
                     onSave={closeDetailModal}/>
             </div>
             <div className="bg-white p-6 shadow-md">
@@ -202,7 +205,7 @@ const ManageEditor = () => {
                                             className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
                                         >
                         <span
-                            className="input-group-text flex items-center whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
+                            className="input-group-text flex items-center whitespace-nowrap lg:whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
                             id="basic-addon2"
                         >
                         <svg
@@ -222,19 +225,19 @@ const ManageEditor = () => {
                                     </div>
                                 </Form>
                             </Formik>
-                            <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-2 py-3">
                                         STT
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Họ và tên
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Email
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Ngày sinh
                                     </th>
                                     <th scope="col" className="px-6 py-3">
@@ -243,7 +246,7 @@ const ManageEditor = () => {
                                     <th scope="col" className="px-6 py-3">
                                         Số điện thoại
                                     </th>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-3 py-3">
                                         Thao tác
                                     </th>
                                 </tr>
@@ -262,25 +265,25 @@ const ManageEditor = () => {
                                         >
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
                                             >
                                                 {count++}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.name}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.email}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {moment(editor.birthday, "YYYY/MM/DD").format(
                                                     "DD/MM/YYYY"
@@ -288,13 +291,13 @@ const ManageEditor = () => {
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.address}
                                             </td>
                                             <td
                                                 scope="row"
-                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                                className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-black"
                                             >
                                                 {editor.phoneNumber.replace(
                                                     /(\d{3})(\d{3})(\d{4})/,
@@ -302,7 +305,7 @@ const ManageEditor = () => {
                                                 )}
                                             </td>
 
-                                            <td className="px-2 py-4">
+                                            <td className="px-2 py-3">
                                                 <button
                                                     className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
                                                     onClick={() => fetchEditorDetails(editor.id, 'detail')}
@@ -341,7 +344,7 @@ const ManageEditor = () => {
                                 )}
                                 </tbody>
                             </table>
-                            <div className="flex justify-center mt-4 mb-4">
+                            <div className="flex justify-center mt-4 mb-4 pagination-container">
                                 <ReactPaginate
                                     breakLabel="..."
                                     nextLabel=">"
@@ -368,7 +371,7 @@ const ManageEditor = () => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

@@ -7,7 +7,7 @@ export const swalWithBootstrapButtons = Swal.mixin({
     },
     buttonsStyling: false
 })
-export const showResultAlert = (res) => {
+export const showResultAlert = (res:any) => {
     if (res != null) {
         if (res) {
             Swal.fire({

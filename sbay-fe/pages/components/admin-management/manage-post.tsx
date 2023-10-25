@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout-admin/LayoutTest";
+import LayoutAdmin from "../../components/layout-admin/LayoutAdmin";
 import {Field, Form, Formik} from "formik";
 import moment from "moment";
 import * as AdminPostService from "../../service/adminPostService";
-import * as Swal from "sweetalert2";
+import Swal, { SweetAlertOptions } from "sweetalert2";
 import {MdPersonAddAlt} from "react-icons/md";
 import {BiSolidEdit} from "react-icons/bi";
 import {RiDeleteBin6Line} from "react-icons/ri";
@@ -12,10 +12,21 @@ import * as Alert from "../../components/hooks/Alert";
 import AddPostModal from "./modal-box/post/AddPostModal";
 import ReactPaginate from "react-paginate";
 import EditPostModal from "./modal-box/post/EditPostModal";
+import {TypePost} from "./manage-typePost";
+import DetailEditorModal from "@/pages/components/admin-management/modal-box/editor/InfomationEditor";
+import DetailPostModal from "@/pages/components/admin-management/modal-box/post/DetailPostIs";
 
+export interface Post {
+    id:number;
+    name:string;
+    title:string;
+    page:number;
+    createDate: string;
+    public: boolean;
+}
 
 const ManagePost = () => {
-    const [posts, setPost] = useState([]);
+    const [posts, setPost] = useState<Post[]>([]);
     const [typePosts, setTypePost] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [pageCount, setPageCount] = useState(0);
@@ -30,7 +41,8 @@ const ManagePost = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
-    const [postId, setPostId] = useState(null)
+    const [postId, setPostId] = useState(0)
+    const [postToModal, setPostToModal] = useState<Post>()
 
     const openAddModal = () => {
         setShowModal(true);
@@ -50,14 +62,15 @@ const ManagePost = () => {
     };
     const openDetailModal = () => {
         setShowDetailModal(true);
+        console.log(showDetailModal)
     };
 
     const closeDetailModal = () => {
-        setShowEditModal(false);
-        findAllListPost({type: "", title: "", page: 0});
+        setShowDetailModal(false);
+        console.log("close")
     };
 
-    const toggleStatus = async (postStatus) => {
+    const toggleStatus = async (postStatus:any) => {
         try {
             await AdminPostService.browsePost(postStatus);
         } catch (error) {
@@ -71,12 +84,12 @@ const ManagePost = () => {
         window.scrollTo(0, 0)
     }, []);
 
-    const findAllTypePost = async () => {
+    const findAllTypePost = async (name:string) => {
         const result = await AdminPostService.typePost("");
         setTypePost(result?.data);
         setIsLoading(false);
     };
-    const findAllListPost = async ({type,title,page}) => {
+    const findAllListPost = async ({type,title,page}:{ type: string, title:string, page: number }) => {
         const result = await AdminPostService.findAllPosts(type, title, page);
         setPost(result.content);
         setIsLoading(false);
@@ -89,51 +102,61 @@ const ManagePost = () => {
     };
     useEffect(() => {
         findAllListPost({type: "", title: "", page: currentPage});
-        findAllTypePost({name:""});
+        findAllTypePost("");
     }, []);
 
-    const handlePageClick = async ({selected}) => {
+    const handlePageClick = async ({selected}:any) => {
         setCurrentPage(selected);
-        console.log(selected)
         await findAllListPost({type: "", title: "", page: selected});
         setPrevDisabled(selected === 0);
         setNextDisabled(selected >= pageCount - 1);
     };
 
-    const handleDeletePost = async (posts) => {
+    const handleDeletePost = async (posts:any) => {
         try {
             await AdminPostService.remove(posts);
-            Swal.fire({
+            const swalOptions: SweetAlertOptions = {
                 icon: "success",
                 title: "Xóa thành công !",
                 timer: 3000,
-            });
-            await findAllListPost({type:"",title: "searchValue", page: 0});
+            };
+            await Swal.fire(swalOptions);
+            await findAllListPost({type:"",title: "", page: 0});
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleDetailPost = async (postId) =>{
+    const handleEditPost = async (postId:number) =>{
         setPostId(postId);
         openEditModal();
+    }
+    const handleDetailPost = async (post:any) =>{
+        setPostToModal(post);
+        openDetailModal();
     }
 
 
     return (
-        <Layout>
+        <LayoutAdmin>
             <div>
                 <AddPostModal
                     isOpen={showModal}
                     onClose={closeAddModal}
                     typePost={typePosts}
+                    onSave={closeAddModal}
                 />
                 <EditPostModal
                     isOpen={showEditModal}
                     onClose={closeEditModal}
                     postId={postId}
                     typePost={typePosts}
+                    onSave={closeEditModal}
                 />
+                <DetailPostModal
+                    isOpen={showDetailModal}
+                    onClose={closeDetailModal}
+                    post={postToModal}/>
             </div>
             <div className="bg-white p-6 shadow-md">
                 <span className="uppercase text-2xl font-semibold mb-4">Quản lý bài viết</span>
@@ -168,7 +191,7 @@ const ManagePost = () => {
                                         setPost(res.content);
                                         setPageCount(res.totalPages);
                                     };
-                                    searchPost();
+                                    await searchPost();
                                 }}
                             >
                                 <Form
@@ -186,7 +209,7 @@ const ManagePost = () => {
                                         className=" border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[12vw]  py-[0.43rem] hover:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     >
                                         <option value="">Chọn Thể Loại</option>
-                                        {typePosts?.map((list, index) => (
+                                        {typePosts?.map((list:TypePost, index) => (
                                             <option key={index} value={list?.name}>
                                                 {list?.name}
                                             </option>
@@ -198,7 +221,7 @@ const ManagePost = () => {
                                             className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
                                         >
                       <span
-                          className="input-group-text flex items-center whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
+                          className="input-group-text flex items-center whitespace-nowrap lg:whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
                           id="basic-addon2"
                       >
                         <svg
@@ -218,7 +241,7 @@ const ManagePost = () => {
                                     </div>
                                 </Form>
                             </Formik>
-                            <table className="md-flex mt-3 w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="md-flex mt-3 w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
                                     <th scope="col" className="px-3 py-1">
@@ -241,7 +264,7 @@ const ManagePost = () => {
                                 <tbody>
                                 {posts.length <= 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center py-4 text-red-500">
+                                        <td colSpan={7} className="text-center py-4 text-red-500">
                                             Không tìm thấy nội dung bạn nhập. Vui lòng nhập lại.
                                         </td>
                                     </tr>
@@ -253,19 +276,19 @@ const ManagePost = () => {
                                     >
                                         <td
                                             scope="row"
-                                            className="w-[50px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
+                                            className="w-[50px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap `dark:text-black`"
                                         >
                                             {count++}
                                         </td>
                                         <td
                                             scope="row"
-                                            className="w-[150px] px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="w-[150px] px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {post.title}
                                         </td>
                                         <td
                                             scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="px-1 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {moment(post.createDate, "YYYY/MM/DD HH:mm:ss").format(
                                                 'DD/MM/YYYY- HH[giờ], mm[phút]'
@@ -274,7 +297,7 @@ const ManagePost = () => {
 
                                         <td
                                             scope="row"
-                                            className="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
+                                            className="px-3 py-4 font-medium text-gray-900 whitespace-nowrap lg:whitespace-nowrap dark:text-black"
                                         >
                                             {post.public ? (
                                                 <button
@@ -316,14 +339,14 @@ const ManagePost = () => {
                                         <td className="px-6 py-4">
                                             <button
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                // onClick={() => handleDetailPost(post.id)}
+                                                onClick={() => handleDetailPost(post)}
                                             >
                                                 <SlInfo size="20"/>
                                             </button>
                                             <button
                                                 type="button"
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => handleDetailPost(post.id)}
+                                                onClick={() => handleEditPost(post.id)}
                                             >
                                                 <BiSolidEdit size="20"/>
                                             </button>
@@ -380,7 +403,7 @@ const ManagePost = () => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 

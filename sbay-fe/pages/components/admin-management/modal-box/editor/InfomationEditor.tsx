@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useFormik } from "formik";
+import {MdOutlineClose} from "react-icons/md";
 
 interface InformationEditor {
     isOpen: boolean;
     onClose: () => void;
     onSave: (values: any) => void;
-    editorToDetail: [];
+    editorToDetail: any;
 }
-
+// @ts-ignore
 const DetailEditorModal: React.FC<InformationEditor> = ({
-                                                         isOpen,
-                                                         onClose,
-                                                         editorToDetail,
-                                                     }) => {
+                                                            isOpen,
+                                                            onClose,
+                                                            editorToDetail,
+                                                        }) => {
     Modal.setAppElement("#__next");
 
     const [avatarUrl, setAvatarUrl] = useState();
-    
+
     useEffect(() => {
         if (editorToDetail) {
             console.log(editorToDetail)
@@ -60,7 +61,7 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                 ariaHideApp={false}
             >
                 <div
-                    className="modal overflow-auto min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none"
+                    className="modal overflow-auto min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-white"
                 >
                     <div
                         className="absolute py-3 px-6 bg-cover  bg-center opacity-80 inset-0 z-0"
@@ -72,7 +73,7 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                 className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                 <h3 className="text-3xl font-semibold"> Thông tin biên tập viên</h3>
                                 <button className="modal-close" onClick={onClose}>
-                                    &times;
+                                    <MdOutlineClose size="30"/>
                                 </button>
                             </div>
                             <form>
@@ -90,7 +91,7 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                                     <img
                                                         src={avatarUrl}
                                                         alt="Loading..." className="mt-2 m-auto"
-                                                   />
+                                                    />
                                                 </>
                                             )}
                                         </div>
@@ -98,11 +99,11 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                             <div className="relative w-full md:h-auto">
                                                 <input
                                                     type="text"
-                                                    name="username"
+                                                    // name="username"
                                                     id="username"
                                                     className={`${formik.touched.username && formik.errors.username ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                     placeholder=""
-                                                    readOnly 
+                                                    readOnly
                                                     {...formik.getFieldProps("username")}
                                                 />
                                                 <label
@@ -115,7 +116,7 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                             <div className="relative w-full md:h-auto">
                                                 <input
                                                     type="text"
-                                                    name="name"
+                                                    // name="name"
                                                     id="name"
                                                     className={`${formik.touched.name && formik.errors.name ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                     placeholder=""
@@ -128,19 +129,19 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                                     {formik.touched.name && formik.errors.name ? formik.errors.name : "Name "}
                                                 </label>
                                             </div>
-                                           
+
                                         </div>
                                     </div>
                                     <div className="grid md:grid-cols-2 md:gap-6">
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="date"
-                                                name="birthday"
+                                                // name="birthday"
                                                 id="birthday"
                                                 max="2000-01-01"
                                                 className={`${formik.touched.birthday && formik.errors.birthday ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=""
-                                                readOnly 
+                                                readOnly
                                                 {...formik.getFieldProps("birthday")}
                                             />
                                             <label
@@ -152,14 +153,14 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                         </div>
                                         <div className="relative z-0 w-full mb-3 group">
                                             <select
-                                                name="gender"
+                                                // name="gender"
                                                 id="gender"
                                                 className={`${formik.touched.gender && formik.errors.gender ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=""
-                                                readOnly 
+                                                // readOnly
                                                 {...formik.getFieldProps("gender")}
                                             >
-                                                <option value="" defaultValue="">Lựa chọn</option>
+                                                {/*<option value="" defaultValue="">Lựa chọn</option>*/}
                                                 <option value="0">Nam</option>
                                                 <option value="1">Nữ</option>
                                             </select>
@@ -175,11 +176,11 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="tel"
-                                                name="phoneNumber"
+                                                // name="phoneNumber"
                                                 id="phoneNumber"
                                                 className={`${formik.touched.phoneNumber && formik.errors.phoneNumber ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=" "
-                                                readOnly 
+                                                readOnly
                                                 {...formik.getFieldProps("phoneNumber")}
                                             />
                                             <label
@@ -192,11 +193,11 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="email"
-                                                name="email"
+                                                // name="email"
                                                 id="email"
                                                 className={`${formik.touched.email && formik.errors.email ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=" "
-                                                readOnly 
+                                                readOnly
                                                 {...formik.getFieldProps("email")}
                                             />
                                             <label
@@ -212,11 +213,11 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="text"
-                                                name="address"
+                                                // name="address"
                                                 id="address"
                                                 className={`${formik.touched.address && formik.errors.address ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=" "
-                                                readOnly 
+                                                readOnly
                                                 {...formik.getFieldProps("address")}
                                             />
                                             <label

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../layout-admin/LayoutTest";
 import * as AdminTypePostService from "../../service/adminTypePostService";
 import ReactPaginate from "react-paginate";
 import {BiSolidEdit} from "react-icons/bi";
@@ -10,18 +9,23 @@ import * as Alert from "../../components/hooks/Alert";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import LoadingHidden from "../hooks/LoadingHidden";
 import {Field, Form, Formik} from "formik";
+import LayoutAdmin from "../layout-admin/LayoutAdmin";
 
-let page: number;
-let name: string;
+export interface TypePost {
+    id: number;
+    name: string;
+}
+
+// @ts-ignore
 const ManageTypePost = () => {
-    const [typePosts, setTypePosts] = useState([]);
+    const [typePosts, setTypePosts] = useState<TypePost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [currentItems, setCurrentItems] = useState(typePosts);
-    const [typePostEdit, setTypePostEdit] = useState(null);
+    const [currentItems, setCurrentItems] = useState<TypePost[]>([]);
+    const [typePostEdit, setTypePostEdit] = useState("");
     const [newType, setNewType] = useState("");
-    const [editMode, setEditMode] = useState(null);
+    const [editMode, setEditMode] = useState<number | null>(null);
     const itemsPerPage = 5;
 
     useEffect(() => {
@@ -73,28 +77,28 @@ const ManageTypePost = () => {
         }
     };
 
-    const handlePageClick = async (selectedPage:any) => {
+    const handlePageClick = async (selectedPage: any) => {
         loadCurrentPageData(selectedPage.selected);
         setCurrentPage(selectedPage.selected);
     };
 
-const handleEdit = (index: number) => {
-  setEditMode(index);
-  setTypePostEdit(currentItems[index]?.name);
-};
+    const handleEdit = (index: number) => {
+        setEditMode(index);
+        setTypePostEdit(currentItems[index]?.name);
+    };
 
-    const handleSaveEdit = async (data:any, index:number) => {
+    const handleSaveEdit = async (data: any, index: number) => {
         try {
-            await LoadingHidden(null);
+            await LoadingHidden(null, null, null);
             await AdminTypePostService.updateTypePost({name: data, id: currentItems[index]?.id});
             Swal.fire({
                 icon: "success",
                 title: "Cập nhật thành công !",
                 timer: 3000,
             });
-            setTypePostEdit(null);
+            setTypePostEdit("");
             setEditMode(null);
-            fetchData("");
+            await fetchData("");
         } catch (error) {
             console.error(error);
         }
@@ -102,27 +106,32 @@ const handleEdit = (index: number) => {
 
     const handleCancelEdit = () => {
         setEditMode(null);
-        setTypePostEdit(null);
+        setTypePostEdit("");
     };
 
     const handleAddType = async () => {
         try {
-            await LoadingHidden(null);
+            await LoadingHidden(null, null, null);
             await AdminTypePostService.createTypePosts({name: newType});
-            Swal.fire({
+            await Swal.fire({
                 icon: "success",
                 title: "Thêm mới thành công !",
                 timer: 3000,
             });
             setNewType("");
-            fetchData("");
+            await fetchData("");
         } catch (error) {
             console.error(error);
         }
     };
 
+    // @ts-ignore
+    const calculateSerialNumber = (pageIndex, itemIndex, itemsPerPage) => {
+        return pageIndex * itemsPerPage + itemIndex + 1;
+    };
+
     return (
-        <Layout>
+        <LayoutAdmin>
             <div className="bg-white p-6 shadow-md">
                 <h2 className="text-2xl uppercase font-semibold mb-4">
                     Quản lý thể loại bài viết
@@ -132,8 +141,10 @@ const handleEdit = (index: number) => {
                     <div className="flex items-center w-150vw md:w-full">
                         <input
                             type="text"
+                            required
+                            pattern="^[A-Z][a-zA-Z0-9]*$"
                             className="w-full py-2 px-3 leading-none rounded-lg border border-solid border-neutral-300 bg-clip-padding text-neutral-700 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Điền tên thể loại"
+                            placeholder="Điền tên thể loại muốn thêm"
                             value={newType}
                             onChange={(e) => setNewType(e.target.value)}
                         />
@@ -162,19 +173,19 @@ const handleEdit = (index: number) => {
                             };
                             await searchEditor();
                         }}>
-                    <Form
-                        className="flex  w-2/5 items-center justify-between text-neutral-500 transition duration-200 hover:text-neutral-600 hover:ease-in-out motion-reduce:transition-none dark:text-neutral-200">
-                        <Field
-                            type="search"
-                            className="relative mr-3 block min-w-[25vw] flex-auto rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none motion-reduce:transition-none dark:border-neutral-500 dark:text-neutral-500 dark:placeholder:text-neutral-500 dark:focus:border-primary"
-                            placeholder="Tên thể loại bài viết"
-                            name="name"
-                        />
-                        <div>
-                            <button
-                                type="submit"
-                                className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
-                            >
+                        <Form
+                            className="flex  w-2/5 items-center justify-between text-neutral-500 transition duration-200 hover:text-neutral-600 hover:ease-in-out motion-reduce:transition-none dark:text-neutral-200">
+                            <Field
+                                type="search"
+                                className="relative mr-3 block min-w-[25vw] flex-auto rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none motion-reduce:transition-none dark:border-neutral-500 dark:text-neutral-500 dark:placeholder:text-neutral-500 dark:focus:border-primary"
+                                placeholder="Tên thể loại bài viết"
+                                name="name"
+                            />
+                            <div>
+                                <button
+                                    type="submit"
+                                    className="bg-white rounded-lg border border-gray-500 hover:bg-gray-700 text-black-800 font-semibold  py-[0.25rem] ml-3 px-3 border border-darker border-dark-400 shadow"
+                                >
                                             <span
                                                 className="input-group-text flex items-center whitespace-nowrap rounded  py-0.5 text-center text-base font-normal text-neutral-700 dark:text-neutral-600"
                                                 id="basic-addon2"
@@ -192,17 +203,17 @@ const handleEdit = (index: number) => {
                                               />
                                             </svg>
                                           </span>
-                            </button>
-                        </div>
-                    </Form>
-                </Formik>
+                                </button>
+                            </div>
+                        </Form>
+                    </Formik>
                 </div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     <div>
                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
+                            <table className="w-full text-sm text-center text-black-500 dark:text-black-400">
                                 <thead className="text-xs text-black-700 uppercase dark:text-black-400">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
@@ -226,7 +237,7 @@ const handleEdit = (index: number) => {
                                             scope="row"
                                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap `dark:text-black`"
                                         >
-                                            {index + 1}
+                                            {calculateSerialNumber(currentPage, index, itemsPerPage)}
                                         </td>
                                         <td
                                             scope="row"
@@ -322,7 +333,7 @@ const handleEdit = (index: number) => {
                     </div>
                 )}
             </div>
-        </Layout>
+        </LayoutAdmin>
     );
 };
 
