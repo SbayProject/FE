@@ -125,9 +125,9 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
             image: "",
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Title is required"),
-            content: Yup.string().required("Content is required"),
-            typePostId: Yup.string().required("TypePost is required"),
+            title: Yup.string().required("Title không được để trống"),
+            content: Yup.string().required("Content không được để trống"),
+            typePostId: Yup.string().required("TypePost không được để trống"),
         }),
         onSubmit: async (values, {resetForm}) => {
             await LoadingHidden(3000);

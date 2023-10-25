@@ -80,9 +80,9 @@ const AddPostModal: React.FC<PostModalProps> = ({
             image: "",
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Title is required"),
-            content: Yup.string().required("Content is required"),
-            typePostId: Yup.string().required("TypePost is required"),
+            title: Yup.string().required("Title không được để trống"),
+            content: Yup.string().required("Content không được để trống"),
+            typePostId: Yup.string().required("TypePost không được để trống"),
         }),
         onSubmit: async (values, {resetForm}) => {
             await LoadingHidden(4000);
@@ -215,24 +215,24 @@ const AddPostModal: React.FC<PostModalProps> = ({
                                             </label>
                                         </div>
                                     </div>
-                                        <div className="relative z-0 w-full mb-3 group">
-                                            <input
-                                                type="text"
-                                                name="title"
-                                                id="title"
-                                                className={`${formik.touched.title && formik.errors.title ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
-                                                placeholder="Nhập tiêu đề bài viết"
-                                                required
-                                                {...formik.getFieldProps("title")}
-                                            />
-                                            <label
-                                                htmlFor="title"
-                                                className={` ${formik.touched.title && formik.errors.title ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
-                                            >
-                                                {formik.touched.title && formik.errors.title ? formik.errors.title + "" : "Tiêu đề bài viết"}
-                                            </label>
-                                        </div>
-                                        <div className="relative z-0 w-full mb-3 group">
+                                    <div className="relative z-0 w-full mb-3 group">
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            id="title"
+                                            className={`${formik.touched.title && formik.errors.title ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
+                                            placeholder="Nhập tiêu đề bài viết"
+                                            required
+                                            {...formik.getFieldProps("title")}
+                                        />
+                                        <label
+                                            htmlFor="title"
+                                            className={` ${formik.touched.title && formik.errors.title ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                                        >
+                                            {formik.touched.title && formik.errors.title ? formik.errors.title + "" : "Tiêu đề bài viết"}
+                                        </label>
+                                    </div>
+                                    <div className="relative z-0 w-full mb-3 group">
                                             <textarea
                                                 name="content"
                                                 id="content"
@@ -242,13 +242,13 @@ const AddPostModal: React.FC<PostModalProps> = ({
                                                 required
                                                 {...formik.getFieldProps("content")}
                                             />
-                                            <label
-                                                htmlFor="content"
-                                                className={` ${formik.touched.content && formik.errors.content ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
-                                            >
-                                                {formik.touched.content && formik.errors.content ? formik.errors.content : "Nội dung bài viết"}
-                                            </label>
-                                        </div>
+                                        <label
+                                            htmlFor="content"
+                                            className={` ${formik.touched.content && formik.errors.content ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                                        >
+                                            {formik.touched.content && formik.errors.content ? formik.errors.content : "Nội dung bài viết"}
+                                        </label>
+                                    </div>
                                     {/*footer*/}
                                     <div
                                         className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">

@@ -8,6 +8,8 @@ import * as AdminEditorService from "../../../../service/adminEditorService";
 import {storage} from "../../../../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
+import * as Swal from "sweetalert2";
+import Toast from "../../../hooks/Toast";
 
 interface EditorModalProps {
     isOpen: boolean;
@@ -22,13 +24,16 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
     Modal.setAppElement("#__next");
 
     const [firebaseImg, setImg] = useState(null);
-    const [avatar, setAvatarFile] = useState();
-    const [avatarUrl, setAvatarUrl] = useState();
+    const [avatar, setAvatarFile] = useState<File | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string>("");
     const [showPassword, setShowPassword] = useState(true);
 
-    const handleFileSelect = (event:any, setFile:any, setFileUrl:string) => {
-        
-        const file = event.target.files[0];
+    const handleFileSelect = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        setFile: React.Dispatch<React.SetStateAction<File | null>>,
+        setFileUrl: React.Dispatch<React.SetStateAction<string>>
+    ) => {
+        const file = event.target.files && event.target.files[0];
         if (file) {
             setFile(file);
         }
@@ -71,12 +76,12 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
         setAvatarFile(null);
     };
 
-    const handleAvatarFileSelect = (event) => {
+    const handleAvatarFileSelect = (event: any) => {
         handleFileSelect(event, setAvatarFile, setAvatarUrl);
     };
 
     const handleAvatarFileUpload = async () => {
-        return handleFileUpload(avatar, setAvatarFile, setAvatarUrl);
+        return handleFileUpload();
     };
 
     const formik = useFormik({
@@ -93,15 +98,13 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             password: "",
         },
         validationSchema: Yup.object({
-            username: Yup.string().required("Username is required"),
-            email: Yup.string().email("Invalid email address").required("Email is required"),
-            password: Yup.string().required("Password is required"),
-            repeatPassword: Yup.string()
-                .oneOf([Yup.ref("password"), null], "Passwords must match")
-                .required("Confirm password is required"),
-            gender: Yup.string().required("Gender is required"),
+            username: Yup.string().required("Username không được để trống"),
+            email: Yup.string().email("Invalid email address").required("Email không được để trống"),
+            password: Yup.string().required("Password không được để trống"),
+            repeatPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords không trùng khớp'),
+            gender: Yup.string().required("Gender không được để trống"),
             birthday: Yup.string()
-                .required("Birthday is required")
+                .required("Birthday không được để trống")
                 .test("is-over-18", "Must be over 18 years old", (value) => {
                     const birthDate = parseISO(value);
                     const currentDate = new Date();
@@ -110,15 +113,12 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                 }),
             phoneNumber: Yup.string()
                 .matches(/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/, 'Nhập đúng định dạng SDT VD: 098XXXXXXX (X là chữ số)')
-                .required("Phone number is required"),
-            address: Yup.string().required("Address is required"),
+                .required("Phone number không được để trống"),
+            address: Yup.string().required("Address không được để trống"),
         }),
-        onSubmit: async (values,{resetForm}) => {
-            await LoadingHidden();
-            const results = await handleAvatarFileUpload()
-            await LoadingHidden(results,null);
-
-            const avatarUp = results;
+        onSubmit: async (values, {resetForm}) => {
+            await LoadingHidden(null,null,onClose);
+            const avatarUp = await handleAvatarFileUpload()
             let newEditor = {
                 ...values,
                 users: {"username": values.username, "password": values.password},
@@ -134,6 +134,11 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             };
             handleSaveModal();
             resetForm();
+            Swal.close();
+            Toast.fire({
+                icon: 'success',
+                title: `Thêm mới nhân viên ${newEditor.name} thành công!`
+            })
             onClose();
         }
     });
@@ -185,7 +190,8 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             />
                                             {avatar && (
                                                 <>
-                                                    <img src={URL.createObjectURL(avatar)} alt="Loading..." className="mt-2 m-auto"
+                                                    <img src={URL.createObjectURL(avatar)} alt="Loading..."
+                                                         className="mt-2 m-auto"
                                                          style={{maxWidth: 150}}/>
                                                     <button
                                                         className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
@@ -213,15 +219,15 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative w-full md:h-auto">
                                                 <input
                                                     type="text"
-                                                    name="username"
-                                                    id="username"
+                                                    // name="usernameInput"
+                                                    id="usernameInput"
                                                     className={`${formik.touched.username && formik.errors.username ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
-                                                    placeholder=""
+                                                    placeholder="Nhập tên tài khoản đăng nhập"
                                                     required
-                                                    {...formik.getFieldProps("username")}
+                                                    {...formik.getFieldProps("usernameInput")}
                                                 />
                                                 <label
-                                                    htmlFor="username"
+                                                    htmlFor="usernameInput"
                                                     className={` ${formik.touched.username && formik.errors.username ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 z-5 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
                                                 >
                                                     {formik.touched.username && formik.errors.username ? formik.errors.username : "UserName"}
@@ -230,15 +236,15 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative w-full md:h-auto">
                                                 <input
                                                     type="text"
-                                                    name="name"
-                                                    id="name"
+                                                    // name="name"
+                                                    id="name123"
                                                     className={`${formik.touched.name && formik.errors.name ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
-                                                    placeholder=""
+                                                    placeholder="Nhập họ và tên"
                                                     required
                                                     {...formik.getFieldProps("name")}
                                                 />
                                                 <label
-                                                    htmlFor="name"
+                                                    htmlFor="name123"
                                                     className={` ${formik.touched.name && formik.errors.name ? "text-red-500" : "text-gray-500 dark:text-gray-400"} peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 z-5 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
                                                 >
                                                     {formik.touched.name && formik.errors.name ? formik.errors.name : "Name "}
@@ -247,11 +253,11 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <input
                                                     type={showPassword ? "text" : "password"}
-                                                    name="password"
+                                                    // name="password"
                                                     id="password"
                                                     className={`${formik.touched.password && formik.errors.password ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
-                                                    placeholder=""
+                                                    placeholder="Nhập mật khẩu"
                                                     required
                                                     {...formik.getFieldProps("password")}
                                                 />
@@ -274,11 +280,11 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <input
                                                     type={showPassword ? "text" : "password"}
-                                                    name="repeatPassword"
+                                                    // name="repeatPassword"
                                                     id="repeatPassword"
                                                     className={`${formik.touched.repeatPassword && formik.errors.repeatPassword ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
-                                                    placeholder=""
+                                                    placeholder="Xác nhận mật khẩu"
                                                     required
                                                     {...formik.getFieldProps("repeatPassword")}
                                                 />
@@ -297,14 +303,13 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                                         <BiShowAlt size="20" style={{marginTop: "-1.75px"}}/>}
                                                 </button>
                                             </div>
-
                                         </div>
                                     </div>
                                     <div className="grid md:grid-cols-2 md:gap-6">
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="date"
-                                                name="birthday"
+                                                // name="birthday"
                                                 id="birthday"
                                                 max="2000-01-01"
                                                 className={`${formik.touched.birthday && formik.errors.birthday ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
@@ -321,7 +326,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                         </div>
                                         <div className="relative z-0 w-full mb-3 group">
                                             <select
-                                                name="gender"
+                                                // name="gender"
                                                 id="gender"
                                                 className={`${formik.touched.gender && formik.errors.gender ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=""
@@ -345,7 +350,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                             <input
                                                 type="tel"
                                                 pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
-                                                name="phoneNumber"
+                                                // name="phoneNumber"
                                                 id="phoneNumber"
                                                 className={`${formik.touched.phoneNumber && formik.errors.phoneNumber ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=" "
@@ -362,7 +367,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="email"
-                                                name="email"
+                                                // name="email"
                                                 id="email"
                                                 className={`${formik.touched.email && formik.errors.email ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
@@ -383,7 +388,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                         <div className="relative z-0 w-full mb-3 group">
                                             <input
                                                 type="text"
-                                                name="address"
+                                                // name="address"
                                                 id="address"
                                                 className={`${formik.touched.address && formik.errors.address ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
