@@ -209,30 +209,30 @@ export default function Header() {
                                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                                   strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
-                                        <div
-                                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
-                                            <ul className="text-left border bg-white rounded ml-32 ">
-                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                    <Link href="/components/admin-management/manage-editor"
-                                                          className="hover:text-danger-600  px-2 block">
-                                                        Quản lý nhân viên
-                                                    </Link>
-                                                </li>
-                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                    <Link href="/components/admin-management/manage-post"
-                                                          className="hover:text-danger-600  px-2 block">
-                                                        Quản lý bài viết
-                                                    </Link>
-                                                </li>
-                                                <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                    <Link href="/components/admin-management/manage-typePost"
-                                                          className="hover:text-danger-600  px-2 block">
-                                                        Quản lý thể loại bài viết
-                                                    </Link>
-                                                </li>
+                                            <div
+                                                className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                                <ul className="text-left border bg-white rounded ml-32 ">
+                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                        <Link href="/components/admin-management/manage-editor"
+                                                              className="hover:text-danger-600  px-2 block">
+                                                            Quản lý nhân viên
+                                                        </Link>
+                                                    </li>
+                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                        <Link href="/components/admin-management/manage-post"
+                                                              className="hover:text-danger-600  px-2 block">
+                                                            Quản lý bài viết
+                                                        </Link>
+                                                    </li>
+                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                        <Link href="/components/admin-management/manage-typePost"
+                                                              className="hover:text-danger-600  px-2 block">
+                                                            Quản lý thể loại bài viết
+                                                        </Link>
+                                                    </li>
 
-                                            </ul>
-                                        </div>
+                                                </ul>
+                                            </div>
                                     </Link>
                                 ) : ''}
                             </li>

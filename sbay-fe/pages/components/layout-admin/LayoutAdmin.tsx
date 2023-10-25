@@ -7,7 +7,7 @@ const LayoutAdmin = ({ children }) => {
     const isMobile = useMediaQuery({ maxWidth: 768 });
 
     return (
-        <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col">
             <div className="container xl:max-w-full lg:max-w-[972px] sm:max-w-[2vw] flex-grow  mx-auto lg:mx-auto py-[15vh] flex">
                 {!isMobile && (
                     <ul className="lag:hidden py-15 w-1/5 h-full">
