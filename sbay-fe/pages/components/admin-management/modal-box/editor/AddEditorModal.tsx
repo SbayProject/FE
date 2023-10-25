@@ -10,6 +10,7 @@ import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 import * as Swal from "sweetalert2";
 import Toast from "../../../hooks/Toast";
+import {MdOutlineClose} from "react-icons/md";
 
 interface EditorModalProps {
     isOpen: boolean;
@@ -134,6 +135,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
             };
             handleSaveModal();
             resetForm();
+            // @ts-ignore
             Swal.close();
             Toast.fire({
                 icon: 'success',
@@ -153,7 +155,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                 ariaHideApp={false}
             >
                 <div
-                    className="modal overflow-auto min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none"
+                    className="modal overflow-auto min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-white bg-fixed"
                 >
                     <div
                         className="absolute py-3 px-6 bg-cover  bg-center opacity-80 inset-0 z-0"
@@ -165,7 +167,7 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                 className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                 <h3 className="text-3xl font-semibold">Thêm mới biên tập viên</h3>
                                 <button className="modal-close" onClick={onClose}>
-                                    &times;
+                                    <MdOutlineClose size="30"/>
                                 </button>
                             </div>
                             <form onSubmit={formik.handleSubmit}>

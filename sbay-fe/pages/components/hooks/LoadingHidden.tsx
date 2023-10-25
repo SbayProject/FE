@@ -1,7 +1,9 @@
 import * as Swal from "sweetalert2";
 
+// @ts-ignore
 const LoadingHidden = async (timeWaitting,open,close) => {
     return new Promise((resolve) => {
+        // @ts-ignore
         Swal.fire({
             html: `
         <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50">
@@ -14,10 +16,12 @@ const LoadingHidden = async (timeWaitting,open,close) => {
             allowOutsideClick: false,
             allowEscapeKey: false,
             allowEnterKey: false,
-            didOpen: (open) => {
+            didOpen: (open:any) => {
+                // @ts-ignore
                 resolve(Swal.getTimerProgressBar());
             },
-            willClose: (close) => {
+            willClose: (close:any) => {
+                // @ts-ignore
                 resolve(Swal.getTimerProgressBar());
             },
         });

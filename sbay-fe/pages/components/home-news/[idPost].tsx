@@ -130,9 +130,9 @@ export default function IdPost() {
                         <div className="mt-6">
                             <p className="mb-4">
                                 <article
-                                    className="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
+                                    className="mt-5 prose max-w-none prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600 text-left text-justify"
                                     // @ts-ignore
-                                >{detail.content}
+                                >{ReactHtmlParser(detail.content)}
                                 </article>
                             </p>
                         </div>

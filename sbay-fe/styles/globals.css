@@ -18,3 +18,9 @@
   scroll-margin-left: 20px; /* Set the desired scroll margin */
 }
 
+.dat-background {
+  background-image: url('/public/assets/defaut-img/bg-admin.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+

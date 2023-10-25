@@ -52,7 +52,10 @@ export default function Header() {
         await localStorage.removeItem("image")
         await localStorage.removeItem("role")
         //@ts-ignore
-        await setIsLogin(false)
+        await setIsLogin(false);
+        setImage('');
+        setNames('');
+        setRole('');
         await new Promise((resolve) => setTimeout(resolve, 250))
 
     }
@@ -198,7 +201,7 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li>
-                                {(role == 'ROLE_EDITOR') ? (
+                                {(role == 'ROLE_EDITOR' || role == 'ROLE_ADMIN') ? (
                                     <Link href="/components/admin-management/manage-post"
                                           className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
                                        lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
@@ -209,8 +212,18 @@ export default function Header() {
                                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                                   strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
-                                            <div
-                                                className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                        <div
+                                            className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
+                                            {role === 'ROLE_EDITOR' && (
+                                                <ul className="text-left border bg-white rounded ml-32 ">
+                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                        <Link href="/components/admin-management/manage-typePost"
+                                                              className="hover:text-danger-600  px-2 block">
+                                                            Quản lý thể loại bài viết
+                                                        </Link>
+                                                    </li>
+                                                </ul>)}
+                                            {role === 'ROLE_ADMIN' && (
                                                 <ul className="text-left border bg-white rounded ml-32 ">
                                                     <li className="hover:text-danger-600 px-4 py-1 border-b">
                                                         <Link href="/components/admin-management/manage-editor"
@@ -231,8 +244,9 @@ export default function Header() {
                                                         </Link>
                                                     </li>
 
-                                                </ul>
-                                            </div>
+                                                </ul>)
+                                            }
+                                        </div>
                                     </Link>
                                 ) : ''}
                             </li>

@@ -13,6 +13,8 @@ import AddPostModal from "./modal-box/post/AddPostModal";
 import ReactPaginate from "react-paginate";
 import EditPostModal from "./modal-box/post/EditPostModal";
 import {TypePost} from "./manage-typePost";
+import DetailEditorModal from "@/pages/components/admin-management/modal-box/editor/InfomationEditor";
+import DetailPostModal from "@/pages/components/admin-management/modal-box/post/DetailPostIs";
 
 export interface Post {
     id:number;
@@ -40,6 +42,7 @@ const ManagePost = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [postId, setPostId] = useState(0)
+    const [postToModal, setPostToModal] = useState<Post>()
 
     const openAddModal = () => {
         setShowModal(true);
@@ -59,11 +62,12 @@ const ManagePost = () => {
     };
     const openDetailModal = () => {
         setShowDetailModal(true);
+        console.log(showDetailModal)
     };
 
     const closeDetailModal = () => {
-        setShowEditModal(false);
-        findAllListPost({type: "", title: "", page: 0});
+        setShowDetailModal(false);
+        console.log("close")
     };
 
     const toggleStatus = async (postStatus:any) => {
@@ -123,9 +127,13 @@ const ManagePost = () => {
         }
     };
 
-    const handleDetailPost = async (postId:number) =>{
+    const handleEditPost = async (postId:number) =>{
         setPostId(postId);
         openEditModal();
+    }
+    const handleDetailPost = async (post:any) =>{
+        setPostToModal(post);
+        openDetailModal();
     }
 
 
@@ -145,6 +153,10 @@ const ManagePost = () => {
                     typePost={typePosts}
                     onSave={closeEditModal}
                 />
+                <DetailPostModal
+                    isOpen={showDetailModal}
+                    onClose={closeDetailModal}
+                    post={postToModal}/>
             </div>
             <div className="bg-white p-6 shadow-md">
                 <span className="uppercase text-2xl font-semibold mb-4">Quản lý bài viết</span>
@@ -327,14 +339,14 @@ const ManagePost = () => {
                                         <td className="px-6 py-4">
                                             <button
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                // onClick={() => handleDetailPost(post.id)}
+                                                onClick={() => handleDetailPost(post)}
                                             >
                                                 <SlInfo size="20"/>
                                             </button>
                                             <button
                                                 type="button"
                                                 className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                                                onClick={() => handleDetailPost(post.id)}
+                                                onClick={() => handleEditPost(post.id)}
                                             >
                                                 <BiSolidEdit size="20"/>
                                             </button>
