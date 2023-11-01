@@ -7,21 +7,3 @@ export const swalWithBootstrapButtons = Swal.mixin({
     },
     buttonsStyling: false
 })
-export const showResultAlert = (res:any) => {
-    if (res != null) {
-        if (res) {
-            Swal.fire({
-                icon: "success",
-                title: "Xóa thành công !",
-                timer: 2000
-            })
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Xóa thất bại !",
-                timer: 2000
-            })
-
-        }
-    }
-}

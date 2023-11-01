@@ -5,12 +5,13 @@ import * as Yup from "yup";
 import {differenceInYears, parseISO} from "date-fns";
 import {BiHide, BiShowAlt} from "react-icons/bi";
 import * as AdminEditorService from "../../../../service/adminEditorService";
-import {storage} from "../../../../../firebase";
+import {storage} from "@/firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 import * as Swal from "sweetalert2";
 import Toast from "../../../hooks/Toast";
 import {MdOutlineClose} from "react-icons/md";
+import Image from "next/dist/client/legacy/image";
 
 interface EditorModalProps {
     isOpen: boolean;
@@ -220,10 +221,12 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 />
                                                 {avatarUrl && (
                                                     <>
-                                                        <img
+                                                        <Image
                                                             src={avatarUrl}
                                                             alt="Loading..." className="mt-2 m-auto"
-                                                            style={{maxWidth: 150}}/>
+                                                            width="100%"
+                                                            height="100%"
+                                                            layout='responsive'/>
                                                         <button
                                                             className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
                                                             onClick={handleRemoveImage}
@@ -234,11 +237,13 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 )}
                                                 {!avatarUrl && (
                                                     <>
-                                                        <img
+                                                        <Image
                                                             src={avatar ? URL.createObjectURL(avatar) : '/assets/defaut-img/human.png'}
                                                             alt="Loading..."
                                                             className="mt-2 m-auto"
-                                                            style={{maxWidth: 150}}/>
+                                                            width="100%"
+                                                            height="100%"
+                                                            layout='responsive'/>
                                                         <label
                                                             htmlFor="image"
                                                             className="mt-2 cursor-pointer text-blue-500 underline"

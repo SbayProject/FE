@@ -16,7 +16,7 @@ export default function Footer() {
                     <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div className="">
                             <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-                                <Image src={Logo_Header} alt=""/>
+                                <Image src={Logo_Header}  alt=""/>
                             </h6>
                             <Link href="#" className="flex mb-3 hover:text-red-700">
                                 <AiOutlineMail size={20} style={{marginTop: "0.9px"}}/>&nbsp;

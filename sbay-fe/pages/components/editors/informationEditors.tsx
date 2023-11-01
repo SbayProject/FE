@@ -1,12 +1,14 @@
 'use client'
 import React, {useEffect, useState} from "react";
-import {findByUserNameEditors} from "@/pages/service/editorsService";
 import {LoadingEditors} from "@/pages/components/loading/loadingEditors";
+import {informationEditor} from "../../service/adminEditorService";
+import Image from "next/dist/client/legacy/image";
 
 export default function InformationEditors() {
     const [info, setInfo] = useState();
     const findByEditors = async () => {
-        const res = await findByUserNameEditors();
+        const res = await informationEditor();
+        console.log(res)
         setInfo(res)
     }
     useEffect(() => {
@@ -26,10 +28,13 @@ export default function InformationEditors() {
                             tin cá
                             nhân</h1>
                         <div className="mt-4 flex justify-center ">
-                            <img className="rounded-full prose-img:container"
+                            <Image className="rounded-full prose-img:container"
                                  src={
-                                     //@ts-ignore
                                      info?.image}
+                                   width="100%"
+                                   height="100%"
+                                   layout='responsive'
+                                   alt="Loading.."
                             />
                         </div>
                     </div>

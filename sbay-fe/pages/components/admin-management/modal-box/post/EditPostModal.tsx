@@ -7,6 +7,7 @@ import {storage} from "@/firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 import {MdOutlineClose} from "react-icons/md";
+import Image from "next/dist/client/legacy/image";
 
 interface EditPostModalProps {
     isOpen: boolean;
@@ -202,10 +203,16 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                         />
                                         {imageUrl && (
                                             <>
-                                                <img
+                                                <Image
                                                     src={imageUrl}
                                                     alt="Loading..." className="mt-2 m-auto"
-                                                    style={{maxWidth: 150}}/>
+                                                    sizes="100vw"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                    width={500}
+                                                    height={300}/>
                                                 <button
                                                     className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
                                                     onClick={handleRemoveImage}
@@ -216,11 +223,17 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                         )}
                                         {!imageUrl && (
                                             <>
-                                                <img
+                                                <Image
                                                     src={image ? URL.createObjectURL(image) : '/assets/defaut-img/human.png'}
                                                     alt="Loading..."
                                                     className="mt-2 m-auto"
-                                                    style={{maxWidth: 150}}/>
+                                                    sizes="100vw"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                    width={500}
+                                                    height={300}/>
                                                 <label
                                                     htmlFor="image"
                                                     className="mt-2 cursor-pointer text-blue-500 underline"

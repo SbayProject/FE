@@ -113,7 +113,7 @@ const ManageEditor = () => {
                 title: "Xóa thành công !",
                 timer: 3000,
             });
-            await fetchData({name: searchValue, page: 0});
+            await fetchData({name: searchValue, page: currentPage});
         } catch (error) {
             console.error(error);
         }

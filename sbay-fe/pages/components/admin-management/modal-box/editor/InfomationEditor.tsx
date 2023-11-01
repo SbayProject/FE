@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useFormik } from "formik";
 import {MdOutlineClose} from "react-icons/md";
+import Image from "next/dist/client/legacy/image";
 
 interface InformationEditor {
     isOpen: boolean;
@@ -88,8 +89,11 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                             </label>
                                             {avatarUrl && (
                                                 <>
-                                                    <img
+                                                    <Image
                                                         src={avatarUrl}
+                                                        width="100%"
+                                                        height="100%"
+                                                        layout='responsive'
                                                         alt="Loading..." className="mt-2 m-auto"
                                                     />
                                                 </>

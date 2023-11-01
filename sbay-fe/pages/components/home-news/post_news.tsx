@@ -15,6 +15,7 @@ import {AiOutlineSearch} from "react-icons/ai";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 // @ts-ignore
 import LazyLoad from 'react-lazyload'
+import Image from "next/dist/client/legacy/image";
 
 export default function Post_news() {
     const [post, setPost] = useState([]);
@@ -29,7 +30,6 @@ export default function Post_news() {
         setPost(res.content);
         setTotalPage(res.totalPages)
     }
-
     const GetAllListTypePost = async () => {
         const res = await ListGetAllTypePost("");
         setTypePost(res);
@@ -154,9 +154,11 @@ export default function Post_news() {
                                          className="mx-3 mt-5 md:mb-10 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
                                         // @ts-ignore
                                     ><Link href={`/components/home-news/${list.id}`}>
-                                        <img
+                                        <Image
                                             className="rounded-t-lg md:h-44"
-                                            style={{width: "100%"}}
+                                            width="100%"
+                                            height="100%"
+                                            layout='responsive'
                                             // @ts-ignore
                                             src={list.image}
                                             alt=""
