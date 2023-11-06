@@ -32,6 +32,7 @@ export default function Post_news() {
     }
     const GetAllListTypePost = async () => {
         const res = await ListGetAllTypePost("");
+        console.log("loai"+res)
         setTypePost(res);
     }
     //@ts-ignore
@@ -156,9 +157,13 @@ export default function Post_news() {
                                     ><Link href={`/components/home-news/${list.id}`}>
                                         <Image
                                             className="rounded-t-lg md:h-44"
-                                            width="100%"
-                                            height="100%"
-                                            layout='responsive'
+                                            sizes="100vw"
+                                            style={{
+                                                width: '100%',
+                                                height: 'auto',
+                                            }}
+                                            width={500}
+                                            height={300}
                                             // @ts-ignore
                                             src={list.image}
                                             alt=""
@@ -183,7 +188,7 @@ export default function Post_news() {
                                 ))}
                             </div>
 
-                            {button == true ? <div className="flex justify-center mt-5"><RotatingLines
+                            {button ? <div className="flex justify-center mt-5"><RotatingLines
                                 strokeColor="grey"
                                 strokeWidth="5"
                                 animationDuration="0.75"

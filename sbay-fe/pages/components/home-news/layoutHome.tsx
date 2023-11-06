@@ -5,6 +5,7 @@ import Footer from "@/pages/components/layout-view/footer";
 import { Meta } from "@/pages/meta";
 import Post_news from "./post_news";
 
+// @ts-ignore
 export default function LayoutHome({ children }) {
     const router = useRouter();
     const defaultContent = router.pathname === '/'||router.pathname==='' ? <Post_news /> : null;

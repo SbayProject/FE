@@ -91,23 +91,29 @@ export default function Header() {
             <nav className="border-gray-200 px-4 md:px-6 py-2.5 md:h-20  z-40 fixed top-0
                 flex w-full items-center justify-between bg-secondary-50 text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
                 <div className="mx-auto max-w-screen-xl flex w-full flex-wrap items-center justify-between px-3">
-                    <Link href="/components/home-news/layoutHome" className="flex items-center">
-                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" width="100%"
-                               height="100%"
-                               alt=""/>
+                    <Link href="/" className="flex items-center">
+                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" sizes="100vw"
+                               alt="Loading.."
+                               priority
+                               style={{
+                                   width: '100%',
+                                   height: 'auto',
+                               }}
+                               width={500}
+                               height={300}/>
                     </Link>
                     {isLogin ? (
                         <div className="lg:order-2 z-40 ">
-                            <Link href="/#"
-                                  className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
+                            <button
+                                className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
                                 <Image
                                     //@ts-ignore
                                     src={image}
                                     className="rounded-full"
                                     width={41}
                                     height={41}
-                                    alt=""
-                                    loading="lazy"/>
+                                    alt="Loading.."
+                                    priority/>
                                 <div
                                     className="absolute hidden top-full min-w-full w-max rounded group-hover:block mt-[-5px]">
                                     <ul className="text-left border bg-white rounded">
@@ -125,8 +131,8 @@ export default function Header() {
                                                             className="rounded-full"
                                                             width={38}
                                                             height={38}
-                                                            alt=""
-                                                            loading="lazy"/>
+                                                            alt="Loading.."
+                                                            priority/>
                                                         <span className="text-[20px] mt-1.5 px-3 ">
                                                             {name}</span>
                                                     </h5>
@@ -147,13 +153,13 @@ export default function Header() {
                                         </li>
                                     </ul>
                                 </div>
-                            </Link>
+                            </button>
                         </div>
                     ) : (
                         <div className="flex mt-0 items-center lg:order-2">
                             <Link type="button" href="/components/login/login"
-                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng
-                                nhập
+                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>
+                                Đăng nhập
                             </Link>
                         </div>
                     )}
@@ -172,15 +178,15 @@ export default function Header() {
                         id="nava-Sbay" data-te-collapse-item="">
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 md:bg">
                             <li>
-                                <Link href="/components/home-news/post_news"
+                                <Link href="/"
                                       className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
                                        lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
                                         dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                                     Trang chủ</Link>
                             </li>
                             <li>
-                                <Link href="/components/home-news/post_news"
-                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
+                                <button
+                                    className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
                                 lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
                                 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
                                 relative justify-center items-center rounded group">Tin tức
@@ -203,12 +209,11 @@ export default function Header() {
                                             ))}
                                         </ul>
                                     </div>
-                                </Link>
+                                </button>
                             </li>
                             <li>
                                 {(role == 'ROLE_EDITOR' || role == 'ROLE_ADMIN') ? (
-                                    <Link
-                                        href="/components/admin-management/manage-post"
+                                    <button
                                         className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 relative justify-center items-center rounded group"
                                     >
                                         Quản lý
@@ -253,7 +258,7 @@ export default function Header() {
                                                 </ul>
                                             )}
                                         </div>
-                                    </Link>) : ''}
+                                    </button>) : ''}
                             </li>
 
 
@@ -379,6 +384,4 @@ export default function Header() {
             </ul>
         </div>
     </>
-
-
 }

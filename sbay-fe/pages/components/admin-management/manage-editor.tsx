@@ -121,14 +121,11 @@ const ManageEditor = () => {
 
     const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
         setIdEditor(parseInt(idEditor));
+        console.log(modalType)
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
             setEditorToEdit(result);
-            if (modalType === 'edit') {
-                openEditModal(result);
-            } else if (modalType === 'detail') {
-                openDetailModal(result);
-            }
+            (modalType==='edit'? openEditModal(result): openDetailModal(result))
         } catch (error) {
             console.error(error);
         }

@@ -91,9 +91,13 @@ const DetailEditorModal: React.FC<InformationEditor> = ({
                                                 <>
                                                     <Image
                                                         src={avatarUrl}
-                                                        width="100%"
-                                                        height="100%"
-                                                        layout='responsive'
+                                                        sizes="100vw"
+                                                        style={{
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                        }}
+                                                        width={500}
+                                                        height={300}
                                                         alt="Loading..." className="mt-2 m-auto"
                                                     />
                                                 </>

@@ -224,9 +224,13 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                         <Image
                                                             src={avatarUrl}
                                                             alt="Loading..." className="mt-2 m-auto"
-                                                            width="100%"
-                                                            height="100%"
-                                                            layout='responsive'/>
+                                                            sizes="100vw"
+                                                            style={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                            }}
+                                                            width={500}
+                                                            height={300}/>
                                                         <button
                                                             className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
                                                             onClick={handleRemoveImage}
@@ -241,9 +245,13 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                             src={avatar ? URL.createObjectURL(avatar) : '/assets/defaut-img/human.png'}
                                                             alt="Loading..."
                                                             className="mt-2 m-auto"
-                                                            width="100%"
-                                                            height="100%"
-                                                            layout='responsive'/>
+                                                            sizes="100vw"
+                                                            style={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                            }}
+                                                            width={500}
+                                                            height={300}/>
                                                         <label
                                                             htmlFor="image"
                                                             className="mt-2 cursor-pointer text-blue-500 underline"

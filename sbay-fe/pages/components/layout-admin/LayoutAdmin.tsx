@@ -2,11 +2,13 @@ import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import {useMediaQuery} from 'react-responsive';
 
+// @ts-ignore
 const LayoutAdmin = ({children}) => {
     const isMobile = useMediaQuery({maxWidth: 768});
     const [role, setRole] = useState('');
     useEffect(() => {
         const role = localStorage.getItem('role')
+        // @ts-ignore
         setRole(role)
     }, [])
     return (

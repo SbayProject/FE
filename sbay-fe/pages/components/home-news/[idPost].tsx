@@ -109,9 +109,13 @@ export default function IdPost() {
                                         className="object-cover md:h-40 w-[12rem] rounded-t-lg md:rounded-none md:rounded-l-lg"
                                         // @ts-ignore
                                         src={list.image}
-                                        width="100%"
-                                        height="100%"
-                                        layout='responsive'
+                                        sizes="100vw"
+                                        style={{
+                                            width: '100%',
+                                            height: 'auto',
+                                        }}
+                                        width={500}
+                                        height={300}
                                         alt="Loading.."
                                     />
                                     <div className="flex flex-col justify-between p-4 leading-normal">
@@ -154,12 +158,16 @@ export default function IdPost() {
                             ><Link href={`/components/home-news/${list.id}`}>
                                 <Image
                                     className="rounded-t-lg md:h-44"
-                                    width="100%"
-                                    height="100%"
-                                    layout='responsive'
+                                    sizes="100vw"
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                    }}
+                                    width={500}
+                                    height={300}
                                     // @ts-ignore
                                     src={list.image}
-                                    alt=""
+                                    alt="Loading.."
                                 />
                             </Link>
                                 <div className="p-6">

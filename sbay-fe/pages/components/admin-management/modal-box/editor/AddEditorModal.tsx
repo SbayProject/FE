@@ -218,9 +218,13 @@ const AddEditorModal: React.FC<EditorModalProps> = ({
                                                 <>
                                                     <Image src="/assets/defaut-img/human.png" alt="Loading..."
                                                          className="mt-2 m-auto"
-                                                           width="150px"
-                                                           height="100%"
-                                                           layout='responsive'/>
+                                                           sizes="100vw"
+                                                           style={{
+                                                               width: '100%',
+                                                               height: 'auto',
+                                                           }}
+                                                           width={500}
+                                                           height={300}/>
                                                     <label
                                                         htmlFor="image"
                                                         className="mt-2 cursor-pointer text-blue-500 underline"

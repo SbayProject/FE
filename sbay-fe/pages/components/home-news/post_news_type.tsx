@@ -161,12 +161,16 @@ export default function NavCard() {
                                             ><Link href={`/components/home-news/${list.id}`}>
                                                 <Image
                                                     className="rounded-t-lg md:h-44"
-                                                    width="100%"
-                                                    height="100%"
-                                                    layout='responsive'
+                                                    sizes="100vw"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                    width={500}
+                                                    height={300}
                                                     // @ts-ignore
                                                     src={list.image}
-                                                    alt=""
+                                                    alt="Loading.."
                                                 />
                                             </Link>
                                                 <div className="p-6">
