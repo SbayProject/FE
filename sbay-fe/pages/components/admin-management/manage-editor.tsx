@@ -64,8 +64,6 @@ const ManageEditor = () => {
         await fetchData({name: "", page: currentPage});
         setShowEditModal(false);
         await fetchData({name: "", page: currentPage});
-
-        console.log("load lai")
     };
     const openDetailModal = (editor: Editor) => {
         setEditorToEdit(editor);
@@ -75,10 +73,8 @@ const ManageEditor = () => {
     const closeDetailModal = () => {
         fetchData({name: "", page: currentPage});
         setShowDetailModal(false);
-        console.log("Tắt Detail")
     };
     const fetchData = async ({ name, page }: { name: any, page: number }) => {
-        console.log("page", page); // Fix the log statement
         try {
             const response = await AdminEditorService.findAllEditors(name, page);
             setSearchValue(name);
@@ -113,7 +109,7 @@ const ManageEditor = () => {
                 title: "Xóa thành công !",
                 timer: 3000,
             });
-            await fetchData({name: searchValue, page: 0});
+            await fetchData({name: searchValue, page: currentPage});
         } catch (error) {
             console.error(error);
         }
@@ -121,14 +117,12 @@ const ManageEditor = () => {
 
     const fetchEditorDetails = async (idEditor: string, modalType: ModalType) => {
         setIdEditor(parseInt(idEditor));
+        console.log(modalType)
         try {
             const result = await AdminEditorService.detailEditor(idEditor);
-            setEditorToEdit(result);
-            if (modalType === 'edit') {
-                openEditModal(result);
-            } else if (modalType === 'detail') {
-                openDetailModal(result);
-            }
+    
+        setEditorToEdit(result);
+        (modalType === 'edit' ? openEditModal(result) : openDetailModal(result))
         } catch (error) {
             console.error(error);
         }
@@ -156,8 +150,7 @@ const ManageEditor = () => {
                 <DetailEditorModal
                     isOpen={showDetailModal}
                     onClose={closeDetailModal}
-                    editorToDetail={editorToEdit || []}
-                    onSave={closeDetailModal}/>
+                    editorToDetail={editorToEdit || []}/>
             </div>
             <div className="bg-white p-6 shadow-md">
                 <span className="uppercase text-2xl font-semibold mb-4">Quản lý nhân viên</span>

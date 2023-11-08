@@ -16,7 +16,7 @@ export default function Footer() {
                     <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div className="">
                             <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-                                <Image src={Logo_Header} alt=""/>
+                                <Image src={Logo_Header} priority alt="Loading.."/>
                             </h6>
                             <Link href="#" className="flex mb-3 hover:text-red-700">
                                 <AiOutlineMail size={20} style={{marginTop: "0.9px"}}/>&nbsp;
@@ -32,7 +32,6 @@ export default function Footer() {
                                 <span className="text-danger-600">Face Book</span>: Sbay Việt Nam
                             </Link>
                         </div>
-
                         <div className="">
                             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 Thông tin cần biết

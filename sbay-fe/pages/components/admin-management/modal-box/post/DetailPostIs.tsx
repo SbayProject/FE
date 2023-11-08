@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Modal from "react-modal";
 import {MdOutlineClose} from "react-icons/md";
+import Image from "next/dist/client/legacy/image";
 
 interface DetailPostIs {
     isOpen: boolean;
@@ -53,7 +54,7 @@ const DetailPostModal: React.FC<DetailPostIs> = ({
                                 </button>
                             </div>
                             <div
-                                className="max-h-[80vh] overflow-y-auto mt-4 border-2 container"
+                                className="max-h-[80vh] overflow-y-auto mt-4 border-2 xl:container"
                                 style={{ maxHeight: '80vh' }}>
                                 <div className="mt-6">
                                     <h2 className="flex justify-center text-neutral-900 mt-4 dark:text-neutral-200 text-4xl"
@@ -65,7 +66,14 @@ const DetailPostModal: React.FC<DetailPostIs> = ({
                                         // @ts-ignore
                                     >{post?.typePost?.name}
                                 </h5></span>
-                                    <img src={imageUrl} alt="Loadding.."/>
+                                    <Image src={imageUrl} alt="Loadding.."
+                                           sizes="100vw"
+                                           style={{
+                                               width: '100%',
+                                               height: 'auto',
+                                           }}
+                                           width={500}
+                                           height={300}/>
                                     <article
                                         className="mt-5 prose max-w-none prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600 text-left text-justify">
                                         {post?.content}

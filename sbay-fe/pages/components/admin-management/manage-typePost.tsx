@@ -4,7 +4,6 @@ import ReactPaginate from "react-paginate";
 import {BiSolidEdit} from "react-icons/bi";
 import {MdPersonAddAlt} from "react-icons/md";
 import Swal from "sweetalert2";
-import fire from "sweetalert2";
 import * as Alert from "../../components/hooks/Alert";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import LoadingHidden from "../hooks/LoadingHidden";
@@ -84,12 +83,13 @@ const ManageTypePost = () => {
 
     const handleEdit = (index: number) => {
         setEditMode(index);
-        setTypePostEdit(currentItems[index]?.name);
+        const {name} = currentItems[index];
+        setTypePostEdit(name);
     };
 
     const handleSaveEdit = async (data: any, index: number) => {
         try {
-            await LoadingHidden(null, null, null);
+            await LoadingHidden(3000, null, console.log("oke"));
             await AdminTypePostService.updateTypePost({name: data, id: currentItems[index]?.id});
             Swal.fire({
                 icon: "success",

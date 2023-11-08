@@ -88,23 +88,32 @@ export default function Header() {
     }
     return <>
         <header className="">
-            <nav className="border-gray-200 px-4 lg:px-6 py-2.5 lg:h-20  z-40 fixed top-0
+            <nav className="border-gray-200 px-4 md:px-6 py-2.5 md:h-20  z-40 fixed top-0
                 flex w-full items-center justify-between bg-secondary-50 text-neutral-600 shadow-lg hover:text-neutral-700 focus:text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200 md:flex-wrap md:justify-start">
                 <div className="mx-auto max-w-screen-xl flex w-full flex-wrap items-center justify-between px-3">
-                    <Link href="/components/home-news/layoutHome" className="flex items-center">
-                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" alt=""/>
+                    <Link href="/" className="flex items-center">
+                        <Image src={Logo_Header} className="mr-3 h-12 sm:h-10" sizes="100vw"
+                               alt="Loading.."
+                               priority
+                               style={{
+                                   width: '100%',
+                                   height: 'auto',
+                               }}
+                               width={500}
+                               height={300}/>
                     </Link>
                     {isLogin ? (
                         <div className="lg:order-2 z-40 ">
-                            <Link href="/#"
-                                  className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
-                                <img
+                            <button
+                                className=" flex py-2 pr-4 relative justify-center items-center rounded group ">
+                                <Image
                                     //@ts-ignore
                                     src={image}
                                     className="rounded-full"
-                                    style={{height: 41, width: 42}}
-                                    alt=""
-                                    loading="lazy"/>
+                                    width={41}
+                                    height={41}
+                                    alt="Loading.."
+                                    priority/>
                                 <div
                                     className="absolute hidden top-full min-w-full w-max rounded group-hover:block mt-[-5px]">
                                     <ul className="text-left border bg-white rounded">
@@ -112,23 +121,25 @@ export default function Header() {
                                             <div
                                                 className="block rounded-lg bg-white p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 mb-2">
 
-                                                <Link href="/components/home-news/informationEmployees">
+                                                <Link href="/components/editors/informationEditors">
                                                     <h5 className="flex mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50
 
                                                 hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-[0.20rem] px-[0.20rem] hover:rounded">
-                                                        <img
+                                                        <Image
                                                             //@ts-ignore
                                                             src={image}
                                                             className="rounded-full"
-                                                            style={{height: 38, width: 39}}
-                                                            alt=""
-                                                            loading="lazy"/>
-                                                        <span className="text-[20px] mt-1.5 px-3 ">{name}</span>
+                                                            width={38}
+                                                            height={38}
+                                                            alt="Loading.."
+                                                            priority/>
+                                                        <span className="text-[20px] mt-1.5 px-3 ">
+                                                            {name}</span>
                                                     </h5>
                                                 </Link>
                                                 <hr className="border-t-2 border-solid border-b-gray-700 mb-1"/>
 
-                                                <Link href="/components/layout-admin/LayoutAdmin"
+                                                <Link href="/components/admin-management/manage-post"
                                                       className="flex hover:bg-secondary-100 active:bg-secondary-100 focus:outline-none focus:ring focus:ring-secondary-100 py-1.5 px-1.5 hover:rounded ">
                                                     <MdOutlineManageAccounts size={25} className="mt-0.5"/><h1
                                                     className="mt-1 px-2">Trang quản lý</h1>
@@ -142,13 +153,13 @@ export default function Header() {
                                         </li>
                                     </ul>
                                 </div>
-                            </Link>
+                            </button>
                         </div>
                     ) : (
                         <div className="flex mt-0 items-center lg:order-2">
                             <Link type="button" href="/components/login/login"
-                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>Đăng
-                                nhập
+                                  className={`bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow block`}>
+                                Đăng nhập
                             </Link>
                         </div>
                     )}
@@ -174,8 +185,8 @@ export default function Header() {
                                     Trang chủ</Link>
                             </li>
                             <li>
-                                <Link href="/components/home-news/post_news"
-                                      className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
+                                <button
+                                    className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
                                 lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
                                 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
                                 relative justify-center items-center rounded group">Tin tức
@@ -198,58 +209,58 @@ export default function Header() {
                                             ))}
                                         </ul>
                                     </div>
-                                </Link>
+                                </button>
                             </li>
                             <li>
                                 {(role == 'ROLE_EDITOR' || role == 'ROLE_ADMIN') ? (
-                                    <Link href="/components/admin-management/manage-post"
-                                          className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent
-                                       lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700
-                                       dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700
-                                       relative justify-center items-center rounded group">Quản lý
+                                    <button
+                                        className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 relative justify-center items-center rounded group"
+                                    >
+                                        Quản lý
                                         <span className="">
-                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                                  strokeWidth={2} d="m1 1 4 4 4-4"/></svg></span>
+        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 10 6">
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m1 1 4 4 4-4"/>
+        </svg>
+      </span>
                                         <div
                                             className="absolute hidden top-full min-w-full w-max rounded group-hover:block">
-                                            {role === 'ROLE_EDITOR' && (
-                                                <ul className="text-left border bg-white rounded ml-32 ">
-                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
-                                                        <Link href="/components/admin-management/manage-typePost"
-                                                              className="hover:text-danger-600  px-2 block">
-                                                            Quản lý thể loại bài viết
-                                                        </Link>
-                                                    </li>
-                                                </ul>)}
-                                            {role === 'ROLE_ADMIN' && (
-                                                <ul className="text-left border bg-white rounded ml-32 ">
+                                            {role === "ROLE_ADMIN" ? (
+
+                                                <ul className="text-left border bg-white rounded ml-32">
                                                     <li className="hover:text-danger-600 px-4 py-1 border-b">
                                                         <Link href="/components/admin-management/manage-editor"
-                                                              className="hover:text-danger-600  px-2 block">
+                                                              className="hover:text-danger-600 px-2 block">
                                                             Quản lý nhân viên
                                                         </Link>
                                                     </li>
                                                     <li className="hover:text-danger-600 px-4 py-1 border-b">
                                                         <Link href="/components/admin-management/manage-post"
-                                                              className="hover:text-danger-600  px-2 block">
+                                                              className="hover:text-danger-600 px-2 block">
                                                             Quản lý bài viết
                                                         </Link>
                                                     </li>
                                                     <li className="hover:text-danger-600 px-4 py-1 border-b">
                                                         <Link href="/components/admin-management/manage-typePost"
-                                                              className="hover:text-danger-600  px-2 block">
+                                                              className="hover:text-danger-600 px-2 block">
                                                             Quản lý thể loại bài viết
                                                         </Link>
                                                     </li>
-
-                                                </ul>)
-                                            }
+                                                </ul>
+                                            ) : (
+                                                <ul className="text-left border bg-white rounded ml-32">
+                                                    <li className="hover:text-danger-600 px-4 py-1 border-b">
+                                                        <Link href="/components/admin-management/manage-post"
+                                                              className="hover:text-danger-600 px-2 block">
+                                                            Quản lý bài viết
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+                                            )}
                                         </div>
-                                    </Link>
-                                ) : ''}
+                                    </button>) : ''}
                             </li>
+
 
                         </ul>
                     </div>
@@ -258,7 +269,7 @@ export default function Header() {
         </header>
         <div
             className={`md:hidden flex z-30 mt-[3.7%] flex-col w-[70%] h-screen fixed bg-neutral-300 text-white top-[60px]
-             ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
+                                    ${mobileMenuOpen ? `left-[0]` : `left-[-100%]`}`}>
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 md:bg">
                 <li>
                     <Link href="/components/home-news/post_news"
@@ -266,8 +277,8 @@ export default function Header() {
                               handleModalOpen(true)
                           }}
                           className="block py-2 pr-4 pl-3 text-gray-800 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
-                          lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
-                           lg:dark:hover:bg-transparent dark:border-gray-700">
+                                    lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                                    lg:dark:hover:bg-transparent dark:border-gray-700">
                         Trang chủ</Link>
                 </li>
                 <li>
@@ -279,17 +290,18 @@ export default function Header() {
                                     onClick={() => setMenuOpen(!menuOpen)}
                                     style={{cursor: "pointer"}}
                                     className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700
-                           lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
-                                      relative  items-center rounded group w-[101%]"
+                                    lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
+                                    relative  items-center rounded group w-[101%]"
                                     data-te-sidenav-link-ref="">
                                     <span>Tin tức</span>
                                     <span
                                         className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
                                         data-te-sidenav-rotate-icon-ref="">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path
-                fillRule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                clipRule="evenodd"/></svg></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         className="h-5 w-5"><path
+                                        fillRule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                        clipRule="evenodd"/></svg></span>
                                 </a>
                                 {menuOpen && (
                                     <ul className="text-left border bg-white rounded ml-[-10px] w-[104%]">
@@ -304,9 +316,9 @@ export default function Header() {
                                             ><Link href={`/components/home-news/post_news_type`} onClick={() => {
                                                 handleModalOpen(true)
                                             }}>
-                                                <span className="text-black hover:text-danger-600">{
-                                                    //@ts-ignore
-                                                    list.name}</span></Link>
+                                    <span className="text-black hover:text-danger-600">{
+                                        //@ts-ignore
+                                        list.name}</span></Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -319,16 +331,17 @@ export default function Header() {
                                         onClick={() => setOpen(!open)}
                                         style={{cursor: "pointer"}}
                                         className="flex py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:border-0 lg:hover:text-primary-700
-                           lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
-                                      relative  items-center rounded group w-[101%] "
+                                    lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white dark:border-gray-700
+                                    relative  items-center rounded group w-[101%] "
                                         data-te-sidenav-link-ref="">
                                         <span>Quản lý</span>
                                         <span
                                             className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
-                                            data-te-sidenav-rotate-icon-ref=""><svg xmlns="http://www.w3.org/2000/svg"
-                                                                                    viewBox="0 0 20 20"
-                                                                                    fill="currentColor"
-                                                                                    className="h-5 w-5"><path
+                                            data-te-sidenav-rotate-icon-ref=""><svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                            className="h-5 w-5"><path
                                             fillRule="evenodd"
                                             d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
                                             clipRule="evenodd"/></svg></span>
@@ -336,19 +349,21 @@ export default function Header() {
                                     {open && (
                                         <ul className="text-left border bg-white rounded ml-[-10px] w-[104%]">
                                             <li className="px-4 py-1 border-b">
-                                                <Link href="/components/admin-management/manage-editor" onClick={() => {
-                                                    handleModalOpen(true)
-                                                }}>
-                                                    <span
-                                                        className="text-black hover:text-danger-600">Quản lý nhân viên</span>
+                                                <Link href="/components/admin-management/manage-editor"
+                                                      onClick={() => {
+                                                          handleModalOpen(true)
+                                                      }}>
+                                    <span
+                                        className="text-black hover:text-danger-600">Quản lý nhân viên</span>
                                                 </Link>
                                             </li>
                                             <li className="px-4 py-1 border-b">
-                                                <Link href="/components/admin-management/manage-post" onClick={() => {
-                                                    handleModalOpen(true)
-                                                }}>
-                                                    <span
-                                                        className="text-black hover:text-danger-600">Quản lý bài viết</span>
+                                                <Link href="/components/admin-management/manage-post"
+                                                      onClick={() => {
+                                                          handleModalOpen(true)
+                                                      }}>
+                                    <span
+                                        className="text-black hover:text-danger-600">Quản lý bài viết</span>
                                                 </Link>
                                             </li>
                                             <li className=" px-4 py-1 border-b">
@@ -369,6 +384,4 @@ export default function Header() {
             </ul>
         </div>
     </>
-
-
 }

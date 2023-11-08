@@ -7,6 +7,7 @@ import {storage} from "@/firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import LoadingHidden from "../../../hooks/LoadingHidden";
 import {MdOutlineClose} from "react-icons/md";
+import Image from "next/dist/client/legacy/image";
 
 interface EditPostModalProps {
     isOpen: boolean;
@@ -202,10 +203,16 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                         />
                                         {imageUrl && (
                                             <>
-                                                <img
+                                                <Image
                                                     src={imageUrl}
                                                     alt="Loading..." className="mt-2 m-auto"
-                                                    style={{maxWidth: 150}}/>
+                                                    sizes="100vw"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                    width={500}
+                                                    height={300}/>
                                                 <button
                                                     className="ext-center mt-2 text-sm text-red-500 cursor-pointer"
                                                     onClick={handleRemoveImage}
@@ -216,11 +223,17 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                         )}
                                         {!imageUrl && (
                                             <>
-                                                <img
+                                                <Image
                                                     src={image ? URL.createObjectURL(image) : '/assets/defaut-img/human.png'}
                                                     alt="Loading..."
                                                     className="mt-2 m-auto"
-                                                    style={{maxWidth: 150}}/>
+                                                    sizes="100vw"
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                    width={500}
+                                                    height={300}/>
                                                 <label
                                                     htmlFor="image"
                                                     className="mt-2 cursor-pointer text-blue-500 underline"
@@ -236,7 +249,6 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                             <div className="relative w-full md:h-auto">
                                                 <input
                                                     type="text"
-                                                    // name="name"
                                                     id="name"
                                                     className="dark:border-gray-600 border-gray-300 block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600"
                                                     placeholder=""
@@ -247,7 +259,6 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                         </div>
                                         <div className="relative z-0 w-full mb-3 group">
                                             <select
-                                                // name="typePostId"
                                                 id="typePostId"
                                                 className={`${formik.touched.typePostId && formik.errors.typePostId ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                 placeholder=""
@@ -272,7 +283,6 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                     <div className="relative z-0 w-full mb-3 group">
                                         <input
                                             type="text"
-                                            // name="title"
                                             id="title"
                                             className={`${formik.touched.title && formik.errors.title ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                             placeholder="Nhập tiêu đề bài viết"
@@ -288,7 +298,6 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
                                     </div>
                                     <div className="relative z-0 w-full mb-3 group">
                                             <textarea
-                                                // name="content"
                                                 id="content"
                                                 className={`${formik.touched.content && formik.errors.content ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
