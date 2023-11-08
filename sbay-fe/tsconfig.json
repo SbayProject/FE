@@ -17,6 +17,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/service/adminPostService.js", "pages/service/adminEditorService.js", "pages/service/adminPostService.js"],
   "exclude": ["node_modules"]
 }

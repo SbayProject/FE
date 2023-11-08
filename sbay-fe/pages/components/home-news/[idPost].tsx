@@ -11,6 +11,7 @@ import {FaCircleChevronUp} from "react-icons/fa6";
 // @ts-ignore
 import ReactHtmlParser from 'react-html-parser';
 import {LoadingIdPost} from "@/pages/components/loading/loadingIdPost";
+import Image from "next/dist/client/legacy/image";
 
 export default function IdPost() {
     const [newPost, setNewPost] = useState([]);
@@ -104,11 +105,18 @@ export default function IdPost() {
                                 <Link key={index} href={`/components/home-news/${list.id}`}
                                       className="flex mr-3 mb-5 flex-col items-center mt-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                                 >
-                                    <img
+                                    <Image
                                         className="object-cover md:h-40 w-[12rem] rounded-t-lg md:rounded-none md:rounded-l-lg"
                                         // @ts-ignore
                                         src={list.image}
-                                        alt=""
+                                        // sizes="100vw"
+                                        style={{
+                                            width: '100%',
+                                            height: 'auto',
+                                        }}
+                                        width={500}
+                                        height={300}
+                                        alt="Loading.."
                                     />
                                     <div className="flex flex-col justify-between p-4 leading-normal">
                                         <h5 className="mb-2 text-[18px] font-bold tracking-tight text-gray-900 dark:text-white"
@@ -130,9 +138,9 @@ export default function IdPost() {
                         <div className="mt-6">
                             <p className="mb-4">
                                 <article
-                                    className="prose prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600"
+                                    className="mt-5 prose max-w-none prose-img:rounded-xl prose-headings:underline prose-a:text-blue-600 text-left text-justify"
                                     // @ts-ignore
-                                >{detail.content}
+                                >{ReactHtmlParser(detail.content)}
                                 </article>
                             </p>
                         </div>
@@ -148,12 +156,18 @@ export default function IdPost() {
                                  className="mx-3 mt-5 md:mb-10 flex flex-col self-start rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 sm:shrink-0 sm:grow sm:basis-0"
                                 // @ts-ignore
                             ><Link href={`/components/home-news/${list.id}`}>
-                                <img
+                                <Image
                                     className="rounded-t-lg md:h-44"
-                                    style={{width: "100%"}}
+                                    sizes="100vw"
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                    }}
+                                    width={500}
+                                    height={300}
                                     // @ts-ignore
                                     src={list.image}
-                                    alt=""
+                                    alt="Loading.."
                                 />
                             </Link>
                                 <div className="p-6">
