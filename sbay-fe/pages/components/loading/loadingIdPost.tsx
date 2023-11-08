@@ -14,7 +14,7 @@ export const LoadingIdPost = props => {
                 height={900}
                 width={1060}
                 primaryColor="#d9d9d9"
-                secondarycolor="#ecebeb"
+                secondaryColor="#ecebeb"
                 viewBox="0 0 1360 1000"
                 {...props}
             >

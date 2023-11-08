@@ -265,7 +265,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 <div className="relative w-full md:h-auto">
                                                     <input
                                                         type="text"
-                                                        // name="username"
                                                         id="username"
                                                         className={`${formik.touched.username && formik.errors.username ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                         placeholder=""
@@ -282,7 +281,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 <div className="relative w-full md:h-auto">
                                                     <input
                                                         type="text"
-                                                        // name="name"
                                                         id="name"
                                                         className={`${formik.touched.name && formik.errors.name ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                         placeholder=""
@@ -299,7 +297,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 <div className="relative z-0 w-full mb-3 group">
                                                     <input
                                                         type={showPassword ? "text" : "password"}
-                                                        // name="password"
                                                         id="password"
                                                         className={`${formik.touched.password && formik.errors.password ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
@@ -326,7 +323,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 <div className="relative z-0 w-full mb-3 group">
                                                     <input
                                                         type={showPassword ? "text" : "password"}
-                                                        // name="repeatPassword"
                                                         id="repeatPassword"
                                                         className={`${formik.touched.repeatPassword && formik.errors.repeatPassword ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                         placeholder=""
@@ -354,7 +350,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <input
                                                     type="date"
-                                                    // name="id"
                                                     id="id"
                                                     placeholder=""
                                                     hidden
@@ -362,7 +357,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 />
                                                 <input
                                                     type="date"
-                                                    // name="birthday"
                                                     id="birthday"
                                                     max="2000-01-01"
                                                     className={`${formik.touched.birthday && formik.errors.birthday ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
@@ -379,7 +373,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                             </div>
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <select
-                                                    // name="gender"
                                                     id="gender"
                                                     className={`${formik.touched.gender && formik.errors.gender ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                     placeholder=""
@@ -403,7 +396,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                                 <input
                                                     type="tel"
                                                     pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
-                                                    // name="phoneNumber"
                                                     id="phoneNumber"
                                                     className={`${formik.touched.phoneNumber && formik.errors.phoneNumber ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
                                                     placeholder=" "
@@ -420,7 +412,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <input
                                                     type="email"
-                                                    // name="email"
                                                     id="email"
                                                     className={`${formik.touched.email && formik.errors.email ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 
@@ -441,7 +432,6 @@ const EditEditorModal: React.FC<EditorModalProps> = ({
                                             <div className="relative z-0 w-full mb-3 group">
                                                 <input
                                                     type="text"
-                                                    // name="address"
                                                     id="address"
                                                     className={`${formik.touched.address && formik.errors.address ? "text-red-500 border-red-500" : "dark:border-gray-600 border-gray-300"} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-dark  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 `}
 

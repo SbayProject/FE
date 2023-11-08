@@ -4,11 +4,19 @@ import {LoadingEditors} from "@/pages/components/loading/loadingEditors";
 import {informationEditor} from "../../service/adminEditorService";
 import Image from "next/dist/client/legacy/image";
 
+interface Info{
+    phoneNumber:string;
+    name:string;
+    birthday:string;
+    image:string;
+    email:string;
+    address:string;
+}
 export default function InformationEditors() {
-    const [info, setInfo] = useState();
+    const [info, setInfo] = useState<Info>();
     const findByEditors = async () => {
         const res = await informationEditor();
-        console.log(res)
+        console.log("info"+res)
         setInfo(res)
     }
     useEffect(() => {
@@ -29,10 +37,14 @@ export default function InformationEditors() {
                             nhân</h1>
                         <div className="mt-4 flex justify-center ">
                             <Image className="rounded-full prose-img:container"
-                                 src={
-                                     info?.image}
-                                   width="100%"
-                                   height="100%"
+                                 src={info ? info.image : ""}
+                                    //    sizes="100vw"
+                                       style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                    }}
+                                    width={500}
+                                    height={300}
                                    layout='responsive'
                                    alt="Loading.."
                             />
@@ -84,7 +96,7 @@ export default function InformationEditors() {
                                 {
                                     //@ts-ignore
                                     info?.phoneNumber
-                                        .replace(
+                                        ?.replace(
                                             /(\d{3})(\d{3})(\d{4})/,
                                             "($1) $2-$3"
                                         )

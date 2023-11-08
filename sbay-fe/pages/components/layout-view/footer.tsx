@@ -32,7 +32,6 @@ export default function Footer() {
                                 <span className="text-danger-600">Face Book</span>: Sbay Việt Nam
                             </Link>
                         </div>
-
                         <div className="">
                             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
                                 Thông tin cần biết

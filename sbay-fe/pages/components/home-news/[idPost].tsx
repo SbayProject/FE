@@ -109,7 +109,7 @@ export default function IdPost() {
                                         className="object-cover md:h-40 w-[12rem] rounded-t-lg md:rounded-none md:rounded-l-lg"
                                         // @ts-ignore
                                         src={list.image}
-                                        sizes="100vw"
+                                        // sizes="100vw"
                                         style={{
                                             width: '100%',
                                             height: 'auto',
